@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/module/auth/src" isTestSource="false" packagePrefix="Auth\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/users/src" isTestSource="false" packagePrefix="Users\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/base/src" isTestSource="false" packagePrefix="Base\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/frontend/src" isTestSource="false" packagePrefix="Frontend\" />
+      <sourceFolder url="file://$MODULE_DIR$/app" isTestSource="false" packagePrefix="App\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/category/src" isTestSource="false" packagePrefix="Category\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/order/src" isTestSource="false" packagePrefix="Order\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/company/src" isTestSource="false" packagePrefix="Company\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/acl/src" isTestSource="false" packagePrefix="Acl\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/setting/src" isTestSource="false" packagePrefix="Setting\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/product/src" isTestSource="false" packagePrefix="Product\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/vendor/src" isTestSource="false" packagePrefix="Vendor\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/media/src" isTestSource="false" packagePrefix="Media\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/location/src" isTestSource="false" packagePrefix="Location\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/page/src" isTestSource="false" packagePrefix="Page\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/contact/src" isTestSource="false" packagePrefix="Contact\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/transaction/src" isTestSource="false" packagePrefix="Transaction\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/post/src" isTestSource="false" packagePrefix="Post\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/hook/src" isTestSource="false" packagePrefix="Hook\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/newsletter/src" isTestSource="false" packagePrefix="Newsletter\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/project/src" isTestSource="false" packagePrefix="Project\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/menu/src" isTestSource="false" packagePrefix="Menu\" />
+      <sourceFolder url="file://$MODULE_DIR$/module/gallery/src" isTestSource="false" packagePrefix="Gallery\" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/module/video/src" isTestSource="false" packagePrefix="Video\" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/livewire/livewire" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bacon/bacon-qr-code" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dasprid/enum" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/simplesoftwareio/simple-qrcode" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/markbaker/complex" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/markbaker/matrix" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ezyang/htmlpurifier" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpoffice/phpspreadsheet" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/php-enum" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/maennchen/zipstream-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/maatwebsite/excel" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

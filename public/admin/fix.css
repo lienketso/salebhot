@@ -1,0 +1,213 @@
+.title_head{
+    color: #666;
+    padding: 10px 0;
+    font-weight: 500;
+}
+ul.tree1{
+    margin: 0;
+    padding: 0;
+}
+ul.tree1 li{
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #bdc3d1;
+    margin:15px;
+    position: relative;
+}
+ul.tree1 li span{
+    position: absolute;
+    right: 10px;
+}
+ul.tree1 li span a{
+    border: 1px solid #259dab;
+    padding: 2px 5px;
+    margin-left: 5px;
+}
+.list_menu_home{
+    padding: 0 20px;
+}
+.table-options > li > a{
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.leftpanel-profile .media-object{
+    height: 48px;
+}
+.alert_an{
+    padding: 3px 10px;
+    background: #c00;
+    border-radius: 4px;
+    margin-left: 5px;
+    color: #fff;
+}
+.custom-file-input{
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+.list_dinh_kem {
+    display: inline-flex;
+}
+.img_att_list {
+    width: 20%;
+    padding: 2px;
+    border: 1px solid #ccc;
+    margin: 10px 5px;
+    position: relative;
+    float: left;
+    height: 80px;
+}
+.img_att_list .img_at {
+    width: 100%;
+    height: 100%;
+}
+.img_att_list span {
+    cursor: pointer;
+    position: absolute;
+    right: -5px;
+    top: -10px;
+}
+.namego h4{
+    text-transform: none;
+    font-size: 14px;
+}
+.namego ul{
+    padding: 0 15px;
+}
+.info_ss_list{
+    padding: 30px 0;
+}
+.info_ss_list h3{
+    text-transform: uppercase;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+.button_add_list{
+    padding-bottom: 20px;
+}
+.button_add_list button{
+    padding: 5px 20px;
+}
+.delete_list, .delete_list_e, .delete_box_e{
+    padding: 9px 20px;
+    background: darkred;
+    color: #fff;
+    font-weight: bold;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+.delete_list:hover, .delete_list_e:hover, .delete_box_e:hover{
+    background: #000;
+}
+.padb10{
+    padding-bottom: 10px;
+}
+.count_list{
+    font-weight: bold;
+    font-size: 20px;
+    padding-top: 4px;
+    text-align: right;
+}
+.list-option{
+    padding: 20px;
+    position: relative;
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.list-option .remove-option{
+    position: absolute;
+    top: -10px;
+    font-weight: bold;
+    color: red;
+    background: #fff;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.list-gt-option{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.list-gt-option ul{
+    list-style: none;
+    padding-left: 0;
+}
+.list-gt-option ul li{
+    display: inline;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+.head-option{
+    padding-top: 20px;
+}
+.title-create-tt{
+    font-size: 18px;
+    font-weight: bold;
+}
+.btn-create-tt{
+    text-align: right;
+}
+.save-tt{
+    position: relative;
+    top: 21px;
+}
+.removeValue{
+    cursor: pointer;
+}
+.modal-variant{
+    width: 1000px;
+}
+.list-variant{
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.list-variant table{
+    width: 100%;
+}
+.list-variant table tr td, .list-variant table tr th{
+    border-bottom: 1px solid #fff;
+    padding: 10px;
+}
+.list-variant table tr td span{
+    padding: 0 5px;
+}
+.list-variant table tr td a{
+    padding: 0 10px;
+}
+.select2-container .select2-selection--single{
+    height: 35px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    line-height: 33px !important;
+}
+.list-meta{
+    margin-bottom: 20px;
+}
+.form-list-search{
+    padding-bottom: 15px;
+}
+.btn-add-search{
+    padding-bottom: 30px;
+}
+.btn-add-search button{
+    padding: 5px;
+    font-weight: bold;
+}
+.btn-search-list button{
+    padding: 8px;
+}
+.qr-code img{
+    max-width: 100%;
+}
+.ckbox{
+    margin-top: 10px;
+}
+@media(max-width: 767px){
+    .txt-field{
+        padding-bottom: 10px;
+    }
+}

@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-fpm
+    volumes:
+      # Logging
+      - ./nginx/log:/var/log/nginx/
+      # Volume đến code ứng dụng, giống bên php-fpm nữa
+      - ./nginx/index.php:/var/www/html/index.php
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'laravel'
+      MYSQL_USER: 'salebaohiem'
+      MYSQL_PASSWORD: '@lks2023@'
+      MYSQL_ROOT_PASSWORD: '@lks2023@'
+    # Volumes này đang sử dụng theo dạng biến đó
+    # Nó tương đương khai báo VOLUME trong Dockerfile, sinh volume dạng mã băm
+    volumes:
+      - db_data:/var/lib/mysql
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+  php-fpm:
+    image: php:8.0-fpm
+    volumes:
+      - ./nginx/index.php:/var/www/html/index.php
+volumes:
+  db_data: {}
