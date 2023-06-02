@@ -6,20 +6,34 @@ namespace Transaction\Models;
 
 use Company\Models\Company;
 use Illuminate\Database\Eloquent\Model;
+use Order\Models\OrderProduct;
+use Product\Models\Factory;
+use Product\Models\Catproduct;
 
 class Transaction extends Model
 {
     protected $table = 'transaction';
-    protected $fillable = ['user_id','company_id','company_code','name','phone','email','license_plate','expiry','products','message','status'];
+    protected $fillable = ['user_id','company_id','company_code','category','name','phone','email','license_plate','expiry','products','factory','amount','message','status'];
 
 
     public function setExpiryAttribute($value)
     {
         $this->attributes['expiry'] = convert_to_timestamp($value);
     }
+    public function hang(){
+        return $this->belongsTo(Factory::class,'factory','id');
+    }
+    public function orderProduct()
+    {
+        return $this->hasMany(OrderProduct::class,'transaction_id','id');
+    }
 
     public function company(){
         return $this->belongsTo(Company::class,'company_id','id');
+    }
+
+    public function trancategory(){
+        return $this->belongsTo(Catproduct::class,'category','id');
     }
 
     public function getCompany(){

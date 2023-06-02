@@ -16,9 +16,9 @@ class Users extends Authenticatable
 
     protected $hidden = ['password','token','remember_token'];
 
-    protected $casts = [
-        'category'=>'array'
-    ];
+    // protected $casts = [
+    //     'category'=>'array'
+    // ];
     public function setPasswordAttribute($value){
         $this->attributes['password'] = bcrypt($value);
     }

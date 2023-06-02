@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 //        $this->call(UsersSeeder::class);
-        for($i=0;$i<=10;$i++) {
+        for($i=0;$i<=1000;$i++) {
             DB::table('company')->insert([
-                'name' => 'Nhà phân phối ' . $this->generateUniqueCode(),
+                'name' => 'Chưa cập nhật',
                 'company_code' => $this->generateUniqueCode(),
                 'status' => 'disable'
             ]);

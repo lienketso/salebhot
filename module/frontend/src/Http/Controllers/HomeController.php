@@ -16,10 +16,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Mail;
 use Newsletter\Repositories\NewsletterRepository;
+use Order\Models\OrderProduct;
 use Post\Repositories\PostRepository;
+use Product\Models\Product;
 use Product\Repositories\CatproductRepository;
 use Product\Repositories\ProductRepository;
 use Setting\Models\Setting;
+use Product\Models\Factory;
 use Setting\Repositories\SettingRepositories;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Repositories\TransactionRepository;
@@ -54,7 +57,6 @@ class HomeController extends BaseController
         }
     }
     function getIndex(PostRepository $postRepository){
-
         $gallery = $this->ga->scopeQuery(function ($e){
             return $e->orderBy('sort_order','asc')
                 ->where('status','active')
@@ -67,92 +69,60 @@ class HomeController extends BaseController
                 ->where('group_id',4);
         })->first();
 
-        $pageAbout = $postRepository->findWhere(['lang_code'=>$this->lang,'status'=>'active','display'=>1,'post_type'=>'page'])->first();
-
-        $latestNews = $postRepository->scopeQuery(function($e){
-            return $e->orderBy('created_at','desc')
-                ->where('lang_code',$this->lang)
-                ->where('status','active')
-                ->where('post_type','blog')
-                ->get();
-        })->limit(5);
-
-        //Tin Slider
-        $sliderNews= $postRepository->scopeQuery(function ($e){
-            return $e->orderBy('created_at','asc')
-                ->where('status','active')
-                ->where('post_type','blog')
-                ->where('lang_code',$this->lang)
-                ->where('display',3)->get();
-        })->limit(20);
-
-        //danh mục tin trang chủ
-        $catnewsHome = $this->catnews->with(['childs'=>function($e){
-            return $e->where('display',1);
-        },'postCat','postHot'])->scopeQuery(function($e){
-            return $e->orderBy('sort_order','asc')
-                ->where('parent',0)
-                ->where('status','active')
-                ->where('lang_code',$this->lang)
-                ->where('display',1)->get();
-        })->limit(10);
-
-        $catBottom = $this->catnews->with(['childs'])->scopeQuery(function($e){
-            return $e->orderBy('sort_order','asc')
-                ->where('parent',0)
-                ->where('status','active')
-                ->where('lang_code',$this->lang)
-                ->where('display',1)->get();
-        })->limit(10);
+        $category = $this->cat->orderBy('sort_order','asc')->findWhere(['status'=>'active','lang_code'=>$this->lang])->all();
 
 
+        $listProduct = $this->po->findWhere(['status'=>'active'])->all();
+        $listFactory = Factory::orderBy('sort_order','asc')->where('status','active')->get();
         return view('frontend::home.index',[
             'gallery'=>$gallery,
-            'sliderNews'=>$sliderNews,
-            'catBottom'=>$catBottom,
-            'latestNews'=>$latestNews,
-            'pageAbout'=>$pageAbout,
-            'catnewsHome'=>$catnewsHome,
-            'popups'=>$popups
+            'popups'=>$popups,
+            'listProduct'=>$listProduct,
+            'listFactory'=>$listFactory,
+            'category'=>$category
         ]);
     }
-    public function about(SettingRepositories $settingRepositories, PostRepository $postRepository){
-        $checkList = $settingRepositories->getSettingMeta('about_section_list_1_title_'.$this->lang);
-        $decodeCheck = json_decode($checkList);
-        $decodeCheck = array_chunk($decodeCheck,4);
-
-        //page to page
-        $pageList = $postRepository->scopeQuery(function($e){
-            return $e->orderBy('created_at','desc')
-                ->where('status','active')
-                ->where('lang_code',$this->lang)
-                ->where('display',3);
-        })->limit(5);
-
-        return view('frontend::home.about',['decodeCheck'=>$decodeCheck,'pageList'=>$pageList]);
-    }
-
     public function postBooking(Request $request,SettingRepositories  $settingRepositories){
         $emailSetting = $settingRepositories->getSettingMeta('site_email_vn');
         $input = [
             'name'=>$request->name,
             'user_id'=>0,
             'phone'=>$request->phone,
-            'email'=>$request->email,
             'license_plate'=>$request->license_plate,
             'expiry'=>$request->expiry,
             'message'=>$request->message,
+            'factory'=>$request->factory,
+            'category'=>$request->category,
             'products'=>json_encode($request->products)
         ];
         if(!is_null($request->npp)){
             $nhapp = Company::where('company_code',$request->npp)->first();
+            $input['user_id'] = $nhapp->user_id;
             $input['company_id'] = $nhapp->id;
             $input['company_code'] = $request->npp;
         }
-         $transaction = $this->tran->create($input);
-//        Mail::to($emailSetting)
-//            ->send(new SendMail($transaction));
+        $transaction = $this->tran->create($input);
+        $totallamount = 0;
+        foreach($request->products as $p){
+            $productInfo = Product::find($p);
+            $totallamount = $totallamount + $productInfo->price;
+            $pro = [
+                'product_id'=>$p,
+                'transaction_id'=>$transaction->id,
+                'qty'=>1,
+                'amount'=>$productInfo->price
+            ];
+            $order = OrderProduct::create($pro);
+        }
+        $amountUp = ['amount'=>$totallamount];
+        $updateAmount = $this->tran->update($amountUp,$transaction->id);
+       Mail::to($emailSetting)
+           ->send(new SendMail($transaction));
         return response()->json($transaction);
+    }
+
+    public function thankyou(){
+    	return view('frontend::home.thankyou');
     }
 
     public function contact(SettingRepositories $settingRepositories){
@@ -183,20 +153,5 @@ class HomeController extends BaseController
             return view('frontend::contact.success',['data'=>$input]);
     }
 
-    public function createNewletter(Request $request, NewsletterRepository $newsletterRepository){
-        $email = $request->get('email');
-        $input = ['email'=>$email];
-        $newsletterRepository->create($input);
-        echo 'Subscribe successful !';
-    }
-
-    public function createPartner(TransactionCreateRequest $request, TransactionRepository $transactionRepository){
-        $input = $request->except(['_token']);
-        try{
-            $create = $transactionRepository->create($input);
-        }catch (\Exception $e){
-            return $e->getMessage();
-        }
-    }
 
 }

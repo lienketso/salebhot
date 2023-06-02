@@ -207,15 +207,14 @@
                         <div class="form-group" >
                             <label style="padding-top: 20px">QR Code NPP</label>
                             <div class="qr-code" id="svgID" style="position: relative">
-{{--                                {!! GenQrCode($settingModel->getSettingMeta('link_qr_code').'?agent='.$data->company_code) !!}--}}
                                 <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
                         ->size(500)->errorCorrection('H')
-                        ->generate($settingModel->getSettingMeta('link_qr_code').'?agent='.$data->company_code)) !!} ">
+                        ->generate($settingModel->getSettingMeta('link_qr_code').'?npp='.$data->company_code)) !!} ">
                             </div>
                             <div style="padding-top: 20px">
                                 <a href="data:image/png;base64, {!! base64_encode(QrCode::format('png')
                         ->size(500)->errorCorrection('H')
-                        ->generate($settingModel->getSettingMeta('link_qr_code').'?agent='.$data->company_code)) !!}" download="qrcode.png">download QR code</a>
+                        ->generate($settingModel->getSettingMeta('link_qr_code').'?npp='.$data->company_code)) !!}" download="qrcode.png">download QR code</a>
                             </div>
                         </div>
 

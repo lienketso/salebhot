@@ -10,7 +10,7 @@ use Product\Models\Product;
 class OrderProduct extends Model
 {
     protected $table = 'order_product';
-    protected $fillable = ['order_id','product_id','qty','amount'];
+    protected $fillable = ['transaction_id','product_id','qty','amount'];
 
     public function product(){
         return $this->belongsTo(Product::class,'product_id','id');

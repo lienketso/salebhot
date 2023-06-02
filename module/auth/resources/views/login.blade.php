@@ -27,7 +27,7 @@
 
 <div class="panel signin">
     <div class="panel-heading">
-        <h1>Lienketso</h1>
+        <h1>Baohiemoto</h1>
         <h4 class="panel-title">Xin chào, vui lòng đăng nhập</h4>
     </div>
     <div class="panel-body">

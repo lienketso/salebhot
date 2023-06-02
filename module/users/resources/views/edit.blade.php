@@ -108,36 +108,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Phân quyền chuyên mục</label>
-                            <div class="table-responsive">
-                                <table class="table nomargin">
-                                    <thead>
-                                    <tr>
-                                        <th>Tên danh mục</th>
-                                        <th>check</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php if(!empty($category)): ?>
-                                        <?php foreach($category as $row): ?>
-
-                                    <tr>
-                                        <td>{{$row->name}}</td>
-                                        <td class="text-center">
-                                            <label class="ckbox ckbox-primary">
-                                                <input type="checkbox" name="category[]" value="{{$row->id}}" {!! (in_array($row->id, $data->category)) ? 'checked' : '' !!}>
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php endif; ?>
-
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
-                        </div>
+                    
                         <div class="form-group mb-3">
                             <label>Ảnh đại diện</label>
                             <div class="custom-file">

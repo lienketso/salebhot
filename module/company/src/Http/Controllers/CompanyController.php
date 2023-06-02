@@ -34,9 +34,11 @@ class CompanyController extends BaseController
     }
 
     public function export(){
+        $idList = range(4037, 5038);
         $data = Company::select('company_code', 'name','thumbnail')
-            ->get();
-        return Excel::download(new Exports($data), 'signaturelist.xlsx');
+            ->whereIn('id',$idList)->get();
+            // dd($data);
+        return Excel::download(new Exports($data), 'QR-Nha-PP-2.xlsx');
     }
 
     public function getIndex(Request $request){

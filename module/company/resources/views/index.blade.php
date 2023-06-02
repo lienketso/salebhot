@@ -98,8 +98,8 @@
                             <td class="namego">
                                 <h4>{{$d->name}} - {{$d->contact_name}}</h4>
                                 <ul>
-                                    <li>Địa chỉ : {{$d->city}} - Số điện thoại : {{$d->phone}}</li>
-                                    <li>Email : {{$d->email}}</li>
+                                    <li>Địa chỉ : {{$d->city}} - Số điện thoại :  <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
+                                    <li>Email : <a href="mailto:{{$d->email}}"> <i class="fa fa-envelope"></i> {{$d->email}}</a></li>
                                 </ul>
                             </td>
                             <td>

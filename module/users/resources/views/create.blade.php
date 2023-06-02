@@ -107,7 +107,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
+                     <!--        <div class="form-group">
                                 <label>Phân quyền chuyên mục</label>
                                 <div class="table-responsive">
                                     <table class="table nomargin">
@@ -136,8 +136,8 @@
 
                                         </tbody>
                                     </table>
-                                </div><!-- table-responsive -->
-                            </div>
+                                </div>
+                            </div> -->
                             <div class="form-group mb-3">
                                 <label>Ảnh đại diện</label>
                                 <div class="custom-file">

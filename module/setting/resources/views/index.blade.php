@@ -2,7 +2,6 @@
 
 @section('js')
     <script type="text/javascript" src="{{asset('admin/libs/ckeditor/ckeditor.js')}}"></script>
-    <script type="text/javascript" src="{{asset('admin/libs/ckfinder/ckfinder_v1.js')}}"></script>
 @endsection
 @section('js-init')
     <script type="text/javascript">
@@ -27,12 +26,6 @@
             filebrowserUploadMethod: 'form'
         });
 
-        CKEDITOR.replace( 'editor4', {
-            filebrowserBrowseUrl: '{{asset("admin/libs/ckfinder/ckfinder.html")}}',
-            filebrowserImageBrowseUrl: '{{asset("admin/libs/ckfinder/ckfinder.html?type=Images")}}',
-            filebrowserUploadUrl: '{{route('ckeditor.upload',['_token' => csrf_token() ])}}',
-            filebrowserUploadMethod: 'form'
-        });
     </script>
 
 @endsection
@@ -167,12 +160,6 @@
                                       placeholder="Nội dung mục chân trang 2">{{$setting->getSettingMeta('site_footer_info_1_'.$language)}}</textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label>Nội dung trang liên hệ</label>
-                            <textarea id="editor4" name="site_contact_info_{{$language}}"
-                                      class="form-control makeMeRichTextarea" rows="3"
-                                      placeholder="Nội dung trang liên hệ">{{$setting->getSettingMeta('site_contact_info_'.$language)}}</textarea>
-                        </div>
 
 
                         <div class="form-group">
@@ -197,9 +184,9 @@
                             <label>Ảnh logo</label>
                             <div class="input-group col-xs-12" style="display: flex">
                                 <input type="text" name="site_logo" value="{{$setting->getSettingMeta('site_logo')}}"
-                                       id="ckfinder-input-2" class="form-control file-upload-info" placeholder="Upload Image">
+                                       id="ckfinder-input-1" class="form-control file-upload-info" placeholder="Upload Image">
                                 <span class="input-group-append">
-								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-2"  type="button">Chọn ảnh</button>
+								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-1"  type="button">Chọn ảnh</button>
 							</span>
                             </div>
                             <div class="thumbnail_w" style="padding-top: 10px">
@@ -210,27 +197,13 @@
                             <label>Tải lên profile</label>
                             <div class="input-group col-xs-12" style="display: flex">
                                 <input type="text" name="site_profile" value="{{$setting->getSettingMeta('site_profile')}}"
-                                       id="ckfinder-input-3" class="form-control file-upload-info" placeholder="Upload Image">
+                                       id="ckfinder-input-2" class="form-control file-upload-info" placeholder="Upload Image">
                                 <span class="input-group-append">
-								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-3"  type="button">Chọn ảnh</button>
+								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-2"  type="button">Chọn ảnh</button>
 							</span>
                             </div>
                             <div class="thumbnail_w" style="padding-top: 10px">
                                 <a href="{{upload_url($setting->getSettingMeta('site_profile'))}}"> <i class="fa fa-file-pdf-o"></i> File is here</a>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label>Banner trang liên hệ</label>
-                            <div class="input-group col-xs-12" style="display: flex">
-                                <input type="text" name="banner_contact" value="{{$setting->getSettingMeta('banner_contact')}}"
-                                       id="ckfinder-input-6" class="form-control file-upload-info" placeholder="Upload Image">
-                                <span class="input-group-append">
-								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-6"  type="button">Chọn ảnh</button>
-							</span>
-                            </div>
-                            <div class="thumbnail_w" style="padding-top: 10px">
-                                <img src="{{ ($setting->getSettingMeta('banner_contact')!='null') ? upload_url($setting->getSettingMeta('banner_contact')) :  public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                             </div>
                         </div>
 

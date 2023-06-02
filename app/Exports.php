@@ -33,8 +33,8 @@ class Exports implements FromCollection, WithHeadings, WithMapping, ShouldAutoSi
 
         $img = base64_encode(QrCode::format('png')
                 ->size(500)->errorCorrection('H')
-                ->generate('https://sale.4car.vn?npp='.$item->company_code));
-        $qrCode = QrCode::format('png')->size(1000)->generate('https://sale.4car.vn?npp='.$item->company_code);
+                ->generate('http://sale.baohiemoto.vn?npp='.$item->company_code));
+        $qrCode = QrCode::format('png')->size(1000)->generate('http://sale.baohiemoto.vn?npp='.$item->company_code);
         $path = '/img/qr-code/' . $item->company_code . '.png';
         Storage::disk('local')->put($path, $qrCode);
         return [

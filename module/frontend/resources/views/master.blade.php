@@ -45,10 +45,10 @@
 <main>
     <div class="logo">
         <div class="logo-icon">
-            <img src="{{asset('frontend/assets/images/logo.png')}}" alt="BeRifma">
+            <img src="{{ ($setting['site_logo']!='') ? upload_url($setting['site_logo']) : asset('frontend/assets/images/logo.png')}}" alt="Baohiemoto">
         </div>
         <div class="logo-text">
-            4car.vn
+            
         </div>
     </div>
     <div class="container">

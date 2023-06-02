@@ -5,7 +5,14 @@ namespace Transaction\Http\Controllers;
 
 
 use Barryvdh\Debugbar\Controllers\BaseController;
+use Company\Models\Company;
 use Illuminate\Http\Request;
+use Order\Models\OrderProduct;
+use PHPUnit\Exception;
+use Product\Models\Factory;
+use Product\Models\Product;
+use Transaction\Http\Requests\TransactionCreateRequest;
+use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
 use Transaction\Repositories\TransactionRepository;
 
@@ -35,6 +42,92 @@ class TransactionController extends BaseController
         }
         $data = $q->orderBy('created_at','desc')->paginate(20);
         return view('wadmin-transaction::index',['data'=>$data]);
+    }
+
+    public function getCreate(){
+        $products = Product::orderBy('created_at','desc')->where('status','active')->get();
+        $hangsx = Factory::orderBy('sort_order','asc')->where('status','active')->get();
+        $company = Company::orderBy('name','asc')->where('status','active')->get();
+        return view('wadmin-transaction::create',compact('products','hangsx','company'));
+    }
+
+    public function postCreate(TransactionCreateRequest $request){
+        try {
+            $input = $request->except(['_token', 'continue_post']);
+            $products = json_encode($request->products);
+            $input['products'] = $products;
+            if(!is_null($request->company_id)){
+                $companyInfo = Company::find($request->company_id);
+                $input['company_code'] = $companyInfo->company_code;
+            }
+
+            $data = $this->model->create($input);
+            $totallamount = 0;
+            if(!is_null($request->products)){
+                foreach($request->products as $p){
+                    $productInfo = Product::find($p);
+                    $totallamount = $totallamount + $productInfo->price;
+                    $pro = [
+                        'product_id'=>$p,
+                        'transaction_id'=>$data->id,
+                        'qty'=>1,
+                        'amount'=>$productInfo->price
+                    ];
+                    $order = OrderProduct::create($pro);
+                }
+            }
+            $amountUp = ['amount'=>$totallamount];
+            $updateAmount = $this->model->update($amountUp,$data->id);
+            if($request->has('continue_post')){
+                return redirect()
+                    ->route('wadmin::transaction.create.get')
+                    ->with('create','Thêm dữ liệu thành công !');
+            }
+            return redirect()->route('wadmin::transaction.index.get')
+                ->with('create','Thêm dữ liệu thành công !');
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+    }
+
+    public function getEdit($id){
+        $products = Product::orderBy('created_at','desc')->where('status','active')->get();
+        $hangsx = Factory::orderBy('sort_order','asc')->where('status','active')->get();
+        $company = Company::orderBy('name','asc')->where('status','active')->get();
+        $data = $this->model->find($id);
+        if(!$data){
+            redirect()->back()->withErrors(config('messages.error'));
+        }
+        $currentProduct = [];
+        $productChecked = $data->orderProduct()->get()->toArray();
+        foreach($productChecked as $check){
+            $currentProduct[] = $check['product_id'];
+        }
+        return view('wadmin-transaction::edit',compact('data','products','hangsx','company','currentProduct'));
+    }
+
+    public function postEdit($id,TransactionEditRequest $request){
+        $input = $request->except(['_token', 'continue_post']);
+        try {
+            if(!is_null($request->company_id)){
+                $companyInfo = Company::find($request->company_id);
+                $input['company_code'] = $companyInfo->company_code;
+            }
+            $update = $this->model->update($input,$id);
+            $totallamount = 0;
+            if(!is_null($request->products)){
+                foreach($request->products as $p){
+                    $productInfo = Product::find($p);
+                    $totallamount = $totallamount + $productInfo->price;
+                    $order = OrderProduct::updateOrCreate(['transaction_id'=>$id],['product_id'=>$p,'amount'=>$productInfo->amount]);
+                }
+            }
+            return redirect()->route('wadmin::transaction.index.get')
+                ->with('create','Sửa dữ liệu thành công !');
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+
     }
 
 

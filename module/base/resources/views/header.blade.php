@@ -1,7 +1,7 @@
 <div class="headerpanel">
 
     <div class="logopanel">
-        <h2><a href="{{route('wadmin::dashboard.index.get')}}">Lienketso</a></h2>
+        <h2><a href="{{route('wadmin::dashboard.index.get')}}">Baohiemoto</a></h2>
     </div><!-- logopanel -->
 
     <div class="headerbar">

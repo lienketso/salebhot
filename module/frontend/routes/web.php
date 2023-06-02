@@ -82,3 +82,4 @@ Route::group(['prefix'=>'cart'],function(Router $router){
 //location
 Route::get('district','OrderController@getDistrict')->name('frontend::district.get');
 Route::get('template-order','OrderController@orderTemplate')->name('frontend::order-template.get');
+Route::get('thank-you','HomeController@thankyou')->name('frontend::thank-you.get');

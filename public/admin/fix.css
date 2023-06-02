@@ -206,6 +206,18 @@ ul.tree1 li span a{
 .ckbox{
     margin-top: 10px;
 }
+.bg-revenua{
+    padding: 50px 20px;
+    display: inline-block;
+    width: 100%;
+}
+.bg-revenua .panel-title{
+    color: #fff !important;
+}
+.panel-site-traffic .panel-body h3{
+    padding-top: 10px;
+    color: #fff;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

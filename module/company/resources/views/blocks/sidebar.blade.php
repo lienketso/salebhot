@@ -6,7 +6,13 @@
     $createRoute = ['wadmin::company.create.get'];
 
 @endphp
-
+@php
+    use Illuminate\Support\Facades\Auth;
+    $userLog = Auth::user();
+    $roles = $userLog->load('roles.perms');
+    $permissions = $roles->roles->first()->perms;
+@endphp
+@if ($permissions->contains('name','company_index'))
 <li class="nav-parent {{in_array(Route::currentRouteName(), $listRoute) ? 'nav-active active' : '' }}">
     <a href="" ><i class="fa fa-smile-o"></i> <span>Quản lý NPP</span></a>
     <ul class="children">
@@ -14,3 +20,4 @@
         <li class="{{in_array(Route::currentRouteName(), $createRoute) ? 'active' : '' }}"><a href="{{route('wadmin::company.create.get')}}">Thêm mới</a></li>
     </ul>
 </li>
+@endif

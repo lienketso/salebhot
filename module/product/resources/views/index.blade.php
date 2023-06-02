@@ -63,11 +63,13 @@
                         <tr>
                             <td>
                                 <div class="product-img bg-transparent border">
-                                    <img src="{{ ($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
+                                    <a href="{{route('wadmin::product.edit.get',$d->id)}}">
+                                        <img src="{{ ($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
+                                    </a>
                                 </div>
                             </td>
                             <td>
-                                <a target="_blank" href="{{route('frontend::product.detail.get',$d->slug)}}">{{$d->name}}</a>
+                                <a href="{{route('wadmin::product.edit.get',$d->id)}}">{{$d->name}}</a>
                             </td>
                             <td>{{$d->getCategory()}}</td>
                             <td>{{$d->getUserPost->username}}</td>

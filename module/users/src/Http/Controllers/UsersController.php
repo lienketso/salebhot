@@ -80,7 +80,7 @@ class UsersController extends BaseController
             if ($request->get('password') == null) {
                 $input = $request->except(['_token', 'email', 'password', 're_password']);
             } else {
-                $input = $request->except(['_token', 'email']);
+                $input = $request->except(['_token']);
             }
 
             if($request->hasFile('thumbnail')){

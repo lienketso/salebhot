@@ -60,18 +60,19 @@ $(document).ready(function()
            let name = $('input[name="name"]').val();
            let npp = $('input[name="npp"]').val();
            let phone = $('input[name="phone"]').val();
-           let email = $('input[name="email"]').val();
+           // let email = $('input[name="email"]').val();
            let license_plate = $('input[name="license_plate"]').val();
            let expiry = $('input[name="expiry"]').val();
            let message = $('input[name="message"]').val();
            // let products = $('input[name="products"]:checked').val();
+            let factory = $('input[name="factory"]:checked').val();
+            // let category = $('select[name="category"]').val();
+            var category = $('.slc-category').find(":selected").val();
+
            var products = [];
-           $(":checkbox").each(function () {
-               var ischecked = $('input[name="products"]:checked');
-               if (ischecked) {
-                   products.push($(this).val());
-               }
-           });
+           $('input[type=checkbox]:checked').each(function() {
+            	products.push($(this).val());
+        	});
 
            let url = _this.attr('data-url');
 
@@ -98,12 +99,13 @@ $(document).ready(function()
                    type: "POST",
                    url: url,
                    dataType: "json",
-                   data: {name,phone,email,license_plate,expiry,message,products,npp},
+                   data: {name,phone,license_plate,expiry,message,products,npp,factory,category},
                    success: function (result) {
                        console.log(result);
-                       $('#txt_success').text('Gửi thông tin thành công ! Chuyên viên tại 4Car sẽ liên hệ quý khách hàng trong vài phút tới');
+                       $('#txt_success').text('Gửi thông tin thành công ! Chuyên viên tại Baohiemoto sẽ liên hệ quý khách hàng trong vài phút tới');
                        $('input[name="name"]').val('');
                        $('input[name="phone"]').val('');
+                       window.location = 'http://sale.baohiemoto.vn/thank-you';
                    },
                    error: function (data, status) {
                        $("#btnSubmit").html("Đã có lỗi xảy ra !");

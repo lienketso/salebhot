@@ -18,7 +18,7 @@ class SendMail extends Mailable
      */
     public function __construct($data)
     {
-        $this->subject('[4-CAR.VN] Thông báo có đơn tư vấn từ Landing page 4car.vn');
+        $this->subject('[sale.baohiemoto.vn] Thông báo có đơn tư vấn từ Landing page sale.baohiemoto.vn');
         $this->data = $data;
     }
 
@@ -29,7 +29,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->subject)->replyTo('thanhan1507@gmail.com','4car.vn')
+        return $this->subject($this->subject)->replyTo('thanhan1507@gmail.com','sale.baohiemoto.vn')
             ->view('frontend::mail.booking',['details'=>$this->data]);
     }
 }

@@ -8,15 +8,15 @@
             <div class="left">
                 <article class="side-text">
                     <h2>Mua xe như ý, Bảo hiểm hợp lý</h2>
-                    <p>Liên hệ ngay <span>info@4car.vn</span></p>
+                    <p>Liên hệ ngay <span>info@baohiemoto.vn</span></p>
                 </article>
                 <div class="left-img">
                     <img src="{{asset('frontend/assets/images/left-bg.gif')}}" alt="BeRifma">
                 </div>
                 <ul class="links">
-                    <li><a href="https://baohiemoto.vn">Về chúng tôi</a></li>
-                    <li><a href="https://baohiemoto.vn/">Chính sách bán hàng</a></li>
-                    <li><a href="https://baohiemoto.vn/">baohiemoto.vn</a></li>
+                    <li><a href="https://baohiemoto.vn"><i class="fa-solid fa-usd"></i> Doanh thu của bạn</a></li>
+                    <li><a href="https://baohiemoto.vn/"><i class="fa-solid fa-users"></i> Trở thành đại lý</a></li>
+                    <li><a href="https://baohiemoto.vn/"><i class="fa-solid fa-info-circle"></i> baohiemoto.vn</a></li>
                 </ul>
             </div>
         </div>
@@ -40,18 +40,14 @@
                             <input type="text" required name="phone" id="phone" value="{{old('phone')}}" placeholder="VD : 0979xxxxxx">
                             <span id="sp_phone"></span>
                         </div>
-                        <div class="input-field">
-                            <label><i class="fa-regular fa-envelope"></i>Email </label>
-                            <input type="text" name="email" id="mail-email" value="{{old('email')}}" placeholder="Địa chỉ email">
-                            <span></span>
-                        </div>
+            
                         <div class="input-field">
                             <label for="license_plate"><i class="fa-regular fa-paper-plane"></i>Biển số xe <span>*</span></label>
                             <input required type="text" name="license_plate" id="license_plate" value="{{old('license_plate')}}" placeholder="VD : 30H888.88">
                             <span></span>
                         </div>
                         <div class="input-field">
-                            <label for="expiry"><i class="fa-regular fa-paper-plane"></i>Ngày hết hạn </label>
+                            <label for="expiry"><i class="fa-regular fa-calendar"></i>Ngày hết hạn </label>
                             <input type="date" name="expiry" id="expiry" value="{{old('expiry')}}" placeholder="VD : 15/10/2023">
                             <span></span>
                         </div>
@@ -64,41 +60,36 @@
                             <label><i class="fa-regular fa-user"></i>Sản phẩm bảo hiểm <span>*</span></label>
                             <div class="row">
                                 <div class="tab-100 col-md-12">
+                                    @foreach($listProduct as $k=>$val)
                                     <div class="check-single">
-                                        <input type="checkbox" name="products[]" value="Bảo hiểm TNDS ( Bắt buộc )" checked>
-                                        <label>Bảo hiểm TNDS ( Bắt buộc )</label>
+                                        <input type="checkbox" name="products[]" value="{{$val->id}}" {{($k==0) ? 'checked' : ''}}>
+                                        <label>{{$val->name}}</label>
                                     </div>
-                                    <div class="check-single">
-                                        <input type="checkbox" name="products[]" value="Bảo hiểm vật chất xe ( thân vỏ xe )">
-                                        <label>Bảo hiểm vật chất xe ( thân vỏ xe )</label>
-                                    </div>
+                                    @endforeach
+                                   
 
                                 </div>
 
                             </div>
                         </div>
+                        <div class="input-field">
+                            <label for="message"><i class="fa-solid fa-car"></i>Loại xe </label>
+                            <select name="category" class="slc-category">
+                            	@foreach($category as $cat)
+                            	<option value="{{$cat->id}}">{{$cat->name}}</option>
+                            	@endforeach
+                            </select>
+                            <span></span>
+                        </div>
                         <fieldset id="radio-step" class="fields-radio">
                             <h4>Hãng cung cấp</h4>
-                            <label class="factory-radio"> BSH - Tổng công ty Bảo hiểm Sài Gòn - Hà Nội
-                                <input type="radio" checked="checked" name="radio" value="BSH">
+                            @foreach($listFactory as $d)
+                            <label class="factory-radio"> {{$d->name}}
+                                <input type="radio" name="factory" value="{{$d->id}}">
                                 <span class="checkmark"></span>
                             </label>
-                            <label class="factory-radio"> PVI - Tổng công ty Bảo hiểm PVI
-                                <input type="radio" name="radio" value="PVI">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label class="factory-radio"> MIC - Bảo hiểm quân đội
-                                <input type="radio" name="radio" value="MIC">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label class="factory-radio">VNI - Bảo hiểm hàng không
-                                <input type="radio" name="radio" value="VNI">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label class="factory-radio">XTI - Bảo hiểm Xuân Thành
-                                <input type="radio" name="radio" value="XTI">
-                                <span class="checkmark"></span>
-                            </label>
+                            @endforeach
+                            
                         </fieldset>
                     </div>
                     <div class="mess-success">

@@ -15,7 +15,7 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_DATABASE: 'laravel'
+      MYSQL_DATABASE: 'salebaohiem'
       MYSQL_USER: 'salebaohiem'
       MYSQL_PASSWORD: '@lks2023@'
       MYSQL_ROOT_PASSWORD: '@lks2023@'

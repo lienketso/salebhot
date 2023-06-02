@@ -54,7 +54,7 @@
                 <table class="table nomargin">
                     <thead>
                     <tr>
-                        <th>Họ tên</th>
+                        <th>Tên khách hàng</th>
                         <th>Thông tin</th>
                         <th>Nhà PP</th>
                         <th>Nội dung</th>
@@ -67,16 +67,26 @@
                     @foreach($data as $d)
                         <tr>
                             <td>
-                                {{$d->name}}<br/>
-                                {{$d->company_info}}
+                                <a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a>
                             </td>
                             <td> Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</td>
                             <td>{{$d->getCompany()}}</td>
                             <td>
-                                <p>Sản phẩm : <strong>{{$d->products}}</strong></p>
-                                <p>Biến số xe : <strong>{{$d->license_plate}}</strong></p>
-                                <p>Ngày hết hạn : <strong>{{format_date($d->expiry)}}</strong></p>
-                                <p>Tin nhắn : {{$d->message}}</p>
+                                <div class="product-in">
+                                    <h4>Sản phẩm</h4>
+                                    <ul>
+                                        @foreach($d->orderProduct as $p)
+                                        <li>{{$p->product->name}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @if(!is_null($d->trancategory) || !is_null($d->category))
+                                <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
+                                @endif
+                                
+                                <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
+                                <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
+                                <p>Tin nhắn: {{$d->message}}</p>
                             </td>
                             <td>{{format_date($d->created_at)}}</td>
                             <td><a href="{{route('wadmin::transaction.change.get',$d->id)}}"
@@ -84,6 +94,7 @@
                                     {{($d->status=='active') ? 'Đã tư vấn' : 'Chưa tư vấn'}}</a></td>
                             <td>
                                 <ul class="table-options">
+                                    <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
                                     <li><a class="example-p-6" data-url="{{route('wadmin::transaction.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
                                 </ul>
                             </td>

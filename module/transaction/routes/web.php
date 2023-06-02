@@ -10,6 +10,17 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
     $router->group(['prefix'=>$moduleRoute],function(Router $router) use ($adminRoute,$moduleRoute){
         $router->get('index','TransactionController@getIndex')
             ->name('wadmin::transaction.index.get')->middleware('permission:transaction_index');
+
+        $router->get('create','TransactionController@getCreate')
+            ->name('wadmin::transaction.create.get')->middleware('permission:transaction_create');
+        $router->post('create','TransactionController@postCreate')
+            ->name('wadmin::transaction.create.post')->middleware('permission:transaction_create');
+
+        $router->get('edit/{id}','TransactionController@getEdit')
+            ->name('wadmin::transaction.edit.get')->middleware('permission:transaction_edit');
+        $router->post('edit/{id}','TransactionController@postEdit')
+            ->name('wadmin::transaction.edit.post')->middleware('permission:transaction_edit');
+
         $router->get('remove/{id}','TransactionController@remove')
             ->name('wadmin::transaction.remove.get')->middleware('permission:transaction_delete');
         $router->get('change/{id}','TransactionController@changeStatus')

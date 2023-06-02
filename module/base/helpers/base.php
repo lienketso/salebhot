@@ -89,7 +89,7 @@ if (!function_exists('domain_url')) {
 
 if (!function_exists('replace_thumbnail')) {
     function replace_thumbnail($thumbnail){
-        return str_replace(env('APP_URL').'/public/upload/','',$thumbnail);
+        return str_replace(env('APP_URL').'/upload/','',$thumbnail);
     }
 }
 
@@ -149,6 +149,14 @@ if(!function_exists('convert_to_timestamp')){
     function convert_to_timestamp($date){
         $time = strtotime($date);
         $newformat = date('Y-m-d h:i:s',$time);
+        return $newformat;
+    }
+}
+
+if(!function_exists('show_date_input')){
+    function show_date_input($date){
+        $time = strtotime($date);
+        $newformat = date('Y-m-d',$time);
         return $newformat;
     }
 }

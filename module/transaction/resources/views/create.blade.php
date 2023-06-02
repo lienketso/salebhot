@@ -1,25 +1,23 @@
 @extends('wadmin-dashboard::master')
 
+@section('css')
+    <link rel="stylesheet" href="{{asset('admin/themes/lib/select2/select2.css')}}">
+@endsection
 @section('js')
-    <script type="text/javascript" src="{{asset('admin/libs/ckeditor/ckeditor.js')}}"></script>
-    <script type="text/javascript" src="{{asset('admin/libs/ckfinder/ckfinder_v1.js')}}"></script>
+    <script type="text/javascript" src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
 @endsection
 @section('js-init')
     <script type="text/javascript">
-        CKEDITOR.replace( 'editor1', {
-            filebrowserUploadUrl: '{{route('ckeditor.upload',['_token' => csrf_token() ])}}', //route dashboard/upload
-            filebrowserUploadMethod: 'form'
-        });
+        $('.js-select-single').select2();
     </script>
-
 @endsection
 
 @section('content')
 
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="{{route('wadmin::page.index.get')}}">Trang tĩnh</a></li>
-        <li class="active">Thêm trang tĩnh</li>
+        <li><a href="{{route('wadmin::transaction.index.get')}}">Đơn hàng</a></li>
+        <li class="active">Thêm đơn hàng mới</li>
     </ol>
 
     <div class="row">
@@ -42,37 +40,50 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label>Tiêu đề</label>
+                            <label>Tên khách hàng (*)</label>
                             <input class="form-control"
                                    name="name"
                                    type="text"
                                    value="{{old('name')}}"
-                                   placeholder="Tiêu đề bài viết">
+                                   placeholder="VD : Nguyễn Văn A">
                         </div>
                         <div class="form-group">
-                            <label>Mô tả</label>
-                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Mô tả ngắn">{{old('description')}}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Nội dung bài viết</label>
-                            <textarea id="editor1" name="content" class="form-control makeMeRichTextarea" rows="3" placeholder="Nội dung bài viết">{{old('content')}}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Tags (Từ khóa)</label>
-                            <input class="form-control" name="tags" type="text" placeholder="Từ khóa liên quan">
-                        </div>
-                        <div class="form-group">
-                            <label>Thẻ Meta title</label>
+                            <label>Số điện thoại (*)</label>
                             <input class="form-control"
-                                   name="meta_title"
+                                   name="phone"
                                    type="text"
-                                   value="{{old('meta_title')}}"
-                                   placeholder="">
+                                   value="{{old('phone')}}"
+                                   placeholder="VD : 0978xxxxxx">
                         </div>
                         <div class="form-group">
-                            <label>Thẻ meta description</label>
-                            <textarea id="" name="meta_desc" class="form-control" rows="3" placeholder="Thẻ Meta description">{{old('meta_desc')}}</textarea>
+                            <label>Email</label>
+                            <input class="form-control"
+                                   name="email"
+                                   type="text"
+                                   value="{{old('email')}}"
+                                   placeholder="VD : admin@gmail.com">
                         </div>
+                        <div class="form-group">
+                            <label>Biển số xe</label>
+                            <input class="form-control"
+                                   name="license_plate"
+                                   type="text"
+                                   value="{{old('license_plate')}}"
+                                   placeholder="VD : 30H34536">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày hết hạn</label>
+                            <input class="form-control"
+                                   name="expiry"
+                                   type="date"
+                                   value="{{old('expiry')}}"
+                                   placeholder="VD : 16/06/2023">
+                        </div>
+                        <div class="form-group">
+                            <label>Note</label>
+                            <textarea id="" name="message" class="form-control" rows="3" placeholder="Mô tả ngắn">{{old('message')}}</textarea>
+                        </div>
+
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>
@@ -94,27 +105,40 @@
                     <div class="panel-body">
 
                         <div class="form-group">
-                            <label>Vị trí hiển thị</label>
-                            <select id="" name="display" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
-                                <option value="0" {{ (old('display') ==0 ) ? 'selected' : ''}}>Không chọn</option>
-                                <option value="1" {{ (old('display') ==1 ) ? 'selected' : ''}}>Trang chủ</option>
-                                <option value="2" {{ (old('display') ==2 ) ? 'selected' : ''}}>Nổi bật</option>
-                            </select>
+                            <label>Chọn nhà phân phối</label>
+                                <select id="" name="company_id" class="form-control js-select-single" style="width: 100%" >
+                                    <option value="">Chọn nhà phân phối</option>
+                                    @foreach($company as $c)
+                                        <option value="{{$c->id}}" {{ (old('company_id')==$c->id) ? 'selected' : ''}}>{{$c->company_code}} - {{$c->name}}</option>
+                                    @endforeach
+                                </select>
                         </div>
+
+                        <div class="form-group">
+                            <label>Chọn sản phẩm</label>
+                            @foreach($products as  $d)
+                                <label class="ckbox ckbox-primary">
+                                    <input type="checkbox" value="{{$d->id}}" wfd-id="id{{$d->id}}" name="products[]"><span> {{$d->name}}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                        <div class="form-group">
+                            <h4>Hãng</h4>
+                            @foreach($hangsx as $h)
+                                <label class="rdiobox">
+                                    <input type="radio" name="factory" value="{{$h->id}}">
+                                    <span>{{$h->name}}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
                         <div class="form-group">
                             <label>Trạng thái</label>
                             <select id="" name="status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
                                 <option value="active" {{ (old('status')=='active') ? 'selected' : ''}}>Hiển thị</option>
                                 <option value="disable" {{ (old('status')=='disable') ? 'selected' : ''}}>Tạm ẩn</option>
                             </select>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label>Ảnh đại diện</label>
-                            <div class="custom-file">
-                                <input type="file" name="thumbnail" value="{{old('thumbnail')}}" class="custom-file-input" id="inputGroupFile01" >
-                                <label class="custom-file-label" for="inputGroupFile01">{{old('thumbnail')}}</label>
-                            </div>
                         </div>
 
                         <div class="form-group">

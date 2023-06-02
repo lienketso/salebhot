@@ -14,6 +14,7 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
+        "intervention/image": "^2.7",
         "laravel/framework": "^7.24",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.4",
@@ -65,7 +66,9 @@
             "Vendor\\": "module/vendor/src",
             "Frontend\\": "module/frontend/src",
             "Order\\": "module/order/src",
-            "Location\\": "module/location/src"
+            "Location\\": "module/location/src",
+            "Expert\\": "module/expert/src",
+            "Commission\\": "module/commission/src"
         },
         "classmap": [
             "database/seeds",

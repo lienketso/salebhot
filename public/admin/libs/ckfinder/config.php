@@ -32,8 +32,8 @@ $config['authentication'] = function () {
 /*============================ License Key ============================================*/
 // https://ckeditor.com/docs/ckfinder/ckfinder3-php/configuration.html#configuration_options_licenseKey
 
-$config['licenseName'] = 'tvrstore.vn';
-$config['licenseKey']  = 'VMYMEWF5GQ8WMHCFN9FEEE9YAFTJL';
+$config['licenseName'] = 'sale.baohiemoto.vn';
+$config['licenseKey']  = 'A3736WTEMSC9BN3RRNXQ5LYN1P9E1';
 
 /*============================ CKFinder Internal Directory ============================*/
 // https://ckeditor.com/docs/ckfinder/ckfinder3-php/configuration.html#configuration_options_privateDir
@@ -67,7 +67,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
     $http = 'https://'.$_SERVER['HTTP_HOST'];
 }
 define("NVCMS_URL",$http);
-$baseUrl = NVCMS_URL.'/public/upload/';
+$baseUrl = NVCMS_URL.'/upload/';
 $config['backends'][] = array(
     'name'         => 'default',
     'adapter'      => 'local',

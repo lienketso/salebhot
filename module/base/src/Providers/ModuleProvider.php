@@ -82,6 +82,8 @@ class ModuleProvider extends ServiceProvider
         $this->app->register(\Frontend\Providers\ModuleProvider::class);
         $this->app->register(\Order\Providers\ModuleProvider::class);
         $this->app->register(\Location\Providers\ModuleProvider::class);
+        $this->app->register(\Expert\Providers\ModuleProvider::class);
+        $this->app->register(\Commission\Providers\ModuleProvider::class);
     }
 
 }

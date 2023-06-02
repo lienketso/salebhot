@@ -40,7 +40,7 @@
                     <div class="panel">
                         <a href="{{route('wadmin::users.index.get')}}">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Quản lý admin</h4>
+                            <h4 class="panel-title">Quản lý User</h4>
                         </div>
                         <div class="panel-body">
                             <div class="page-icon"><i class="icon ion-person-stalker"></i></div>
@@ -50,9 +50,9 @@
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 page-products">
                     <div class="panel">
-                        <a href="{{route('wadmin::category.index.get')}}">
+                        <a href="{{route('wadmin::transaction.index.get')}}">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Danh mục</h4>
+                            <h4 class="panel-title">Đơn hàng</h4>
                         </div>
                         <div class="panel-body">
                             <div class="page-icon"><i class="fa fa-shopping-cart"></i></div>
@@ -62,9 +62,9 @@
                 </div>
                 <div class="col-xs-4 col-sm-3 col-md-2 page-events">
                     <div class="panel">
-                        <a href="{{route('wadmin::post.index.get')}}">
+                        <a href="{{route('wadmin::company.index.get')}}">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Bài viết</h4>
+                            <h4 class="panel-title">Nhà phân phối</h4>
                         </div>
                         <div class="panel-body">
                             <div class="page-icon"><i class="icon ion-ios-calendar-outline"></i></div>
@@ -156,7 +156,7 @@
                 <div class="col-sm-5 col-md-12 col-lg-6">
                     <div class="panel panel-primary list-announcement">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Bài viết xem nhiều</h4>
+                            <h4 class="panel-title">Đơn hàng mới nhất</h4>
                         </div>
                         <div class="panel-body">
                             <ul class="list-unstyled mb20">
@@ -175,7 +175,7 @@
                 <div class="col-sm-5 col-md-12 col-lg-6">
                     <div class="panel panel-success">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Sản phẩm xem nhiều</h4>
+                            <h4 class="panel-title">Nhà phân phối mới</h4>
                         </div>
                         <div class="panel-body">
                             <ul class="media-list user-list">
