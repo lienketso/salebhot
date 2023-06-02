@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Product\Repositories\FactoryRepository;
 use Users\Http\Requests\UsersCreateRequest;
 use Users\Http\Requests\UsersEditRequest;
+use Users\Models\Users;
 use Users\Repositories\UsersRepository;
 
 class UsersController extends BaseController
@@ -46,7 +47,10 @@ class UsersController extends BaseController
         //lấy ra role
         $listRole = $roleRepository->orderBy('name','asc')->all();
         $category = $this->cat->findWhere(['status'=>'active','lang_code'=>$this->langcode])->all();
-        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category]);
+        $userGDV = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 7);
+        })->get();
+        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV]);
     }
     public function postCreate(UsersCreateRequest $request){
         try{
@@ -72,7 +76,11 @@ class UsersController extends BaseController
         $listRole = $roleRepository->orderBy('name','asc')->all();
         $category = $this->cat->findWhere(['status'=>'active','lang_code'=>$this->langcode])->all();
 
-        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'category'=>$category]);
+        $userGDV = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 7);
+        })->get();
+
+        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV]);
     }
 
     function postEdit($id, UsersEditRequest $request){

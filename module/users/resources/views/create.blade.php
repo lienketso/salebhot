@@ -1,4 +1,22 @@
 @extends('wadmin-dashboard::master')
+    @section('js-init')
+        <script type="text/javascript">
+            $('.GDV').hide();
+            $('#selectGDV').attr('disabled',true);
+            $('select[name="role"]').on('change',function (e){
+                var _this = $(e.currentTarget);
+                var value = _this.val();
+                if(value==='6'){
+                    $('.GDV').show();
+                    $('#selectGDV').attr('disabled',false);
+                }else{
+                    $('.GDV').hide();
+                    $('#selectGDV').attr('disabled',true);
+                }
+
+            });
+        </script>
+    @endsection
 @section('content')
 
         <ol class="breadcrumb breadcrumb-quirk">
@@ -107,37 +125,16 @@
                                     @endforeach
                                 </select>
                             </div>
-                     <!--        <div class="form-group">
-                                <label>Phân quyền chuyên mục</label>
-                                <div class="table-responsive">
-                                    <table class="table nomargin">
-                                        <thead>
-                                        <tr>
-                                            <th>Tên danh mục</th>
-                                            <th>check</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php if(!empty($category)): ?>
-                                            <?php foreach($category as $row): ?>
-
-                                        <tr>
-                                            <td>{{$row->name}}</td>
-                                            <td class="text-center">
-                                                <label class="ckbox ckbox-primary">
-                                                    <input type="checkbox" name="category[]"
-                                                           value="{{$row->id}}" >
-                                                    <span></span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                        <?php endif; ?>
-
-                                        </tbody>
-                                    </table>
+                            <div class="GDV" style="padding-bottom: 10px">
+                                <div class="form-group">
+                                    <label>Giám đốc vùng quản lý</label>
+                                    <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
+                                        @foreach($userGDV as $d)
+                                            <option value="{{$d->id}}" >{{$d->full_name}} </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="form-group mb-3">
                                 <label>Ảnh đại diện</label>
                                 <div class="custom-file">

@@ -12,7 +12,7 @@ class Users extends Authenticatable
 {
     protected $table = 'users';
 
-    protected $fillable = ['email','username','password','full_name','phone','address','token','remember_token','status','thumbnail','category'];
+    protected $fillable = ['email','username','password','full_name','phone','address','token','remember_token','status','thumbnail','category','parent'];
 
     protected $hidden = ['password','token','remember_token'];
 
@@ -57,6 +57,10 @@ class Users extends Authenticatable
         } else {
             return null;
         }
+    }
+
+    public function parent() {
+        return $this->hasMany(Users::class,'parent','id');
     }
 
 }

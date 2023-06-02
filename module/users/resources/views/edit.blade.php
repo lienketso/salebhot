@@ -1,5 +1,27 @@
 @extends('wadmin-dashboard::master')
+@section('js-init')
+    <script type="text/javascript">
+        $('.GDV').hide();
+        $('#selectGDV').attr('disabled',true);
+        var nodeType = $('select[name="role"]');
+        if(nodeType.val() === '6'){
+            $('.GDV').show();
+            $('#selectGDV').attr('disabled',false);
+        }
+        $('select[name="role"]').on('change',function (e){
+            var _this = $(e.currentTarget);
+            var value = _this.val();
+            if(value==='6'){
+                $('.GDV').show();
+                $('#selectGDV').attr('disabled',false);
+            }else{
+                $('.GDV').hide();
+                $('#selectGDV').attr('disabled',true);
+            }
 
+        });
+    </script>
+@endsection
 @section('content')
 
     <ol class="breadcrumb breadcrumb-quirk">
@@ -95,20 +117,31 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label>Trạng thái</label>
-                            <select id="" name="status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
+                            <select name="status" class="form-control " style="width: 100%" data-placeholder="Trạng thái">
                                 <option value="active" {{($data->status=='active') ? 'selected' : ''}}>Đã kích hoạt</option>
                                 <option value="disable" {{($data->status=='disable') ? 'selected' : ''}}>Chưa kích hoạt</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Phân quyền sử dụng module</label>
-                            <select id="" name="role" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
+                            <select name="role" class="form-control node_type" style="width: 100%" data-placeholder="Trạng thái">
                                 @foreach($listRole as $r)
                                 <option value="{{$r->id}}" {{ ($data->roles()->first()->id == $r->id) ? 'selected' : '' }} >{{$r->name}} ({{$r->display_name}})</option>
                                 @endforeach
                             </select>
                         </div>
-                    
+
+                        <div class="GDV" style="padding-bottom: 10px">
+                            <div class="form-group">
+                                <label>Giám đốc vùng quản lý</label>
+                                <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
+                                    @foreach($userGDV as $d)
+                                        <option value="{{$d->id}}" {{ ($data->parent == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group mb-3">
                             <label>Ảnh đại diện</label>
                             <div class="custom-file">
