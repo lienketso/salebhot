@@ -218,6 +218,24 @@ ul.tree1 li span a{
     padding-top: 10px;
     color: #fff;
 }
+.bag-amount{
+    border-radius: 4px;
+    padding: 5px 10px;
+    background: #1e7e34;
+    color: #fff;
+}
+.bag-commission{
+    border-radius: 4px;
+    padding: 5px 10px;
+    background: #037bda;
+    color: #fff;
+}
+.bag-count{
+    border-radius: 4px;
+    padding: 5px 10px;
+    background: #b07cc6;
+    color: #fff;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

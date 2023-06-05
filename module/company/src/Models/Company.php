@@ -6,6 +6,7 @@ namespace Company\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Product\Models\Catproduct;
+use Transaction\Models\Transaction;
 use Users\Models\Users;
 
 class Company extends Model
@@ -55,6 +56,10 @@ class Company extends Model
         } else {
             echo '<span style="color:#c00">Chưa chọn danh mục</span>';
         }
+    }
+
+    public function getTransaction(){
+        return $this->hasMany(Transaction::class,'company_id','id');
     }
 
 }
