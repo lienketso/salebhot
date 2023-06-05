@@ -218,7 +218,7 @@ class CompanyController extends BaseController
             $input['status'] = 'pending';
         }
         $this->model->update($input,$id);
-        return redirect()->back();
+        return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa duyệt nhà phân phối thành công');
     }
 
     public function status(Request $request){
