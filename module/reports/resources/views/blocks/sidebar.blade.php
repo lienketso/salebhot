@@ -13,7 +13,7 @@
     $roles = $userLog->load('roles.perms');
     $permissions = $roles->roles->first()->perms;
 @endphp
-@if ($permissions->contains('name','commission_index'))
+@if ($permissions->contains('name','report_distributor'))
 <li class="nav-parent {{in_array(Route::currentRouteName(), $listRoute) ? 'nav-active active' : '' }}">
     <a href="" ><i class="fa fa-bar-chart-o"></i> <span>Báo cáo</span></a>
     <ul class="children">

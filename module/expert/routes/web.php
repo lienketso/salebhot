@@ -24,6 +24,6 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::expert.change.get');
         //revenue
         $router->get('revenue','ExpertController@revenue')
-            ->name('wadmin::expert.revenue.get');
+            ->name('wadmin::expert.revenue.get')->middleware('permission:expert_revenue');
     });
 });
