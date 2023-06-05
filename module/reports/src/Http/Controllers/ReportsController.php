@@ -4,64 +4,96 @@ namespace Reports\Http\Controllers;
 
 use Acl\Models\Role;
 use Barryvdh\Debugbar\Controllers\BaseController;
+use Carbon\Carbon;
 use Commission\Models\Commission;
+use Company\Models\Company;
 use Illuminate\Http\Request;
+use Users\Models\Users;
 
 class ReportsController extends BaseController
 {
-    public function getIndex(){
-        $q = Commission::query();
-        $data = $q->orderBy('created_at','desc')->paginate(20);
-        return view('wadmin-commission::index',compact('data'));
+
+    public function experts(Request $request){
+        $q = new Users();
+        $mon = $request->mon;
+        $thang = date('m');
+        $year = date('Y');
+        if(!is_null($mon)){
+            $thang = $mon;
+        }
+        $chuyenvien = $q->whereHas('roles', function ($query) {
+            $query->where('role_id', 6);
+        })->with(['getTransaction'=>function ($que) use($thang,$year){
+            $que->where('status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
+        }])->paginate(30);
+        $year = date('Y'); // Năm cần lấy
+        // Lấy danh sách tháng trong năm
+        $monthList = collect([]);
+        for ($month = 1; $month <= 12; $month++) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthList->push([
+                'value' => $date->format('m'),
+                'label' => $date->format('F'),
+            ]);
+        }
+        $commission = Commission::where('role_id',6)->first();
+        $commissionRate = ($commission->commission_rate / 100);
+
+        return view('wadmin-report::experts',compact('chuyenvien','monthList','commissionRate','thang'));
     }
-    public function getCreate(){
-        $roleList = Role::all();
-        return view('wadmin-commission::create',compact('roleList'));
+
+    public function distributor(Request $request){
+        $q = new Company();
+        $mon = $request->mon;
+        $thang = date('m');
+        $year = date('Y');
+        if(!is_null($mon)){
+            $thang = $mon;
+        }
+        $monthList = collect([]);
+        for ($month = 1; $month <= 12; $month++) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthList->push([
+                'value' => $date->format('m'),
+                'label' => $date->format('F'),
+            ]);
+        }
+        $data = $q->with(['getTransaction'=>function($query) use($thang,$year){
+            $query->where('status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
+        }])
+            ->orderBy('name','asc')
+            ->where('status','active')->paginate(30);
+        $commissionRate = (40/100);
+        return view('wadmin-report::distributor',compact('data','monthList','thang','commissionRate'));
     }
-    public function postCreate(Request $request){
-        $input = $request->except(['_token','continue_post']);
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'commission_rate' => 'required|numeric'
-        ]);
-        try {
-            $data = Commission::create($input);
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
+
+    public function director(Request $request){
+        $q = new Users();
+        $mon = $request->mon;
+        $thang = date('m');
+        $year = date('Y');
+        if(!is_null($mon)){
+            $thang = $mon;
+        }
+        $monthList = collect([]);
+        for ($month = 1; $month <= 12; $month++) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthList->push([
+                'value' => $date->format('m'),
+                'label' => $date->format('F'),
+            ]);
         }
 
-        if($request->has('continue_post')){
-            return redirect()
-                ->route('wadmin::commission.create.get')
-                ->with('create','Thêm dữ liệu thành công');
-        }
-        return redirect()->route('wadmin::commission.index.get',['id'=>$data->id])
-            ->with('create','Thêm dữ liệu thành công');
+        $data = $q->whereHas('roles', function ($query) {
+            $query->where('role_id', 7);
+        })->paginate(20);
+//        dd($data);
+        $commission = Commission::where('role_id',7)->first();
+        $commissionRate = ($commission->commission_rate / 100);
 
+        return view('wadmin-report::director',compact('data','monthList','thang','commissionRate'));
     }
 
-    public function getEdit($id){
-        $data = Commission::find($id);
-        $roleList = Role::all();
-        return view('wadmin-commission::edit',compact('data','roleList'));
-    }
 
-    public function postEdit($id, Request $request){
-        $input = $request->except(['_token','continue_post']);
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'commission_rate' => 'required|numeric'
-        ]);
-        try {
-            $update = Commission::find($id);
-            $update->name = $request->name;
-            $update->commission_rate = $request->commission_rate;
-            $update->role_id = $request->role_id;
-            $update->save();
-            return redirect()->route('wadmin::commission.index.get')->with('edit','Bạn vừa cập nhật dữ liệu');
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
 
 }

@@ -7,6 +7,7 @@ use Acl\Models\RoleUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Config;
+use Transaction\Models\Transaction;
 
 class Users extends Authenticatable
 {
@@ -59,8 +60,12 @@ class Users extends Authenticatable
         }
     }
 
-    public function parent() {
+    public function childs() {
         return $this->hasMany(Users::class,'parent','id');
+    }
+
+    public function getTransaction(){
+        return $this->hasMany(Transaction::class,'user_id','id');
     }
 
 }
