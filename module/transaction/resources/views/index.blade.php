@@ -59,7 +59,7 @@
                         <th>Nhà PP</th>
                         <th>Nội dung</th>
                         <th class="">Ngày gửi</th>
-                        <th class="">Trạng thái</th>
+                        <th class="" width="180">Trạng thái</th>
                         <th></th>
                     </tr>
                     </thead>

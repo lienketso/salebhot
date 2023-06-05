@@ -241,6 +241,7 @@ ul.tree1 li span a{
     border-radius: 4px;
     color: #000;
     position: relative;
+    display: block;
 }
 .order-status span.order-success{
     background: #9ed566;
