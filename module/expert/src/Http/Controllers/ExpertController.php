@@ -132,6 +132,7 @@ class ExpertController extends BaseController
             }
             $input['slug'] = $request->name;
             $input['lang_code'] = $this->langcode;
+            $input['status'] = 'pending';
 
 
             if(!empty($companyInfo)){

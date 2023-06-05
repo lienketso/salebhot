@@ -23,5 +23,6 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         $router->get('change/{id}','CompanyController@changeStatus')
             ->name('wadmin::company.change.get');
         $router->get('export','CompanyController@export')->name('wadmin::company.export.get');
+        $router->get('status','CompanyController@status')->name('wadmin::company.status.get');
     });
 });

@@ -6,12 +6,38 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 @endsection
 @section('js-init')
-    <script type="text/javascript">
+    <script>
         Fancybox.bind('[data-fancybox="gallery"]', {
             //
         });
 
-
+        // auto close
+        $('.accept-npp').on('click', function(e){
+            e.preventDefault();
+            let _this = $(e.currentTarget);
+            let url = _this.attr('data-url');
+            $.confirm({
+                title: 'Xác nhận duyệt nhà phân phối',
+                content: 'Bạn có chắc chắn muốn duyệt nhà phân phối này ?',
+                autoClose: 'cancelAction|10000',
+                escapeKey: 'cancelAction',
+                buttons: {
+                    confirm: {
+                        btnClass: 'btn-green',
+                        text: 'Duyệt nhà phân phối',
+                        action: function(){
+                            location.href = url;
+                        }
+                    },
+                    cancelAction: {
+                        text: 'Hủy',
+                        action: function(){
+                            $.alert('Đã hủy duyệt nhà phân phối !');
+                        }
+                    }
+                }
+            });
+        });
     </script>
 @endsection
 @section('content')
@@ -47,15 +73,9 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a class="export-npp btn btn-danger" href="{{route('wadmin::company.export.get')}}" >Export excel</a>
                             <a href="{{route('wadmin::company.index.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
-                        <div class="col-sm-2 txt-field">
-                            <div class="button_more">
-                                <a class="btn btn-primary" href="{{route('wadmin::company.create.get')}}">Thêm mới</a>
-                            </div>
-                        </div>
-{{--                        <a href="{{route('wadmin::company.export.get')}}">export</a>--}}
+
                     </form>
                 </div>
 
@@ -79,10 +99,10 @@
                         <th>Ảnh NPP</th>
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
-                        <th>Hình 1</th>
-                        <th>Hình 2</th>
+                        <th>Hình ảnh 1</th>
+                        <th>Hình ảnh 2</th>
                         <th>Chuyên viên cs</th>
-                        <th class="">Trạng thái</th>
+                        <th class="">Duyệt NPP</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -102,14 +122,16 @@
                                 <ul>
                                     <li>Địa chỉ : {{$d->city}} - Số điện thoại :  <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
                                     <li>Email : <a href="mailto:{{$d->email}}"> <i class="fa fa-envelope"></i> {{$d->email}}</a></li>
+                                    <li>Số TK ngân hàng : <strong>{{$d->bank_number}}</strong></li>
+                                    <li>Ngân hàng : <strong>{{$d->bank_name}}</strong></li>
                                 </ul>
                             </td>
                             <td>
                                 <div class="img-cccd">
                                     <a style="cursor: pointer" data-src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="Hình 1">
-                                    <img src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
+                                       data-caption="CMT/CCCD Mặt trước">
+                                        <img src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>
                             </td>
@@ -117,24 +139,22 @@
                                 <div class="img-cccd">
                                     <a style="cursor: pointer"  data-src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="Hình 2">
-                                    <img src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
+                                       data-caption="CMT/CCCD Mặt sau">
+                                        <img src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>
                             </td>
                             <td>
                                 <div class="op_sale">
-                                    <span><strong>{{($d->user()->exists()) ? $d->user->full_name : 'Chưa xác định'}}</strong></span>
+                                    <span>{{($d->user()->exists()) ? $d->user->full_name : 'Null'}}</span>
                                 </div>
                             </td>
-                            <td><a href="{{route('wadmin::company.change.get',$d->id)}}"
-                                   class="btn btn-sm {{($d->status=='active') ? 'btn-success' : 'btn-warning'}} radius-30">
-                                    {{($d->status=='active') ? 'Đã duyệt' : 'Chưa duyệt'}}</a></td>
                             <td>
-                                <ul class="table-options">
-                                    <li><a href="{{route('wadmin::company.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
-                                    <li><a class="example-p-6" data-url="{{route('wadmin::company.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
-                                </ul>
+                                @if($d->status=='pending')
+                                    <a data-url="{{route('wadmin::company.change.get',$d->id)}}" title="Click để duyệt nhà phân phối" class="btn btn-sm btn-warning radius-30 accept-npp"><i class="fa fa-bell-o"></i> Chưa duyệt</a>
+                                    @else
+                                    <a href="" class="btn btn-sm btn-success radius-30"><i class="fa fa-check-circle"></i> Đã duyệt </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

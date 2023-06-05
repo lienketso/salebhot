@@ -212,13 +212,19 @@ class CompanyController extends BaseController
     public function changeStatus($id){
         $input = [];
         $data = $this->model->find($id);
-        if($data->status=='active'){
-            $input['status'] = 'disable';
-        }elseif ($data->status=='disable'){
+        if($data->status=='pending'){
             $input['status'] = 'active';
+        }elseif ($data->status=='active'){
+            $input['status'] = 'pending';
         }
         $this->model->update($input,$id);
         return redirect()->back();
+    }
+
+    public function status(){
+        $q = new Company();
+        $data = $q->where('status','pending')->paginate(20);
+        return view('wadmin-company::status',compact('data'));
     }
 
 }

@@ -68,7 +68,8 @@
             "Order\\": "module/order/src",
             "Location\\": "module/location/src",
             "Expert\\": "module/expert/src",
-            "Commission\\": "module/commission/src"
+            "Commission\\": "module/commission/src",
+            "Reports\\": "module/reports/src"
         },
         "classmap": [
             "database/seeds",
