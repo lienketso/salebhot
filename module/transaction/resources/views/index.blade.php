@@ -70,7 +70,7 @@
                                 <a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a>
                             </td>
                             <td> Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</td>
-                            <td>{{$d->getCompany()}}</td>
+                            <td>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</td>
                             <td>
                                 <div class="product-in">
                                     <h4>Sản phẩm</h4>
