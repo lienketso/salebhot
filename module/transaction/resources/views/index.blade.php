@@ -56,11 +56,11 @@
                     <tr>
                         <th>Tên khách hàng</th>
                         <th>Thông tin</th>
-                        <th>Nhà PP</th>
+                        <th width="300">Nhà PP</th>
                         <th>Nội dung</th>
                         <th class="">Ngày gửi</th>
                         <th class="" width="180">Trạng thái</th>
-                        <th></th>
+                        <th width="100"></th>
                     </tr>
                     </thead>
                     <tbody>
