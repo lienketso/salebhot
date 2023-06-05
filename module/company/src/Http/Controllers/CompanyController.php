@@ -221,8 +221,21 @@ class CompanyController extends BaseController
         return redirect()->back();
     }
 
-    public function status(){
-        $q = new Company();
+    public function status(Request $request){
+        $name = $request->get('name');
+        $status = $request->get('status');
+        $company_code = $request->get('company_code');
+        $q = Company::query();
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%');
+        }
+        if(!is_null($status)){
+            $q->where('status',$status);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+
         $data = $q->where('status','pending')->paginate(20);
         return view('wadmin-company::status',compact('data'));
     }

@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::company.index.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::company.status.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
