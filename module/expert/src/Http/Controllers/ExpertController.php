@@ -279,7 +279,7 @@ class ExpertController extends BaseController
             $thang = $mon;
         }
 
-        $query->where('status','active');
+        $query->where('order_status','active');
         $query->where('user_id',$login->id);
         $query->whereYear('created_at',date('Y'));
         $query->whereMonth('created_at',$thang);

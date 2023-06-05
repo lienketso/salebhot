@@ -83,15 +83,26 @@
                                 @if(!is_null($d->trancategory) || !is_null($d->category))
                                 <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
                                 @endif
-                                
+
                                 <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
                                 <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
                                 <p>Tin nhắn: {{$d->message}}</p>
                             </td>
                             <td>{{format_date($d->created_at)}}</td>
-                            <td><a href="{{route('wadmin::transaction.change.get',$d->id)}}"
-                                   class="btn btn-sm {{($d->status=='active') ? 'btn-success' : 'btn-warning'}} radius-30">
-                                    {{($d->status=='active') ? 'Đã tư vấn' : 'Chưa tư vấn'}}</a></td>
+                            <td class="order-status">
+                                @if($d->order_status=='active')
+                                    <span class="order-success"><i class="fa fa-check-circle-o"></i> Đã hoàn thành</span>
+                                @endif
+                                @if($d->order_status=='disable' || $d->order_status=='pending')
+                                    <span class="order-pending"><i class="fa fa-exclamation-circle"></i> Đang xử lý</span>
+                                @endif
+                                    @if($d->order_status=='payment')
+                                        <span class="order-payment"><i class="fa fa-usd"></i> Đã thanh toán</span>
+                                    @endif
+                                    @if($d->order_status=='cancel')
+                                        <span class="order-cancel"><i class="fa fa-ban"></i> Đã hủy</span>
+                                    @endif
+                            </td>
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>

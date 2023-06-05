@@ -24,7 +24,7 @@ class ReportsController extends BaseController
         $chuyenvien = $q->whereHas('roles', function ($query) {
             $query->where('role_id', 6);
         })->with(['getTransaction'=>function ($que) use($thang,$year){
-            $que->where('status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
+            $que->where('order_status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
         }])->paginate(30);
         $year = date('Y'); // Năm cần lấy
         // Lấy danh sách tháng trong năm
@@ -59,7 +59,7 @@ class ReportsController extends BaseController
             ]);
         }
         $data = $q->with(['getTransaction'=>function($query) use($thang,$year){
-            $query->where('status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
+            $query->where('order_status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
         }])
             ->orderBy('name','asc')
             ->where('status','active')->paginate(30);
@@ -87,7 +87,6 @@ class ReportsController extends BaseController
         $data = $q->whereHas('roles', function ($query) {
             $query->where('role_id', 7);
         })->paginate(20);
-//        dd($data);
         $commission = Commission::where('role_id',7)->first();
         $commissionRate = ($commission->commission_rate / 100);
 

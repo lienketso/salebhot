@@ -135,10 +135,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Trạng thái</label>
-                            <select id="" name="status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
-                                <option value="active" {{ ($data->status=='active') ? 'selected' : ''}}>Đã tư vấn</option>
-                                <option value="disable" {{ ($data->status=='disable') ? 'selected' : ''}}>Chưa tư vấn</option>
+                            <label>Cập nhật trạng thái đơn hàng</label>
+                            <p class="alert-an">Chú ý : Trạng thái "<b class="alert-warning">Đang xử lý</b>" : đang tiếp nhận đơn hàng ; "<b class="alert-info">Đã thanh toán</b>" : Xác nhận đã thanh toán
+                                ; "<b class="alert-success">Đã hoàn thành</b>": Xác nhận đơn hàng hoàn thành cộng doanh thu và hoa hồng cho đại lý, chuyên viên, giám đốc vùng;
+                                "<b class="alert-danger">Đã hủy</b>" : Hủy đơn hàng
+                            </p>
+                            <select id="" name="order_status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
+                                <option value="pending" {{ ($data->order_status=='pending') ? 'selected' : ''}}>Đang xử lý</option>
+                                <option value="payment" {{ ($data->order_status=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
+                                <option value="active" {{ ($data->order_status=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
+                                <option value="cancel" {{ ($data->order_status=='cancel') ? 'selected' : ''}}>Đã hủy</option>
                             </select>
                         </div>
 

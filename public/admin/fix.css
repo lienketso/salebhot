@@ -236,6 +236,30 @@ ul.tree1 li span a{
     background: #b07cc6;
     color: #fff;
 }
+.order-status span{
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #000;
+    position: relative;
+}
+.order-status span.order-success{
+    background: #9ed566;
+}
+.order-status span.order-pending{
+    background: #fdcc51;
+}
+.order-status span.order-payment{
+    background: #56c2e8;
+}
+.order-status span.order-cancel{
+    background: #e55869;
+}
+.alert-an{
+    line-height: 25px;
+}
+.alert-an b{
+    padding: 0 5px;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;
