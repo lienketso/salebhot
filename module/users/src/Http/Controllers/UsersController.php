@@ -74,16 +74,14 @@ class UsersController extends BaseController
         $data = $this->users->find($id);
         //lấy ra role
         $listRole = $roleRepository->orderBy('name','asc')->all();
-        $category = $this->cat->findWhere(['status'=>'active','lang_code'=>$this->langcode])->all();
-
         $userGDV = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 7);
         })->get();
+
         $saleAdmin = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 5);
         })->get();
-
-        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
+        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
     }
 
     function postEdit($id, UsersEditRequest $request){
