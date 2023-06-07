@@ -106,7 +106,9 @@ class ExpertController extends BaseController
 
         $data = $q->where('lang_code',$this->langcode)
             ->where('user_id',$userLog->id)
-            ->where('status','disable')
+            ->where(function ($query){
+                $query->where('status','active')->orWhere('status','pending');
+            })
             ->orderBy('created_at','desc')->paginate($page);
         return view('wadmin-expert::pending',compact('data'));
     }

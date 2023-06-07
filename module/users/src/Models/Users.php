@@ -15,7 +15,7 @@ class Users extends Authenticatable
 {
     protected $table = 'users';
 
-    protected $fillable = ['email','username','password','full_name','phone','address','token','remember_token','status','thumbnail','category','parent'];
+    protected $fillable = ['email','username','password','full_name','phone','address','token','remember_token','status','thumbnail','category','parent','sale_admin'];
 
     protected $hidden = ['password','token','remember_token'];
 
@@ -75,7 +75,9 @@ class Users extends Authenticatable
     }
 
     public function getCompanyCV(){
-        return $this->getCompany()->where('status','disable');
+        return $this->getCompany()->where(function ($q){
+            $q->where('status','active')->orWhere('status','pending');
+        });
     }
 
 }

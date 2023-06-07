@@ -131,14 +131,26 @@
                             </select>
                         </div>
 
-                        <div class="GDV" style="padding-bottom: 10px">
-                            <div class="form-group">
-                                <label>Giám đốc vùng quản lý</label>
-                                <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
-                                    @foreach($userGDV as $d)
-                                        <option value="{{$d->id}}" {{ ($data->parent == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
-                                    @endforeach
-                                </select>
+                        <div class="CVSelect">
+                            <div class="GDV" style="padding-bottom: 10px">
+                                <div class="form-group">
+                                    <label>Giám đốc vùng quản lý</label>
+                                    <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
+                                        @foreach($userGDV as $d)
+                                            <option value="{{$d->id}}" {{ ($data->parent == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="SaleAdmin" style="padding-bottom: 10px">
+                                <div class="form-group">
+                                    <label>Sale admin quản lý</label>
+                                    <select id="selectSale" name="sale_admin" class="form-control" style="width: 100%" >
+                                        @foreach($saleAdmin as $d)
+                                            <option value="{{$d->id}}" {{ ($data->sale_admin == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 

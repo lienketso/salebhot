@@ -79,8 +79,11 @@ class UsersController extends BaseController
         $userGDV = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 7);
         })->get();
+        $saleAdmin = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 5);
+        })->get();
 
-        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV]);
+        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
     }
 
     function postEdit($id, UsersEditRequest $request){
