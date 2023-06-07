@@ -10,6 +10,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
     $router->group(['prefix'=>$moduleRoute],function(Router $router) use ($adminRoute,$moduleRoute){
         $router->get('index','ExpertController@getIndex')
             ->name('wadmin::expert.index.get')->middleware('permission:expert_index');
+        $router->get('pending','ExpertController@getPending')
+            ->name('wadmin::expert.pending.get')->middleware('permission:expert_index');
         $router->get('create','ExpertController@getCreate')
             ->name('wadmin::expert.create.get')->middleware('permission:expert_create');
         $router->post('create','ExpertController@postCreate')

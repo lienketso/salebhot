@@ -73,6 +73,7 @@
                 <table class="table nomargin">
                     <thead>
                     <tr>
+                        <th>STT</th>
                         <th>Ảnh NPP</th>
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
@@ -82,28 +83,30 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($data as $d)
+                    @foreach($data as $key=>$d)
                         <tr>
-                            <td>
-                                <div class="product-img bg-transparent border">
-                                    <a href="{{route('wadmin::expert.edit.get',$d->id)}}">
-                                        <img src="{{ ($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
-                                    </a>
-                                </div>
-                            </td>
+                            <td>{{$key}}</td>
                             <td><a href="{{route('wadmin::expert.edit.get',$d->id)}}">{{$d->company_code}}</a></td>
                             <td class="namego">
                                 <h4>{{$d->name}} - {{$d->contact_name}}</h4>
                                 <ul>
-                                    <li>Địa chỉ : {{$d->city}} - Số điện thoại : <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
-                                    <li>Email : <a href="mailto:{{$d->email}}"> <i class="fa fa-envelope"></i> {{$d->email}}</a></li>
+                                    <li>Địa chỉ : {{$d->address}} - Số điện thoại : <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
                                 </ul>
+                            </td>
+                            <td>
+                                <div class="product-img bg-transparent border">
+                                    <a style="cursor: pointer" data-fancybox="gallery"
+                                       data-caption="Hình ảnh 1"
+                                       data-src="{{ ($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}">
+                                        <img src="{{ ($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
+                                    </a>
+                                </div>
                             </td>
                             <td>
                                 <div class="img-cccd">
                                     <a style="cursor: pointer" data-src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="CMT/CCCD Mặt trước">
+                                       data-caption="Hình ảnh 1">
                                     <img src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>
@@ -112,7 +115,7 @@
                                 <div class="img-cccd">
                                     <a style="cursor: pointer"  data-src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="CMT/CCCD Mặt sau">
+                                       data-caption="Hình ảnh 2">
                                     <img src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>

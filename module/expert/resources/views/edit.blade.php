@@ -129,10 +129,7 @@
                                    value="{{$data->bank_name}}"
                                    placeholder="VD : Ngân hàng Agribank">
                         </div>
-                        <div class="form-group">
-                            <label>Mô tả ngắn</label>
-                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Mô tả ngắn">{{$data->description}}</textarea>
-                        </div>
+
                         <div class="form-group">
                             <label>Nội dung về công ty</label>
                             <textarea id="editor1" name="content" class="form-control makeMeRichTextarea" rows="3" placeholder="Nội dung bài viết">{{$data->content}}</textarea>
@@ -160,9 +157,9 @@
                         <div class="form-group">
                             <label>Chuyên viên chăm sóc</label>
                             <select id="" name="user_id" class="form-control js-example-basic-single" style="width: 100%" >
-        
+
                                     <option value="{{$data->user->id}}">{{$data->user->full_name}} - {{$data->user->phone}}</option>
-                         
+
                                 @if($role->id==1)
                                 @foreach($users as $user)
                                     <option value="{{$user->id}}" {{ ($data->user_id==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
@@ -197,7 +194,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="form-group" >
                             <label style="padding-top: 20px">QR Code NPP</label>
                             <div class="qr-code" id="svgID" style="position: relative">

@@ -50,7 +50,7 @@
                         <h4 class="panel-title">Thêm nhà phân phối</h4>
                         <p>Bạn cần nhập đầy đủ các thông tin để thêm nhà phân phối mới</p>
                     </div>
-                   
+
                     <div class="panel-body">
                          <div class="form-group">
                             <label>Mã NPP (*)</label>
@@ -132,10 +132,7 @@
                                    placeholder="VD : Ngân hàng Agribank">
                         </div>
 
-                        <div class="form-group">
-                            <label>Mô tả ngắn</label>
-                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Mô tả ngắn">{{old('description')}}</textarea>
-                        </div>
+
                         <div class="form-group">
                             <label>Chi tiết về nhà phân phối</label>
                             <textarea id="editor1" name="content" class="form-control makeMeRichTextarea" rows="3" placeholder="Nội dung bài viết">{{old('content')}}</textarea>
@@ -193,7 +190,7 @@
                             </div>
                         </div>
 
-                      
+
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>

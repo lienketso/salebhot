@@ -10,34 +10,6 @@
         Fancybox.bind('[data-fancybox="gallery"]', {
             //
         });
-
-        // auto close
-        $('.accept-npp').on('click', function(e){
-            e.preventDefault();
-            let _this = $(e.currentTarget);
-            let url = _this.attr('data-url');
-            $.confirm({
-                title: 'Xác nhận duyệt nhà phân phối',
-                content: 'Bạn có chắc chắn muốn duyệt nhà phân phối này ?',
-                autoClose: 'cancelAction|10000',
-                escapeKey: 'cancelAction',
-                buttons: {
-                    confirm: {
-                        btnClass: 'btn-green',
-                        text: 'Duyệt nhà phân phối',
-                        action: function(){
-                            location.href = url;
-                        }
-                    },
-                    cancelAction: {
-                        text: 'Hủy',
-                        action: function(){
-                            $.alert('Đã hủy duyệt nhà phân phối !');
-                        }
-                    }
-                }
-            });
-        });
     </script>
 @endsection
 @section('content')
@@ -73,9 +45,14 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::company.status.get')}}" class="btn btn-default">Làm lại</a>
+                            <!--  <a class="export-npp btn btn-danger" href="{{route('wadmin::company.export.get')}}" >Export excel</a> -->
+                            <a href="{{route('wadmin::expert.index.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
-
+                        <div class="col-sm-2 txt-field">
+                            <div class="button_more">
+                                <a class="btn btn-primary" href="{{route('wadmin::expert.create.get')}}">Thêm mới</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -100,10 +77,9 @@
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
                         <th>Ảnh NPP</th>
-                        <th>Hình ảnh 1</th>
                         <th>Hình ảnh 2</th>
-                        <th>Chuyên viên cs</th>
-                        <th class="">Duyệt NPP</th>
+                        <th>Hình ảnh 3</th>
+                        <th>Lý do chưa duyệt</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -111,13 +87,11 @@
                     @foreach($data as $key=>$d)
                         <tr>
                             <td>{{$key}}</td>
-                            <td><a href="{{route('wadmin::company.edit.get',$d->id)}}">{{$d->company_code}}</a></td>
+                            <td><a href="{{route('wadmin::expert.edit.get',$d->id)}}">{{$d->company_code}}</a></td>
                             <td class="namego">
                                 <h4>{{$d->name}} - {{$d->contact_name}}</h4>
                                 <ul>
-                                    <li>Địa chỉ : {{$d->address}} - Số điện thoại :  <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
-                                    <li>Số TK ngân hàng : <strong>{{$d->bank_number}}</strong></li>
-                                    <li>Ngân hàng : <strong>{{$d->bank_name}}</strong></li>
+                                    <li>Địa chỉ : {{$d->address}} - Số điện thoại : <a title="Click để gọi điện số khách hàng" href="tel:{{$d->phone}}" target="_blank">{{$d->phone}} ( <i class="fa fa-phone"></i> Gọi điện )</a></li>
                                 </ul>
                             </td>
                             <td>
@@ -133,7 +107,7 @@
                                 <div class="img-cccd">
                                     <a style="cursor: pointer" data-src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="Hình ảnh 2">
+                                       data-caption="Hình ảnh 1">
                                         <img src="{{ ($d->cccd_mt!='') ? upload_url($d->cccd_mt) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>
@@ -142,24 +116,20 @@
                                 <div class="img-cccd">
                                     <a style="cursor: pointer"  data-src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}"
                                        data-fancybox="gallery"
-                                       data-caption="Hình ảnh 3">
+                                       data-caption="Hình ảnh 2">
                                         <img src="{{ ($d->cccd_ms!='') ? upload_url($d->cccd_ms) : public_url('admin/themes/images/no-image.png')}}" width="100" alt="">
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div class="op_sale">
-                                    <span>{{($d->user()->exists()) ? $d->user->full_name : 'Null'}}</span>
-                                </div>
+                                <p style="color: #F87D33">{{$d->description}}</p>
                             </td>
+
                             <td>
-                                @if($d->status=='pending')
-                                    <a data-url="{{route('wadmin::company.change.get',$d->id)}}" title="Click để duyệt nhà phân phối"
-                                       class="btn btn-sm btn-warning radius-30 accept-npp"><i class="fa fa-bell-o"></i> Duyệt ngay</a>
-                                    <a href="{{route('wadmin::company.fix.get',$d->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-repeat"></i> Cần sửa</a>
-                                    @else
-                                    <a href="" class="btn btn-sm btn-success radius-30"><i class="fa fa-check-circle"></i> Đã duyệt </a>
-                                @endif
+                                <ul class="table-options">
+                                    <li><a href="{{route('wadmin::expert.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
+                                    <!-- <li><a class="example-p-6" data-url="{{route('wadmin::expert.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li> -->
+                                </ul>
                             </td>
                         </tr>
                     @endforeach

@@ -34,8 +34,10 @@ class AppServiceProvider extends ServiceProvider
         View::share('listContact',$listContact);
         $countContact = DB::table('contact')->where('status','disable')->count();
         View::share('countContact',$countContact);
+        //số nhà phân phối chưa được duyệt
         $countComPending = DB::table('company')->where('status','pending')->count();
         View::share('countComPending',$countComPending);
+
         if(!session('lang') || session('lang')==null){
             session()->put(['lang'=>config('app.locale')]);
         }

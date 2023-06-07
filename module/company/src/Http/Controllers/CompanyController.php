@@ -218,7 +218,28 @@ class CompanyController extends BaseController
             $input['status'] = 'pending';
         }
         $this->model->update($input,$id);
-        return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa duyệt nhà phân phối thành công');
+        return redirect()->back()->with('edit','Bạn vừa duyệt nhà phân phối thành công');
+    }
+
+    public function fix(Request $request,$id){
+        $data = $this->model->find($id);
+        return view('wadmin-company::fix',compact('data'));
+    }
+    public function postfix(Request $request,$id){
+        $data = $this->model->find($id);
+        if($data){
+            try {
+                $data->status = 'disable';
+                $data->description = $request->description;
+                $data->save();
+                return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa sửa nhà phân phối '.$data->name);
+            }catch (\Exception $e){
+                return redirect()->back()->withErrors($e->getMessage());
+            }
+
+        }else{
+            return redirect()->back();
+        }
     }
 
     public function status(Request $request){
@@ -238,6 +259,35 @@ class CompanyController extends BaseController
 
         $data = $q->where('status','pending')->paginate(20);
         return view('wadmin-company::status',compact('data'));
+    }
+
+    public function accept(Request $request){
+        $name = $request->get('name');
+        $status = $request->get('status');
+        $count = $request->get('count');
+        $company_code = $request->get('company_code');
+        $export = $request->get('export');
+        $q = Company::query();
+        $page = 20;
+
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%');
+        }
+        if(!is_null($status)){
+            $q->where('status',$status);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+        if(!is_null($count)){
+            $page = $count;
+        }
+
+        $data = $q->where('lang_code',$this->langcode)
+            ->where('status','active')
+            ->orderBy('created_at','desc')
+            ->paginate($page);
+        return view('wadmin-company::accept',compact('data'));
     }
 
 }

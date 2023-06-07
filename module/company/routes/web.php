@@ -24,5 +24,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::company.change.get');
         $router->get('export','CompanyController@export')->name('wadmin::company.export.get');
         $router->get('status','CompanyController@status')->name('wadmin::company.status.get');
+        $router->get('fix-npp/{id}','CompanyController@fix')->name('wadmin::company.fix.get');
+        $router->post('fix-npp/{id}','CompanyController@postfix')->name('wadmin::company.fix.post');
+        $router->get('accept','CompanyController@accept')->name('wadmin::company.accept.get');
     });
 });

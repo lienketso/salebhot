@@ -4,7 +4,9 @@ namespace Users\Models;
 
 use Acl\Models\Role;
 use Acl\Models\RoleUser;
+use Company\Models\Company;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Config;
 use Transaction\Models\Transaction;
@@ -66,6 +68,14 @@ class Users extends Authenticatable
 
     public function getTransaction(){
         return $this->hasMany(Transaction::class,'user_id','id');
+    }
+
+    public function getCompany(){
+        return $this->hasMany(Company::class,'user_id','id');
+    }
+
+    public function getCompanyCV(){
+        return $this->getCompany()->where('status','disable');
     }
 
 }

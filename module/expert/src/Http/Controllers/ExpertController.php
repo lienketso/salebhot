@@ -50,7 +50,6 @@ class ExpertController extends BaseController
         $status = $request->get('status');
         $count = $request->get('count');
         $company_code = $request->get('company_code');
-        $export = $request->get('export');
         $q = Company::query();
         $page = 20;
         if($id){
@@ -71,13 +70,47 @@ class ExpertController extends BaseController
             $page = $count;
         }
 
-
-
         $data = $q->where('lang_code',$this->langcode)
         ->where('user_id',$userLog->id)
+        ->where('status','active')
         ->orderBy('created_at','desc')->paginate($page);
         return view('wadmin-expert::index',['data'=>$data]);
     }
+
+    public function getPending(Request $request){
+        $userLog = Auth::user();
+        $id = $request->get('id');
+        $name = $request->get('name');
+        $status = $request->get('status');
+        $count = $request->get('count');
+        $company_code = $request->get('company_code');
+        $q = Company::query();
+        $page = 20;
+        if($id){
+            $data = $this->model->scopeQuery(function ($e) use($id){
+                return $e->orderBy('id','desc')->where('id',$id);
+            })->paginate(1);
+        }
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%');
+        }
+        if(!is_null($status)){
+            $q->where('status',$status);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+        if(!is_null($count)){
+            $page = $count;
+        }
+
+        $data = $q->where('lang_code',$this->langcode)
+            ->where('user_id',$userLog->id)
+            ->where('status','disable')
+            ->orderBy('created_at','desc')->paginate($page);
+        return view('wadmin-expert::pending',compact('data'));
+    }
+
     public function getCreate(){
         $cities = City::orderBy('name','asc')->get();
         $users = Users::orderBy('id','desc')->where('status','active')->get();
@@ -134,12 +167,9 @@ class ExpertController extends BaseController
             $input['lang_code'] = $this->langcode;
             $input['status'] = 'pending';
 
-
             if(!empty($companyInfo)){
                 $update = $this->model->update($input,$companyInfo->id);
             }
-
-            // $data = $this->model->create($input);
 
             if($request->has('continue_post')){
                 return redirect()

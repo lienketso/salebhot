@@ -1,11 +1,12 @@
 @php
     $listRoute = [
         'wadmin::company.index.get', 'wadmin::company.create.get', 'wadmin::company.edit.get','wadmin::company.index.get','wadmin::company.create.get',
-        'wadmin::company.edit.get','wadmin::company.status.get'
+        'wadmin::company.edit.get','wadmin::company.status.get','wadmin::company.accept.get'
     ];
     $indexRoute = ['wadmin::company.index.get'];
     $createRoute = ['wadmin::company.create.get'];
     $statusRoute = ['wadmin::company.status.get'];
+    $acceptRoute = ['wadmin::company.accept.get'];
 
 @endphp
 @php
@@ -22,6 +23,9 @@
         <li class="{{in_array(Route::currentRouteName(), $createRoute) ? 'active' : '' }}"><a href="{{route('wadmin::company.create.get')}}">Thêm mới</a></li>
         <li class="{{in_array(Route::currentRouteName(), $statusRoute) ? 'active' : '' }}">
             <span class="badge pull-right">{{$countComPending}}</span> <a href="{{route('wadmin::company.status.get')}}">Duyệt NPP</a>
+        </li>
+        <li class="{{in_array(Route::currentRouteName(), $acceptRoute) ? 'active' : '' }}">
+            <a href="{{route('wadmin::company.accept.get')}}">Đã duyệt</a>
         </li>
     </ul>
 </li>
