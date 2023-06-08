@@ -9,6 +9,7 @@ use Commission\Models\Commission;
 use Company\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Transaction\Models\Transaction;
 use Users\Models\Users;
 
 class ReportsController extends BaseController
@@ -94,8 +95,20 @@ class ReportsController extends BaseController
             ->where('company.status','active')->paginate(30);
 
 //        dd($data);
+        $totalOrderMonth = Transaction::where('order_status','active')
+            ->whereMonth('created_at',$thang)
+            ->whereYear('created_at',$year)
+            ->count();
+        $totalAmountMonth = Transaction::where('order_status','active')
+            ->whereMonth('created_at',$thang)
+            ->whereYear('created_at',$year)
+            ->sum('amount');
 
-        return view('wadmin-report::distributor',compact('data','monthList','thang','commissionRate'));
+        return view('wadmin-report::distributor',compact(
+            'data','monthList',
+            'thang','commissionRate',
+            'totalOrderMonth','totalAmountMonth'
+        ));
     }
 
     public function director(Request $request){

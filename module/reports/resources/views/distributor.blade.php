@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tổng đơn hàng trong tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h3>{{$totalOrderMonth}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tổng doanh số tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h3>{{number_format($totalAmountMonth)}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tổng hoa hồng đại lý tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h3>{{number_format($totalAmountMonth*$commissionRate)}}</h3>
                                 </div>
                             </div>
                         </div>
