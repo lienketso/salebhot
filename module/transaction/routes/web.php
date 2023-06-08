@@ -29,5 +29,7 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::transaction.accept.get')->middleware('permission:transaction_accept');
         $router->post('change-all','TransactionController@changeAll')
             ->name('wadmin::transaction.changeall.get')->middleware('permission:transaction_accept');
+
+        $router->get('chanel-telegram','TransactionController@updatedActivity')->name('wadmin::telegrame.chanel.get');
     });
 });

@@ -12,6 +12,7 @@ use Order\Models\OrderProduct;
 use PHPUnit\Exception;
 use Product\Models\Factory;
 use Product\Models\Product;
+use Telegram\Bot\Laravel\Facades\Telegram;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
@@ -178,6 +179,23 @@ class TransactionController extends BaseController
             $d->save();
         }
         return response()->json($data);
+    }
+
+    public function updatedActivity()
+    {
+//        $activity = Telegram::getUpdates();
+//        dd($activity);
+        $text = "A new contact us query\n"
+            . "<b>Email Address: </b>\n"
+            . "thanhan1507@gmail.com\n"
+            . "<b>Message: </b>\n"
+            . "tester";
+
+        Telegram::sendMessage([
+            'chat_id' => 5449285604,
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
     }
 
 }

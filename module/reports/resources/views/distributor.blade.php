@@ -70,9 +70,9 @@
                                 <p>Địa chỉ: {{$d->address}}</p>
                                 <p>ID: <strong>{{$d->company_code}}</strong></p>
                             </td>
-                            <td><span class="bag-count">{{($d->getTransaction()->exists()) ? $d->getTransaction->count() : 0}}</span></td>
-                            <td><span class="bag-amount">{{($d->getTransaction()->exists()) ? number_format($d->getTransaction->sum('amount')) : 0}}</span></td>
-                            <td><span class="bag-commission">{{($d->getTransaction()->exists()) ? number_format( $commissionRate * $d->getTransaction->sum('amount')) : 0}}</span> </td>
+                            <td><span class="bag-count">{{$d->totalOrder}}</span></td>
+                            <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
+                            <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}}</span> </td>
                         </tr>
                     @endforeach
 
