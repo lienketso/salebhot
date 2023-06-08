@@ -74,11 +74,11 @@
                     <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Ảnh NPP</th>
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
-                        <th>CMT/CCCD mặt trước</th>
-                        <th>CMT/CCCD mặt sau</th>
+                        <th>Ảnh NPP</th>
+                        <th>Hình ảnh 2</th>
+                        <th>Hình ảnh 3</th>
                         <th></th>
                     </tr>
                     </thead>
