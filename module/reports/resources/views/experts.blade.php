@@ -4,7 +4,7 @@
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
         <li><a href="">Danh sách báo cáo chuyên viên </a></li>
     </ol>
-    <div class="panel">
+    <div class="panel panel-site-traffic">
         <div class="panel-heading">
             <h4 class="panel-title">Danh sách báo cáo chuyên viên</h4>
         </div>
@@ -51,17 +51,17 @@
                             <li><a><i class="fa fa-refresh"></i></a></li>
                         </ul>
                         <h4 class="panel-title text-success">Thống kê doanh thu và hoa hồng</h4>
-                        <p class="nomargin">Thống kê doanh số và hoa hồng tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
+                        <p class="nomargin">Thống kê doanh số và hoa hồng chuyên viên tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
                     </div>
-                    <div class="row">
+
                         <div class="col-xs-6 col-sm-4">
                             <div class="bg-revenua panel-success-full">
                                 <div class="pull-left">
                                     <div class="icon fa fa-shopping-cart"></div>
                                 </div>
                                 <div class="pull-left">
-                                    <h4 class="panel-title">Đơn hàng trong tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h4 class="panel-title">Đơn hàng chuyên viên trong tháng {{$thang}}</h4>
+                                    <h3>{{$totalOrderMonth}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -71,8 +71,8 @@
                                     <div class="icon fa fa-usd"></div>
                                 </div>
                                 <div class="pull-left">
-                                    <h4 class="panel-title">Doanh số tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h4 class="panel-title">Doanh số chuyên viên tháng {{$thang}}</h4>
+                                    <h3>{{number_format($totalAmountMonth)}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -82,17 +82,18 @@
                                     <div class="icon fa fa-smile-o"></div>
                                 </div>
                                 <div class="pull-left">
-                                    <h4 class="panel-title">Hoa hồng nhận được tháng {{$thang}}</h4>
-                                    <h3>0</h3>
+                                    <h4 class="panel-title">Hoa hồng chuyên viên tháng {{$thang}}</h4>
+                                    <h3>{{number_format($totalAmountMonth*$commissionRate)}}</h3>
                                 </div>
                             </div>
                         </div>
-                    </div><!-- row -->
+
 
                     <div class="mb20"></div>
                 <table class="table nomargin">
                     <thead>
                     <tr>
+                        <th>STT</th>
                         <th>Tên chuyên viên</th>
                         <th>Đơn hàng</th>
                         <th>Doanh số</th>
@@ -100,8 +101,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($chuyenvien as $d)
+                    @foreach($chuyenvien as $key=>$d)
                         <tr>
+                            <td>{{$key+1}}</td>
                             <td>{{$d->full_name}} - {{$d->phone}}</td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>

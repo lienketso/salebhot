@@ -23,11 +23,6 @@ class ReportsController extends BaseController
         if(!is_null($mon)){
             $thang = $mon;
         }
-//        $chuyenvien = $q->whereHas('roles', function ($query) {
-//            $query->where('role_id', 6);
-//        })->with(['getTransaction'=>function ($que) use($thang,$year){
-//            $que->where('order_status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
-//        }])->paginate(30);
         // Lấy danh sách tháng trong năm
         $monthList = collect([]);
         for ($month = 1; $month <= 12; $month++) {
@@ -55,7 +50,19 @@ class ReportsController extends BaseController
                 $query->where('role_id', 6);
             })->paginate(30);
 
-        return view('wadmin-report::experts',compact('chuyenvien','monthList','commissionRate','thang'));
+        $totalOrderMonth = Transaction::where('order_status','active')
+            ->whereMonth('created_at',$thang)
+            ->whereYear('created_at',$year)
+            ->count();
+        $totalAmountMonth = Transaction::where('order_status','active')
+            ->whereMonth('created_at',$thang)
+            ->whereYear('created_at',$year)
+            ->sum('amount');
+
+        return view('wadmin-report::experts',compact(
+            'chuyenvien','monthList',
+            'commissionRate','thang','totalOrderMonth','totalAmountMonth'
+        ));
     }
 
     public function distributor(Request $request){

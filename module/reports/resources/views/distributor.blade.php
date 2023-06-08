@@ -93,6 +93,7 @@
                 <table class="table nomargin">
                     <thead>
                     <tr>
+                        <th>STT</th>
                         <th>Nhà phân phối</th>
                         <th>Đơn hàng</th>
                         <th>Doanh số</th>
@@ -100,8 +101,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($data as $d)
+                    @foreach($data as $key=>$d)
                         <tr>
+                            <td>{{$key+1}}</td>
                             <td>
                                 <p>{{$d->name}} - {{$d->phone}}</p>
                                 <p>Địa chỉ: {{$d->address}}</p>
