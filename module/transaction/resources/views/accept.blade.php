@@ -59,7 +59,7 @@
     <div class="panel">
         <div class="panel-heading">
             <h4 class="panel-title">Danh sách đơn hàng</h4>
-            <p>Danh sách đơn hàng trên trang</p>
+            <p>Danh sách đơn hàng bạn cần duyệt</p>
         </div>
 
         <div class="search_page">
@@ -75,10 +75,8 @@
                         <div class="col-sm-2 txt-field">
                             <select name="status" class="form-control">
                                 <option value="">Trạng thái</option>
-                                <option value="disable" {{(request('status')=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
-                                <option value="active" {{(request('status')=='disable') ? 'selected' : ''}}>Đang xử lý</option>
-                                <option value="payment" {{(request('status')=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
-                                <option value="cancel" {{(request('status')=='cancel') ? 'selected' : ''}}>Đã hủy</option>
+                                <option value="disable" {{(request('status')=='active') ? 'selected' : ''}}>Đã tư vấn</option>
+                                <option value="active" {{(request('status')=='disable') ? 'selected' : ''}}>Chưa tư vấn</option>
                             </select>
                         </div>
                         <div class="col-sm-2 txt-field">
@@ -89,50 +87,26 @@
                     </form>
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get')}}" class="btn btn-default btn-quirk ">Tất cả ({{$countAll}})</a>
-                        </div>
-                        <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'active'])}}" class="btn btn-primary btn-quirk ">Đã hoàn thành ({{$countActive }})</a>
-                        </div>
-
-                        <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'payment'])}}" class="btn btn-success btn-quirk">Đã thanh toán ({{$countPayment}})</a>
-                        </div>
-
-                        <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'disable'])}}" class="btn btn-warning btn-quirk">Đang xử lý ({{$countPending}})</a>
-                        </div>
-
-
-                        <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'cancel'])}}" class="btn btn-danger btn-quirk">Đã hủy ({{$countCancel}})</a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
         <div class="panel-body">
             <div class="action-block">
 
-                    <div class="btn-group mr5">
-                        <button type="button" class="btn btn-primary">Duyệt đơn hàng nhanh</button>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a class="accept-action" data-status="disable">Đang xử lý</a></li>
-                            <li><a class="accept-action" data-status="payment">Đã thanh toán</a></li>
-                            <li><a class="accept-action" data-status="active">Đã hoàn thành</a></li>
-                            <li class="divider"></li>
-                            <li><a class="accept-action" data-status="cancel">Đã hủy</a></li>
-                        </ul>
-                    </div><!-- btn-group -->
+                <div class="btn-group mr5">
+                    <button type="button" class="btn btn-primary">Duyệt đơn hàng nhanh</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a class="accept-action" data-status="disable">Đang xử lý</a></li>
+                        <li><a class="accept-action" data-status="payment">Đã thanh toán</a></li>
+                        <li><a class="accept-action" data-status="active">Đã hoàn thành</a></li>
+                        <li class="divider"></li>
+                        <li><a class="accept-action" data-status="cancel">Đã hủy</a></li>
+                    </ul>
+                </div><!-- btn-group -->
 
             </div>
             <div class="table-responsive">
@@ -165,7 +139,7 @@
                     </thead>
                     <tbody>
                     @foreach($data as $d)
-                        <tr id="tr_{{$d->id}}">
+                        <tr>
                             <td>
                                 <label class="ckbox ckbox-primary">
                                     <input type="checkbox" class="checkbox" data-id="{{$d->id}}" wfd-id="{{$d->id}}"><span></span>
@@ -181,12 +155,12 @@
                                     <h4>Sản phẩm</h4>
                                     <ul>
                                         @foreach($d->orderProduct as $p)
-                                        <li>{{$p->product->name}}</li>
+                                            <li>{{$p->product->name}}</li>
                                         @endforeach
                                     </ul>
                                 </div>
                                 @if(!is_null($d->trancategory) || !is_null($d->category))
-                                <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
+                                    <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
                                 @endif
 
                                 <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
@@ -201,12 +175,12 @@
                                 @if($d->order_status=='disable' || $d->order_status=='pending')
                                     <span class="order-pending"><i class="fa fa-exclamation-circle"></i> Đang xử lý</span>
                                 @endif
-                                    @if($d->order_status=='payment')
-                                        <span class="order-payment"><i class="fa fa-usd"></i> Đã thanh toán</span>
-                                    @endif
-                                    @if($d->order_status=='cancel')
-                                        <span class="order-cancel"><i class="fa fa-ban"></i> Đã hủy</span>
-                                    @endif
+                                @if($d->order_status=='payment')
+                                    <span class="order-payment"><i class="fa fa-usd"></i> Đã thanh toán</span>
+                                @endif
+                                @if($d->order_status=='cancel')
+                                    <span class="order-cancel"><i class="fa fa-ban"></i> Đã hủy</span>
+                                @endif
                             </td>
                             <td>
                                 <ul class="table-options">

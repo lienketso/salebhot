@@ -261,6 +261,14 @@ ul.tree1 li span a{
 .alert-an b{
     padding: 0 5px;
 }
+.hulk-site{
+    padding-top: 10px;
+    display: inline-block;
+    padding-right: 10px;
+}
+.action-block{
+    padding-bottom: 20px;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

@@ -25,5 +25,9 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::transaction.remove.get')->middleware('permission:transaction_delete');
         $router->get('change/{id}','TransactionController@changeStatus')
             ->name('wadmin::transaction.change.get');
+        $router->get('accept-order','TransactionController@accept')
+            ->name('wadmin::transaction.accept.get')->middleware('permission:transaction_accept');
+        $router->post('change-all','TransactionController@changeAll')
+            ->name('wadmin::transaction.changeall.get')->middleware('permission:transaction_accept');
     });
 });

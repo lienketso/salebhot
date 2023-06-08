@@ -4,6 +4,7 @@
 namespace Transaction\Http\Controllers;
 
 
+use Auth\Supports\Traits\Auth;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
 use Illuminate\Http\Request;
@@ -38,10 +39,17 @@ class TransactionController extends BaseController
             $q->where('company_code',$company_code);
         }
         if(!is_null($status)){
-            $q->where('status',$status);
+            $q->where('order_status',$status);
         }
         $data = $q->orderBy('created_at','desc')->paginate(20);
-        return view('wadmin-transaction::index',['data'=>$data]);
+
+        $countActive = Transaction::where('order_status','active')->count();
+        $countPayment = Transaction::where('order_status','payment')->count();
+        $countPending = Transaction::where('order_status','disable')->count();
+        $countCancel = Transaction::where('order_status','cancel')->count();
+        $countAll = Transaction::count();
+
+        return view('wadmin-transaction::index',compact('data','countActive','countPayment','countPending','countCancel','countAll'));
     }
 
     public function getCreate(){
@@ -150,6 +158,26 @@ class TransactionController extends BaseController
         }
         $this->model->update($input,$id);
         return redirect()->back();
+    }
+
+    public function accept(){
+        $saleLogin = \Illuminate\Support\Facades\Auth::user();
+        $q = Transaction::query();
+        $data = $q->where('sale_admin',$saleLogin->id)
+            ->where('order_status','!=','active')
+            ->paginate(30);
+        return view('wadmin-transaction::accept',compact('data'));
+    }
+
+    public function changeAll(Request $request){
+        $ids = $request->ids;
+        $status = $request->status;
+        $data = Transaction::whereIn('id',explode(",",$ids))->get();
+        foreach($data as $d){
+            $d->order_status = $status;
+            $d->save();
+        }
+        return response()->json($data);
     }
 
 }
