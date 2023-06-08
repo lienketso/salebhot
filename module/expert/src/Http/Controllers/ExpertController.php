@@ -274,6 +274,7 @@ class ExpertController extends BaseController
             //     $input['company_code'] = $this->generateUniqueCode();
             // }
             //cấu hình seo
+            $input['status'] = 'pending';
             $nhapp = $this->model->update($input, $id);
             return redirect()->route('wadmin::expert.index.get')->with('edit','Bạn vừa cập nhật dữ liệu');
         }catch (\Exception $e){
