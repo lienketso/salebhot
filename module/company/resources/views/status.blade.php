@@ -153,7 +153,7 @@
                                 </div>
                             </td>
                             <td>
-                                @if($d->status=='pending')
+                                @if($d->status=='pending' || $d->status=='disable')
                                     <a data-url="{{route('wadmin::company.change.get',$d->id)}}" title="Click để duyệt nhà phân phối"
                                        class="btn btn-sm btn-warning radius-30 accept-npp"><i class="fa fa-bell-o"></i> Duyệt ngay</a>
                                     <a href="{{route('wadmin::company.fix.get',$d->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-repeat"></i> Cần sửa</a>

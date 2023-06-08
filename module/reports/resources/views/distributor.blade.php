@@ -4,7 +4,7 @@
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
         <li><a href="">Danh sách báo cáo nhà phân phối </a></li>
     </ol>
-    <div class="panel">
+    <div class="panel panel-site-traffic">
         <div class="panel-heading">
             <h4 class="panel-title">Danh sách báo cáo nhà phân phối</h4>
         </div>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body ">
             <div class="table-responsive">
                 @if (session('edit'))
                     <div class="alert alert-info">{{session('edit')}}</div>
@@ -50,9 +50,46 @@
                     <ul class="panel-options">
                         <li><a><i class="fa fa-refresh"></i></a></li>
                     </ul>
-                    <h4 class="panel-title text-success">Thống kê doanh thu và hoa hồng</h4>
-                    <p class="nomargin">Thống kê doanh số và hoa hồng tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
+                    <h4 class="panel-title text-success">Thống kê doanh thu và hoa hồng đại lý</h4>
+                    <p class="nomargin">Thống kê doanh số và hoa của đại lý tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
                 </div>
+
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-success-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-shopping-cart"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Tổng đơn hàng trong tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-warning-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-usd"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Tổng doanh số tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-info-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-smile-o"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Tổng hoa hồng đại lý tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <div class="mb20"></div>
                 <table class="table nomargin">
                     <thead>
                     <tr>

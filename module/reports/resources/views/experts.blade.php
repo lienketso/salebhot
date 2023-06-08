@@ -53,6 +53,43 @@
                         <h4 class="panel-title text-success">Thống kê doanh thu và hoa hồng</h4>
                         <p class="nomargin">Thống kê doanh số và hoa hồng tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-success-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-shopping-cart"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Đơn hàng trong tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-warning-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-usd"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Doanh số tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-4">
+                            <div class="bg-revenua panel-info-full">
+                                <div class="pull-left">
+                                    <div class="icon fa fa-smile-o"></div>
+                                </div>
+                                <div class="pull-left">
+                                    <h4 class="panel-title">Hoa hồng nhận được tháng {{$thang}}</h4>
+                                    <h3>0</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- row -->
+
+                    <div class="mb20"></div>
                 <table class="table nomargin">
                     <thead>
                     <tr>

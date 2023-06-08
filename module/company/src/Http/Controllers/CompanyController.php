@@ -257,7 +257,9 @@ class CompanyController extends BaseController
             $q->where('company_code',$company_code);
         }
 
-        $data = $q->where('status','pending')->paginate(20);
+        $data = $q->where(function ($query){
+            return $query->where('status','pending')->orWhere('status','disable');
+        })->paginate(20);
         return view('wadmin-company::status',compact('data'));
     }
 

@@ -53,7 +53,7 @@ class ReportsController extends BaseController
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 6);
             })->paginate(30);
-        
+
         return view('wadmin-report::experts',compact('chuyenvien','monthList','commissionRate','thang'));
     }
 
