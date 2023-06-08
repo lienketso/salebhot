@@ -1,17 +1,26 @@
 @extends('wadmin-dashboard::master')
     @section('js-init')
         <script type="text/javascript">
-            $('.GDV').hide();
+            $('.CVSelect').hide();
             $('#selectGDV').attr('disabled',true);
+            $('#selectSale').attr('disabled',true);
+            var nodeType = $('select[name="role"]');
+            if(nodeType.val() === '6'){
+                $('.CVSelect').show();
+                $('#selectGDV').attr('disabled',false);
+                $('#selectSale').attr('disabled',false);
+            }
             $('select[name="role"]').on('change',function (e){
                 var _this = $(e.currentTarget);
                 var value = _this.val();
                 if(value==='6'){
-                    $('.GDV').show();
+                    $('.CVSelect').show();
                     $('#selectGDV').attr('disabled',false);
+                    $('#selectSale').attr('disabled',false);
                 }else{
-                    $('.GDV').hide();
+                    $('.CVSelect').hide();
                     $('#selectGDV').attr('disabled',true);
+                    $('#selectSale').attr('disabled',true);
                 }
 
             });
@@ -125,14 +134,26 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="GDV" style="padding-bottom: 10px">
-                                <div class="form-group">
-                                    <label>Giám đốc vùng quản lý</label>
-                                    <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
-                                        @foreach($userGDV as $d)
-                                            <option value="{{$d->id}}" >{{$d->full_name}} </option>
-                                        @endforeach
-                                    </select>
+                            <div class="CVSelect">
+                                <div class="GDV" style="padding-bottom: 10px">
+                                    <div class="form-group">
+                                        <label>Giám đốc vùng quản lý</label>
+                                        <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
+                                            @foreach($userGDV as $d)
+                                                <option value="{{$d->id}}" >{{$d->full_name}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="SaleAdmin" style="padding-bottom: 10px">
+                                    <div class="form-group">
+                                        <label>Sale admin quản lý</label>
+                                        <select id="selectSale" name="sale_admin" class="form-control" style="width: 100%" >
+                                            @foreach($saleAdmin as $d)
+                                                <option value="{{$d->id}}" >{{$d->full_name}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">

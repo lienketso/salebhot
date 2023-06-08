@@ -50,7 +50,10 @@ class UsersController extends BaseController
         $userGDV = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 7);
         })->get();
-        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV]);
+        $saleAdmin = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 5);
+        })->get();
+        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
     }
     public function postCreate(UsersCreateRequest $request){
         try{

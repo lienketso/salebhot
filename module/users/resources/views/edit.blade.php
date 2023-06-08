@@ -1,22 +1,26 @@
 @extends('wadmin-dashboard::master')
 @section('js-init')
     <script type="text/javascript">
-        $('.GDV').hide();
+        $('.CVSelect').hide();
         $('#selectGDV').attr('disabled',true);
+        $('#selectSale').attr('disabled',true);
         var nodeType = $('select[name="role"]');
         if(nodeType.val() === '6'){
-            $('.GDV').show();
+            $('.CVSelect').show();
             $('#selectGDV').attr('disabled',false);
+            $('#selectSale').attr('disabled',false);
         }
         $('select[name="role"]').on('change',function (e){
             var _this = $(e.currentTarget);
             var value = _this.val();
             if(value==='6'){
-                $('.GDV').show();
+                $('.CVSelect').show();
                 $('#selectGDV').attr('disabled',false);
+                $('#selectSale').attr('disabled',false);
             }else{
-                $('.GDV').hide();
+                $('.CVSelect').hide();
                 $('#selectGDV').attr('disabled',true);
+                $('#selectSale').attr('disabled',true);
             }
 
         });
