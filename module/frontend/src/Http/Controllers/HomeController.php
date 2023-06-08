@@ -86,7 +86,6 @@ class HomeController extends BaseController
         $emailSetting = $settingRepositories->getSettingMeta('site_email_vn');
         $input = [
             'name'=>$request->name,
-            'user_id'=>0,
             'phone'=>$request->phone,
             'license_plate'=>$request->license_plate,
             'expiry'=>$request->expiry,

@@ -76,7 +76,7 @@ class Users extends Authenticatable
 
     public function getCompanyCV(){
         return $this->getCompany()->where(function ($q){
-            $q->where('status','active')->orWhere('status','pending');
+            $q->where('status','disable')->orWhere('status','pending');
         });
     }
 
