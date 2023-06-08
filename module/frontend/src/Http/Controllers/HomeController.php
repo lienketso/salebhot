@@ -26,6 +26,7 @@ use Product\Models\Factory;
 use Setting\Repositories\SettingRepositories;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Repositories\TransactionRepository;
+use Users\Models\Users;
 
 class HomeController extends BaseController
 {
@@ -96,9 +97,11 @@ class HomeController extends BaseController
         ];
         if(!is_null($request->npp)){
             $nhapp = Company::where('company_code',$request->npp)->first();
+            $userNPP = Users::where('id',$nhapp->user_id)->first();
             $input['user_id'] = $nhapp->user_id;
             $input['company_id'] = $nhapp->id;
             $input['company_code'] = $request->npp;
+            $input['sale_admin'] = $userNPP->sale_admin;
         }
         $transaction = $this->tran->create($input);
         $totallamount = 0;
