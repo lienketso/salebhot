@@ -166,7 +166,7 @@ class HomeController extends BaseController
         $response = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response, true);
-        return $response['access_token'];
+        return $response;
     }
 
 
