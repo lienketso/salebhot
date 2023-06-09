@@ -70,7 +70,8 @@
             "Location\\": "module/location/src",
             "Expert\\": "module/expert/src",
             "Commission\\": "module/commission/src",
-            "Reports\\": "module/reports/src"
+            "Reports\\": "module/reports/src",
+            "Wallets\\": "module/wallets/src"
         },
         "classmap": [
             "database/seeds",

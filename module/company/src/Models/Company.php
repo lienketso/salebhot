@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Product\Models\Catproduct;
 use Transaction\Models\Transaction;
 use Users\Models\Users;
+use Wallets\Models\Wallets;
 
 class Company extends Model
 {
@@ -60,6 +61,10 @@ class Company extends Model
 
     public function getTransaction(){
         return $this->hasMany(Transaction::class,'company_id','id');
+    }
+
+    public function getWallet(){
+        return $this->hasMany(Wallets::class,'company_id','id');
     }
 
 }

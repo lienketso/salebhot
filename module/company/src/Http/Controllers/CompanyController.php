@@ -18,6 +18,8 @@ use Product\Repositories\CatproductRepository;
 use Setting\Repositories\SettingRepositories;
 use Users\Models\Users;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Wallets\Models\Wallets;
+use Wallets\Repositories\WalletRepository;
 
 
 class CompanyController extends BaseController
@@ -26,11 +28,24 @@ class CompanyController extends BaseController
     protected $cat;
     protected $langcode;
     protected $setting;
-    public function __construct(CompanyRepository $companyRepository, SettingRepositories  $settingRepositories)
+    protected $wallet;
+    public function __construct(CompanyRepository $companyRepository, SettingRepositories  $settingRepositories, WalletRepository $walletRepository)
     {
         $this->model = $companyRepository;
         $this->langcode = session('lang');
         $this->setting = $settingRepositories;
+        $this->wallet = $walletRepository;
+    }
+
+    public function createWallet(){
+        $company = $this->model->where('status','active')->orWhere('status','pending')->get();
+        foreach($company as $com){
+            $data = [
+                'company_id'=>$com->id,
+            ];
+            $createWallet = Wallets::create($data);
+        }
+        return 'done';
     }
 
     public function export(){
@@ -217,7 +232,11 @@ class CompanyController extends BaseController
         }elseif ($data->status=='active'){
             $input['status'] = 'pending';
         }
-        $this->model->update($input,$id);
+        $update = $this->model->update($input,$id);
+        if(!$update->getWallet()->exists()){
+            $data = ['company_id'=>$update->id];
+            $createWallet = $this->wallet->create($data);
+        }
         return redirect()->back()->with('edit','Bạn vừa duyệt nhà phân phối thành công');
     }
 
@@ -229,7 +248,7 @@ class CompanyController extends BaseController
         $data = $this->model->find($id);
         if($data){
             try {
-                $data->status = 'disable';
+                $data->status = 'pending';
                 $data->description = $request->description;
                 $data->save();
                 return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa sửa nhà phân phối '.$data->name);

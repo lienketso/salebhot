@@ -7,8 +7,6 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ZaloZNS
 {
-    const API_URL = 'https://openapi.zalo.me/v2.0/oa/message?access_token=Akw26QTUz8EYZ5i3JwGj';
-
     /**
      * Gửi tin nhắn ZNS.
      *
@@ -17,62 +15,14 @@ class ZaloZNS
      * @param array $params Tham số cho các biến trong template
      * @return bool
      */
-    public function sendMessage(string $phone, string $templateId, array $params): bool
-    {
-        // Tạo dữ liệu để gửi lên Zalo ZNS
-        $data = [
-            'recipient' => [
-                'user_id' => $phone,
-            ],
-            'message' => [
-                'text' => '',
-                'attachment' => [
-                    'type' => 'template',
-                    'payload' => [
-                        'template_id' => $templateId,
-                        'elements' => [
-                            [
-                                'params' => $params,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $curl = curl_init(self::API_URL);
-
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen(json_encode($data)),
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        if ($response) {
-            return true;
-        }
-
-        return false;
-    }
 
     public function sendZaloMessage($templateId, $recipient, $params){
-//        $code_verifier = bin2hex(random_bytes(32));
-        $code_verifier = '7f7de30229a6edab8bc968ac7b7bcafa117691c20a59cd8db2471d19a53eba34';
-        $code_challenge = $this->base64_url_encode(hash('sha256', $code_verifier, true));
-        dd($code_challenge);
-        $accessToken = 'Akw26QTUz8EYZ5i3JwGj';
+
+        $accessToken = 'Z2zqT92npoMF9dXyaBV2BOafVNcDoy9ntrnXFAEYd2RpJaqHj96bADa0Ppc5teqotnjJ0Q64Xp3CS6mLkQAGCVisTZZeuBmAkmHHKkdAxd2k12HOwvRjIw1oDMB7kurAkYjcPjZNdsgOGbXmmeQFTxz4Q5pIeQ4HY5D5G_gR-M-SV10stQBCPQTG8tJ4ZE0viN0wRF-0_6Iv43DyoTdqHB4r4aMill1_lrr9JwUNdsRgN5mmhfQZFST17GI8XE9JzbeeT93Emd_8NISobOBWFDjl2JQ0lE8wubCE8w2VjW6xNKqc_RYB8P9GVGZTbP4ifmftVzV4obAk1I5rGYgcZc2Ifyqc';
         $client = new Client([
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
-                'Authorization' => "Bearer ${accessToken}",
+                'access_token' => "${accessToken}",
             ]
         ]);
         try {
@@ -90,8 +40,31 @@ class ZaloZNS
         }
     }
 
+    function generate_pkce_codes() {
+
+        $code_verifier = bin2hex(random_bytes(32));
+        $code_challenge = $this->base64_url_encode(hash('sha256', $code_verifier, true));
+        return array(
+            "verifier" => $code_verifier,
+            "challenge" => $code_challenge
+        );
+    }
+    public function getAuthCode(){
+        $app_id = '726851519957413814';
+        $app_callback_url = 'https://sale.baohiemoto.vn/zalo';
+        $zalo_permission_url = 'https://oauth.zaloapp.com/v4/oa/permission';
+        $codes = $this->generate_pkce_codes();
+        $auth_uri = $zalo_permission_url . "?" . http_build_query( array(
+                "app_id" => $app_id,
+                "redirect_uri" => $app_callback_url,
+                "code_challenge" => $codes["challenge"],
+            ) );
+        header("Location: {$auth_uri}");
+    }
     function base64_url_encode($input) {
         return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
     }
+
+
 
 }

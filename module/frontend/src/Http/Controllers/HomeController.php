@@ -12,6 +12,7 @@ use Company\Repositories\CompanyRepository;
 use Contact\Http\Requests\ContactCreateRequest;
 use Contact\Repositories\ContactRepository;
 use Gallery\Repositories\GalleryRepository;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Mail;
@@ -156,10 +157,15 @@ class HomeController extends BaseController
     }
 
     public function zalo(Request $request){
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'secret_key' => "Akw26QTUz8EYZ5i3JwGj",
+            ]
+        ]);
         $app_id = '726851519957413814';
-        $app_secret = 'Akw26QTUz8EYZ5i3JwGj';
         $code = $request->code;
-        $url = "https://oauth.zaloapp.com/v4/oa/access_token?app_id=$app_id&secret_key=$app_secret&code=$code&grant_type=authorization_code&code_verifier=7f7de30229a6edab8bc968ac7b7bcafa117691c20a59cd8db2471d19a53eba34";
+        $url = "https://oauth.zaloapp.com/v4/oa/access_token?app_id=$app_id&code=$code&grant_type=authorization_code&code_verifier=7f7de30229a6edab8bc968ac7b7bcafa117691c20a59cd8db2471d19a53eba34";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
