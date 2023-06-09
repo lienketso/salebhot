@@ -236,6 +236,12 @@ ul.tree1 li span a{
     background: #b07cc6;
     color: #fff;
 }
+.bag-danger{
+    border-radius: 4px;
+    padding: 5px 10px;
+    background: #c9302c;
+    color: #fff;
+}
 .order-status span{
     padding: 5px 10px;
     border-radius: 4px;

@@ -141,10 +141,10 @@
                                 "<b class="alert-danger">Đã hủy</b>" : Hủy đơn hàng
                             </p>
                             <select id="" name="order_status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
-                                <option value="pending" {{ ($data->order_status=='pending') ? 'selected' : ''}}>Đang xử lý</option>
-                                <option value="payment" {{ ($data->order_status=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
-                                <option value="active" {{ ($data->order_status=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
-                                <option value="cancel" {{ ($data->order_status=='cancel') ? 'selected' : ''}}>Đã hủy</option>
+                                    <option value="pending" {{ ($data->order_status=='pending') ? 'selected' : ''}}>Đang xử lý</option>
+                                    <option value="payment" {{ ($data->order_status=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
+                                    <option value="active" {{ ($data->order_status=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
+                                    <option value="cancel" {{ ($data->order_status=='cancel') ? 'selected' : ''}}>Đã hủy</option>
                             </select>
                         </div>
 

@@ -4,6 +4,7 @@ use Barryvdh\Debugbar\Controllers\BaseController;
 use Barryvdh\Debugbar\LaravelDebugbar;
 use Illuminate\Http\Request;
 use Wallets\Models\Wallets;
+use Wallets\Models\WalletTransaction;
 use Wallets\Repositories\WalletRepository;
 
 class WalletController extends BaseController
@@ -29,6 +30,12 @@ class WalletController extends BaseController
         }
         $data = $q->orderBy('balance','desc')->paginate(30);
         return view('wadmin-wallets::index',compact('data'));
+    }
+
+    public function history(){
+        $q = WalletTransaction::query();
+        $data = $q->orderBy('created_at','desc')->paginate(30);
+        return view('wadmin-wallets::history',compact('data'));
     }
 
 }

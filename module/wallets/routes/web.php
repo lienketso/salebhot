@@ -10,5 +10,7 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
     $router->group(['prefix'=>$moduleRoute],function(Router $router) use ($adminRoute,$moduleRoute){
         $router->get('index','WalletController@getIndex')
             ->name('wadmin::wallet.index.get')->middleware('permission:wallets_index');
+        $router->get('history','WalletController@history')
+            ->name('wadmin::wallet.history.get')->middleware('permission:wallets_history');
     });
 });

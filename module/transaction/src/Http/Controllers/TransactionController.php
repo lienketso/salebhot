@@ -17,13 +17,20 @@ use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
 use Transaction\Repositories\TransactionRepository;
+use Wallets\Repositories\WalletRepository;
+use Wallets\Repositories\WalletTransactionRepository;
 
 class TransactionController extends BaseController
 {
     protected $model;
-    public function __construct(TransactionRepository $transactiontRepository)
+    protected $wallet;
+    protected $wallettrans;
+    public function __construct(TransactionRepository $transactiontRepository, WalletRepository $walletRepository,
+                                WalletTransactionRepository $walletTransactionRepository)
     {
         $this->model = $transactiontRepository;
+        $this->wallet = $walletRepository;
+        $this->wallettrans = $walletTransactionRepository;
     }
 
     public function getIndex(Request $request){
@@ -117,6 +124,7 @@ class TransactionController extends BaseController
 
     public function postEdit($id,TransactionEditRequest $request){
         $input = $request->except(['_token', 'continue_post']);
+        $data = $this->model->find($id);
         try {
             if(!is_null($request->company_id)){
                 $companyInfo = Company::find($request->company_id);
@@ -129,6 +137,22 @@ class TransactionController extends BaseController
                     $productInfo = Product::find($p);
                     $totallamount = $totallamount + $productInfo->price;
                     $order = OrderProduct::updateOrCreate(['transaction_id'=>$id],['product_id'=>$p,'amount'=>$productInfo->amount]);
+                }
+            }
+            //cộng tiền vào ví
+            if($data->order_status!='active') {
+                if ($update->order_status == 'active') {
+                    $nppWallet = $this->wallet->findWhere(['company_id' => $update->company_id])->first();
+                    $nppWallet->balance = $nppWallet->balance + ($update->amount * 0.4);
+                    $nppWallet->save();
+                    $d = [
+                        'company_id' => $update->company_id,
+                        'wallet_id' => $nppWallet->id,
+                        'transaction_type' => 'plus',
+                        'transaction_id' => $update->id,
+                        'amount' => ($update->amount * 0.4)
+                    ];
+                    $createWalletTran = $this->wallettrans->create($d);
                 }
             }
             return redirect()->route('wadmin::transaction.index.get')
@@ -175,6 +199,19 @@ class TransactionController extends BaseController
         $status = $request->status;
         $data = Transaction::whereIn('id',explode(",",$ids))->get();
         foreach($data as $d){
+            if($d->order_status!='active' && $status == 'active') {
+                $nppWallet = $this->wallet->findWhere(['company_id' => $d->company_id])->first();
+                $nppWallet->balance = $nppWallet->balance + ($d->amount * 0.4);
+                $nppWallet->save();
+                $don = [
+                    'company_id' => $d->company_id,
+                    'wallet_id' => $nppWallet->id,
+                    'transaction_type' => 'plus',
+                    'transaction_id' => $d->id,
+                    'amount' => ($d->amount * 0.4)
+                ];
+                $createWalletTran = $this->wallettrans->create($don);
+            }
             $d->order_status = $status;
             $d->save();
         }

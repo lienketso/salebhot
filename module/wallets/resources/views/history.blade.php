@@ -3,12 +3,12 @@
 @section('content')
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="">Danh sách ví nhà phân phối</a></li>
+        <li><a href="">Lịch sử biến động ví </a></li>
     </ol>
     <div class="panel">
         <div class="panel-heading">
-            <h4 class="panel-title">Danh sách ví nhà phân phối</h4>
-            <p>Danh sách ví nhà phân phối</p>
+            <h4 class="panel-title">Lịch sử biến động ví </h4>
+            <p>Lịch sử biến động ví đại lý</p>
         </div>
 
         <div class="search_page">
@@ -24,7 +24,7 @@
 
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::wallet.index.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::wallet.history.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
@@ -49,9 +49,11 @@
                     <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Tên đại lý</th>
-                        <th>Mã đại lý</th>
-                        <th>Số dư (VND)</th>
+                        <th>Loại giao dịch</th>
+                        <th>Nhà phân phối</th>
+                        <th>Đơn hàng</th>
+                        <th>Số tiền</th>
+                        <th>Ngày giao dịch</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,10 +61,22 @@
                         <tr id="tr_{{$d->id}}">
                             <td>{{$key+1}}</td>
                             <td>
-                                {{$d->getDistributor->name}}
+                                @if($d->transaction_type=='plus')
+                                <span class="bag-commission">Cộng tiền</span>
+                                    @else
+                                    <span class="bag-danger">Trừ tiền</span>
+                                    @endif
                             </td>
-                            <td>{{$d->getDistributor->company_code}}</td>
-                            <td> <span class="bag-amount">{{number_format($d->balance)}}</span></td>
+                            <td>{{$d->company->name}}</td>
+                            <td>DH{{$d->transaction->id}}</td>
+                            <td>
+                                @if($d->transaction_type=='plus')
+                                <span class="bag-amount">+ {{number_format($d->amount)}}</span>
+                                    @else
+                                    <span class="bag-danger"> - {{number_format($d->amount)}}</span>
+                                    @endif
+                            </td>
+                            <td>{{format_date($d->created_at)}}</td>
 
                         </tr>
                     @endforeach
