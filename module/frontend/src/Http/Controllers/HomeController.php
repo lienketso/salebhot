@@ -155,5 +155,19 @@ class HomeController extends BaseController
             return view('frontend::contact.success',['data'=>$input]);
     }
 
+    public function zalo(Request $request){
+        $app_id = '726851519957413814';
+        $app_secret = 'Akw26QTUz8EYZ5i3JwGj';
+        $code = $request->code;
+        $url = "https://oauth.zaloapp.com/v4/oa/access_token?app_id=$app_id&app_secret=$app_secret&code=$code&grant_type=authorization_code";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response, true);
+        return $response['access_token'];
+    }
+
 
 }

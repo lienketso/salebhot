@@ -83,3 +83,4 @@ Route::group(['prefix'=>'cart'],function(Router $router){
 Route::get('district','OrderController@getDistrict')->name('frontend::district.get');
 Route::get('template-order','OrderController@orderTemplate')->name('frontend::order-template.get');
 Route::get('thank-you','HomeController@thankyou')->name('frontend::thank-you.get');
+Route::get('zalo','HomeController@zalo')->name('frontend::zalo.get');
