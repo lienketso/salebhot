@@ -131,9 +131,24 @@
                                     <span><strong>{{($d->user()->exists()) ? $d->user->full_name : 'Chưa xác định'}}</strong></span>
                                 </div>
                             </td>
-                            <td><a href="{{route('wadmin::company.change.get',$d->id)}}"
-                                   class="btn btn-sm {{($d->status=='active') ? 'btn-success' : 'btn-warning'}} radius-30">
-                                    {{($d->status=='active') ? 'Đã duyệt' : 'Chưa duyệt'}}</a></td>
+                            <td>
+                                @if($d->status=='active')
+                                <a href="#"
+                                   class="btn btn-sm btn-success radius-30"><i class="fa fa-check-circle-o"></i>
+                                    Đã duyệt</a>
+                                    @endif
+                                @if($d->status=='pending')
+                                        <a href="#"
+                                           class="btn btn-sm btn-warning radius-30"><i class="fa fa-info-circle"></i>
+                                            Đang đợi duyệt</a>
+                                    @endif
+                                    @if($d->status=='disable')
+                                        <a href="#"
+                                           class="btn btn-sm btn-danger radius-30"><i class="fa fa-gear"></i>
+                                            Đang trống</a>
+                                    @endif
+
+                            </td>
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::company.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>

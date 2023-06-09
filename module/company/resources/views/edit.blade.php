@@ -130,8 +130,8 @@
                                    placeholder="VD : Ngân hàng Agribank">
                         </div>
                         <div class="form-group">
-                            <label>Mô tả ngắn</label>
-                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Mô tả ngắn">{{$data->description}}</textarea>
+                            <label>Lý do chưa duyệt</label>
+                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Lý do chưa duyệt">{{$data->description}}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Nội dung về công ty</label>

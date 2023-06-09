@@ -121,8 +121,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Mô tả ngắn</label>
-                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Mô tả ngắn">{{old('description')}}</textarea>
+                            <label>Lý do chưa duyệt</label>
+                            <textarea id="" name="description" class="form-control" rows="3" placeholder="Lý do chưa duyệt">{{old('description')}}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Chi tiết về nhà phân phối</label>
