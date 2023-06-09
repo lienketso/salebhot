@@ -4,6 +4,7 @@
 namespace Base\Http\Controllers;
 
 
+use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -70,6 +71,23 @@ class DashboardController extends BaseController
             $message->to('thanhan1507@gmail.com', 'Visitor')->subject('Visitor Feedback!');
         });
         return 'Send successful'; die;
+    }
+
+    public function sendZns(){
+        $phone = '0979823452';
+        $templateId = '263590';
+        $params = ['customer_name' => 'Nguyen Thanh An', 'Bill_cost' => '2042DD','product_name'=>'Bảo hiểm trách nhiệm dân sự','date'=>'09/06/2023'];
+
+        $response = new ZaloZNS();
+        $data = $response->sendZaloMessage($templateId,$phone,$params);
+
+        if ($data) {
+            return response()->json($data);
+        } else {
+            return $data ? 'Tin nhắn đã được gửi đi.' : 'Gửi tin nhắn thất bại.';
+        }
+
+
     }
 
 

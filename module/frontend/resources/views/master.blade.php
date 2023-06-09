@@ -22,6 +22,7 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta name="zalo-platform-site-verification" content="M_2F9wdO804hr_iYoETMBWBBro7kjGTtE3C" />
     <title>{{(isset($meta_title)) ? $meta_title : $setting['site_name_'.$lang]}}</title>
 
     <!-- color sceme -->
@@ -48,7 +49,7 @@
             <img src="{{ ($setting['site_logo']!='') ? upload_url($setting['site_logo']) : asset('frontend/assets/images/logo.png')}}" alt="Baohiemoto">
         </div>
         <div class="logo-text">
-            
+
         </div>
     </div>
     <div class="container">

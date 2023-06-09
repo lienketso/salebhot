@@ -13,6 +13,7 @@ Route::group(['prefix'=>$adminRoute], function(Router $router) use($adminRoute,$
         $router->post('ckeditor/upload', 'DashboardController@upload')->name('ckeditor.upload');
         $router->get('lang/{lang}','DashboardController@changeLang')->name('dashboard.lang');
         $router->get('send-mail','DashboardController@addFeedback')->name('dashboard.sendmail');
+        $router->get('send-zns','DashboardController@sendZns')->name('dashboard.sendznd');
     });
 });
 
