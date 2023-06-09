@@ -64,7 +64,8 @@ class ZaloZNS
     }
 
     public function sendZaloMessage($templateId, $recipient, $params){
-        $code_verifier = bin2hex(random_bytes(32));
+//        $code_verifier = bin2hex(random_bytes(32));
+        $code_verifier = '7f7de30229a6edab8bc968ac7b7bcafa117691c20a59cd8db2471d19a53eba34';
         $code_challenge = $this->base64_url_encode(hash('sha256', $code_verifier, true));
         dd($code_challenge);
         $accessToken = 'Akw26QTUz8EYZ5i3JwGj';

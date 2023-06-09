@@ -159,7 +159,7 @@ class HomeController extends BaseController
         $app_id = '726851519957413814';
         $app_secret = 'Akw26QTUz8EYZ5i3JwGj';
         $code = $request->code;
-        $url = "https://oauth.zaloapp.com/v4/oa/access_token?app_id=$app_id&app_secret=$app_secret&code=$code&grant_type=authorization_code";
+        $url = "https://oauth.zaloapp.com/v4/oa/access_token?app_id=$app_id&app_secret=$app_secret&code=$code&grant_type=authorization_code&code_verifier=7f7de30229a6edab8bc968ac7b7bcafa117691c20a59cd8db2471d19a53eba34";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
