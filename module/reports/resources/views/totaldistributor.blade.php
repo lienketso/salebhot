@@ -108,6 +108,29 @@
 
                     <div class="mb20"></div>
 
+                    <table class="table nomargin">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên chuyên viên</th>
+                            <th>NPP đã duyệt</th>
+                            <th>NPP Chưa duyệt</th>
+                            <th>Tất cả NPP</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($users as $key=>$d)
+                            <tr>
+                                <td>{{$key+1}}</td>
+                                <td>{{$d->full_name}} - {{$d->phone}}</td>
+                                <td><span class="bag-count">{{$d->getCompanyActive->count()}}</span></td>
+                                <td><span class="bag-amount">{{$d->getCompanyPending->count()}}</span></td>
+                                <td><span class="bag-commission">{{$d->countCompany}} </span></td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
 
                 </div><!-- panel-body -->
 

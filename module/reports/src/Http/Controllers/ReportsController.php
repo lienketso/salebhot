@@ -181,9 +181,22 @@ class ReportsController extends BaseController
             $e->where('status','active')->orWhere('status','pending');
         })->count();
 
-        $users = Users::whereHas('roles', function ($query){
-            $query->where('role_id', 6);
-        })->get();
+//        $users = Users::whereHas('roles', function ($query){
+//            $query->where('role_id', 6);
+//        })->get();
+
+        $users = Users::select('users.*')
+            ->leftJoin('company', function ($join) use($thang,$year){
+                $join->on('users.id','=','company.user_id')
+                    ->where('company.status','!=','disable');
+            })
+            ->selectRaw('COUNT(company.id) AS countCompany')
+            ->groupBy('users.id')
+            ->orderBy('countCompany', 'DESC')
+            ->whereHas('roles', function ($query) {
+                $query->where('role_id', 6);
+            })->get();
+//        dd($users);
 
         return view('wadmin-report::totaldistributor',compact(
             'monthList',

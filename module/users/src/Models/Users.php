@@ -80,4 +80,16 @@ class Users extends Authenticatable
         });
     }
 
+    public function getCompanyActive(){
+        return $this->getCompany()->where(function ($q){
+            $q->where('status','active');
+        });
+    }
+
+    public function getCompanyPending(){
+        return $this->getCompany()->where(function ($q){
+            $q->where('status','pending');
+        });
+    }
+
 }
