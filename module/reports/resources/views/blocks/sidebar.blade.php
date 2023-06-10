@@ -1,10 +1,11 @@
 @php
     $listRoute = [
-        'wadmin::reports.distributor.get', 'wadmin::reports.experts.get', 'wadmin::reports.director.get'
+        'wadmin::reports.distributor.get', 'wadmin::reports.experts.get', 'wadmin::reports.director.get','wadmin::reports.total.distributor'
     ];
     $indexRoute = ['wadmin::reports.distributor.get'];
     $createRoute = ['wadmin::reports.experts.get'];
     $directorRoute = ['wadmin::reports.director.get'];
+    $totalDRoute = ['wadmin::reports.total.distributor'];
 
 @endphp
 @php
@@ -25,6 +26,9 @@
         </li>
         <li class="{{in_array(Route::currentRouteName(), $indexRoute) ? 'active' : '' }}">
             <a href="{{route('wadmin::reports.distributor.get')}}">Báo cáo nhà phân phối</a>
+        </li>
+        <li class="{{in_array(Route::currentRouteName(), $totalDRoute) ? 'active' : '' }}">
+            <a href="{{route('wadmin::reports.total.distributor')}}">Tổng hợp nhà phân phối</a>
         </li>
     </ul>
 </li>

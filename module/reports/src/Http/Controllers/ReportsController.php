@@ -144,6 +144,57 @@ class ReportsController extends BaseController
         return view('wadmin-report::director',compact('data','monthList','thang','commissionRate'));
     }
 
+    public function totalDistributor(Request $request){
+        $u = $request->u;
+        $mon = $request->mon;
+        $thang = date('m');
+        $year = date('Y');
+        if(!is_null($mon)){
+            $thang = $mon;
+        }
+        $monthList = collect([]);
+        for ($month = 1; $month <= 12; $month++) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthList->push([
+                'value' => $date->format('m'),
+                'label' => $date->format('F'),
+            ]);
+        }
+        $q = Company::query();
+        $w = Company::query();
+        $v = Company::query();
+        $userRequest = null;
+        if(!is_null($u)){
+            $q->where('user_id',$u);
+            $w->where('user_id',$u);
+            $v->where('user_id',$u);
+            $userRequest = Users::find($u);
+        }
+        if(!is_null($mon)){
+            $q->whereMonth('updated_at',$mon)->whereYear('updated_at',$year);
+            $w->whereMonth('updated_at',$mon)->whereYear('updated_at',$year);
+            $v->whereMonth('updated_at',$mon)->whereYear('updated_at',$year);
+        }
+        $totalCompanyActive = $q->where('status','active')->count();
+        $totalCompanyPending = $w->where('status','pending')->count();
+        $totalCompany = $v->where(function($e){
+            $e->where('status','active')->orWhere('status','pending');
+        })->count();
 
+        $users = Users::whereHas('roles', function ($query){
+            $query->where('role_id', 6);
+        })->get();
+
+        return view('wadmin-report::totaldistributor',compact(
+            'monthList',
+            'thang',
+            'year',
+            'totalCompanyActive',
+            'totalCompanyPending',
+            'totalCompany',
+            'users',
+            'userRequest'
+        ));
+    }
 
 }
