@@ -74,7 +74,7 @@
                         <div class="col-xs-6 col-sm-4">
                             <div class="bg-revenua panel-success-full">
                                 <div class="pull-left">
-                                    <div class="icon fa fa-shopping-cart"></div>
+                                    <div class="icon fa fa-user-plus"></div>
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Nhà phân phối đã duyệt</h4>
@@ -85,7 +85,7 @@
                         <div class="col-xs-6 col-sm-4">
                             <div class="bg-revenua panel-warning-full">
                                 <div class="pull-left">
-                                    <div class="icon fa fa-usd"></div>
+                                    <div class="icon fa fa-user-times"></div>
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Nhà phân phối chưa duyệt</h4>
@@ -96,7 +96,7 @@
                         <div class="col-xs-6 col-sm-4">
                             <div class="bg-revenua panel-info-full">
                                 <div class="pull-left">
-                                    <div class="icon fa fa-smile-o"></div>
+                                    <div class="icon fa fa-users"></div>
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tất cả nhà phân phối</h4>
