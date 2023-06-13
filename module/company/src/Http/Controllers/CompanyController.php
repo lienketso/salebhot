@@ -48,12 +48,14 @@ class CompanyController extends BaseController
         return 'done';
     }
 
-    public function export(){
-        $idList = range(4037, 5038);
+    public function export(Request $request){
+        $start = $request->start;
+        $end = $request->endl
+        $idList = range($start, $end);
         $data = Company::select('company_code', 'name','thumbnail')
             ->whereIn('id',$idList)->get();
             // dd($data);
-        return Excel::download(new Exports($data), 'QR-Nha-PP-2.xlsx');
+        return Excel::download(new Exports($data), 'QR-Nha-PP-3.xlsx');
     }
 
     public function getIndex(Request $request){
