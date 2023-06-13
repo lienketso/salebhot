@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             DB::table('company')->insert([
                 'name' => 'Chưa cập nhật',
                 'company_code' => $this->generateUniqueCode(),
-                'status' => 'disable'
+                'status' => 'disable',
+                'password'=>\Illuminate\Support\Facades\Hash::make('baohiemoto')
             ]);
         }
     }

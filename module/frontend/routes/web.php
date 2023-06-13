@@ -84,3 +84,12 @@ Route::get('district','OrderController@getDistrict')->name('frontend::district.g
 Route::get('template-order','OrderController@orderTemplate')->name('frontend::order-template.get');
 Route::get('thank-you','HomeController@thankyou')->name('frontend::thank-you.get');
 Route::get('zalo','HomeController@zalo')->name('frontend::zalo.get');
+//login
+Route::get('login-customer','LoginController@login')->name('login-customer');
+Route::get('customer-logout','LoginController@logout')->name('customer-logout')->middleware('customer');
+Route::post('login-customer','LoginController@postLogin')->name('login-customer-post');
+//customer
+Route::group(['prefix'=>'customer'],function(Router $router){
+    $router->get('/','CustomerController@home')->name('frontend::customer.index.get')->middleware('customer');
+
+});

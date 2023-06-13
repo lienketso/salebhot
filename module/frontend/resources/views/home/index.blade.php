@@ -40,7 +40,7 @@
                             <input type="text" required name="phone" id="phone" value="{{old('phone')}}" placeholder="VD : 0979xxxxxx">
                             <span id="sp_phone"></span>
                         </div>
-            
+
                         <div class="input-field">
                             <label for="license_plate"><i class="fa-regular fa-paper-plane"></i>Biển số xe <span>*</span></label>
                             <input required type="text" name="license_plate" id="license_plate" value="{{old('license_plate')}}" placeholder="VD : 30H888.88">
@@ -66,7 +66,7 @@
                                         <label>{{$val->name}}</label>
                                     </div>
                                     @endforeach
-                                   
+
 
                                 </div>
 
@@ -89,7 +89,7 @@
                                 <span class="checkmark"></span>
                             </label>
                             @endforeach
-                            
+
                         </fieldset>
                     </div>
                     <div class="mess-success">
