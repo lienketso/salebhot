@@ -50,7 +50,7 @@ class CompanyController extends BaseController
 
     public function export(Request $request){
         $start = $request->start;
-        $end = $request->endl
+        $end = $request->end;
         $idList = range($start, $end);
         $data = Company::select('company_code', 'name','thumbnail')
             ->whereIn('id',$idList)->get();
