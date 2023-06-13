@@ -51,7 +51,7 @@ class UsersController extends BaseController
             $query->where('role_id', 7);
         })->get();
         $saleAdmin = Users::whereHas('roles', function ($query) {
-            $query->where('role_id', 5);
+            $query->where('role_id', 9);
         })->get();
         return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
     }
@@ -82,7 +82,7 @@ class UsersController extends BaseController
         })->get();
 
         $saleAdmin = Users::whereHas('roles', function ($query) {
-            $query->where('role_id', 5);
+            $query->where('role_id', 9);
         })->get();
         return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
     }

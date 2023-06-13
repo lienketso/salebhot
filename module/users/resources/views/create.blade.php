@@ -4,6 +4,7 @@
             $('.CVSelect').hide();
             $('#selectGDV').attr('disabled',true);
             $('#selectSale').attr('disabled',true);
+            $('#Telegram').hide();
             var nodeType = $('select[name="role"]');
             if(nodeType.val() === '6'){
                 $('.CVSelect').show();
@@ -21,6 +22,12 @@
                     $('.CVSelect').hide();
                     $('#selectGDV').attr('disabled',true);
                     $('#selectSale').attr('disabled',true);
+                }
+
+                if(nodeType.val()==='9'){
+                    $('#Telegram').show();
+                }else{
+                    $('#Telegram').hide();
                 }
 
             });
@@ -147,7 +154,7 @@
                                 </div>
                                 <div class="SaleAdmin" style="padding-bottom: 10px">
                                     <div class="form-group">
-                                        <label>Sale admin quản lý</label>
+                                        <label>Sale chốt đơn</label>
                                         <select id="selectSale" name="sale_admin" class="form-control" style="width: 100%" >
                                             @foreach($saleAdmin as $d)
                                                 <option value="{{$d->id}}" >{{$d->full_name}} </option>
@@ -155,6 +162,14 @@
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-group" id="Telegram">
+                                <label>ID nhóm Telegram</label>
+                                <input class="form-control"
+                                       name="telegram"
+                                       value="{{old('telegram')}}"
+                                       type="text"
+                                       placeholder="">
                             </div>
                             <div class="form-group mb-3">
                                 <label>Ảnh đại diện</label>

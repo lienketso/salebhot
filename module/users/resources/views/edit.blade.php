@@ -4,11 +4,17 @@
         $('.CVSelect').hide();
         $('#selectGDV').attr('disabled',true);
         $('#selectSale').attr('disabled',true);
+        $('#Telegram').hide();
         var nodeType = $('select[name="role"]');
         if(nodeType.val() === '6'){
             $('.CVSelect').show();
             $('#selectGDV').attr('disabled',false);
             $('#selectSale').attr('disabled',false);
+        }
+        if(nodeType.val()==='9'){
+            $('#Telegram').show();
+        }else{
+            $('#Telegram').hide();
         }
         $('select[name="role"]').on('change',function (e){
             var _this = $(e.currentTarget);
@@ -22,6 +28,8 @@
                 $('#selectGDV').attr('disabled',true);
                 $('#selectSale').attr('disabled',true);
             }
+
+
 
         });
     </script>
@@ -148,7 +156,7 @@
                             </div>
                             <div class="SaleAdmin" style="padding-bottom: 10px">
                                 <div class="form-group">
-                                    <label>Sale admin quản lý</label>
+                                    <label>Sale chốt đơn</label>
                                     <select id="selectSale" name="sale_admin" class="form-control" style="width: 100%" >
                                         @foreach($saleAdmin as $d)
                                             <option value="{{$d->id}}" {{ ($data->sale_admin == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
@@ -156,6 +164,15 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-group" id="Telegram">
+                            <label>ID nhóm Telegram</label>
+                            <input class="form-control"
+                                   name="telegram"
+                                   value="{{$data->telegram}}"
+                                   type="text"
+                                   placeholder="">
                         </div>
 
                         <div class="form-group mb-3">
