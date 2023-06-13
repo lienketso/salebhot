@@ -52,6 +52,7 @@ function formvalidate(stepnumber)
 $(document).ready(function()
    {
        // $('#successID').hide();
+       $('#errorNPP').hide();
        $("#btnSubmit").on('click' , function(e)
        {
            e.preventDefault();
@@ -75,7 +76,14 @@ $(document).ready(function()
         	});
 
            let url = _this.attr('data-url');
-
+           if(npp.length <=0){
+               mess += 'err';
+               $('#errorNPP').show();
+               $('#err_npp').text('Bạn cần quét mã QR để đặt hàng');
+           }else{
+               $('#err_npp').text('');
+               $('#errorNPP').hide();
+           }
            if (name.length <= 0) {
                mess += 'err';
                $('input[name="name"]').addClass('err_alert');

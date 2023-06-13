@@ -23,6 +23,10 @@
         <div class="tab-sm-100 offset-md-1 col-md-5">
             <div class="right">
 
+                    <div class="alert alert-warning" id="errorNPP">
+                        <strong id="err_npp"></strong>
+                    </div>
+
                 <!-- form -->
                 <form method="post" action="{{route('frontend::home.booking.post')}}" enctype="multipart/form-data">
                     {{csrf_field()}}
