@@ -76,7 +76,7 @@
                             <select name="status" class="form-control">
                                 <option value="">Trạng thái</option>
                                 <option value="disable" {{(request('status')=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
-                                <option value="active" {{(request('status')=='disable') ? 'selected' : ''}}>Đang xử lý</option>
+                                <option value="active" {{(request('status')=='pending') ? 'selected' : ''}}>Đang xử lý</option>
                                 <option value="payment" {{(request('status')=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
                                 <option value="cancel" {{(request('status')=='cancel') ? 'selected' : ''}}>Đã hủy</option>
                             </select>
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'disable'])}}" class="btn btn-warning btn-quirk">Đang xử lý ({{$countPending}})</a>
+                            <a href="{{route('wadmin::transaction.index.get',['status'=>'pending'])}}" class="btn btn-warning btn-quirk">Đang xử lý ({{$countPending}})</a>
                         </div>
 
 

@@ -220,8 +220,8 @@ class TransactionController extends BaseController
 
     public function updatedActivity()
     {
-//        $activity = Telegram::getUpdates();
-//        dd($activity);
+        $activity = Telegram::getUpdates();
+        dd($activity);
         $text = "A new contact us query\n"
             . "<b>Email Address: </b>\n"
             . "thanhan1507@gmail.com\n"
