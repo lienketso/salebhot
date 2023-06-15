@@ -144,7 +144,7 @@ class HomeController extends BaseController
         $text .= "<a target='_blank' href='".\route('wadmin::transaction.edit.get',$transaction->id)."'>Xem đơn hàng </a>";
 
         Telegram::sendMessage([
-            'chat_id' => $chanelTelegram,
+            'chat_id' => 1049968534,
             'parse_mode' => 'HTML',
             'text' => $text
         ]);

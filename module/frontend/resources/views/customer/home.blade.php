@@ -50,25 +50,7 @@
                 <h5 class="mb-0">0</h5>
             </div>
         </div>
-        <div class="card summary-card">
-            <div class="card-header border-0">
-                <h6 class="mb-0 font-14">Order Summary</h6>
-                <ul class="nav nav-pills dz-nav summary-chart" id="pills-tab1" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-series="month" id="pills-month-tab1" data-bs-toggle="pill" data-bs-target="#pills-month1" type="button" role="tab" aria-selected="true">Monthly</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-week-tab1" data-series="week" data-bs-toggle="pill" data-bs-target="#pills-week1" type="button" role="tab" aria-selected="false" tabindex="-1">Weekly</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-today-tab1" data-series="today" data-bs-toggle="pill" data-bs-target="#pills-today1" type="button" role="tab" aria-selected="false" tabindex="-1">Today</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body p-0">
-                <div id="summaryChart"></div>
-            </div>
-        </div>
+
         <div class="card revenue-card">
             <div class="card-header border-0">
                 <h6 class="mb-0 font-14">Revenue</h6>

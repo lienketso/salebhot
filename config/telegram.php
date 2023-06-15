@@ -33,8 +33,8 @@ return [
     */
     'bots'                         => [
         'mybot' => [
-            'username'            => 'Bhotvn_bot',
-            'token'               => env('TELEGRAM_BOT_TOKEN', '6021370495:AAFaAG9ope2N9pAJOLJeIewYgnrhT2TdidQ'),
+            'username'            => 'baohiemotovnbot',
+            'token'               => env('TELEGRAM_BOT_TOKEN', '5975534623:AAGr7feOimankAeDahX3xTS792qE6HStAbw'),
             'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
             'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
             'commands'            => [
