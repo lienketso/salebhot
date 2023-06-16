@@ -87,6 +87,7 @@ class HomeController extends BaseController
     }
     public function postBooking(Request $request,SettingRepositories  $settingRepositories){
         $emailSetting = $settingRepositories->getSettingMeta('site_email_vn');
+        $distributor_rate = intval($settingRepositories->getSettingMeta('commission_rate'));
         $input = [
             'name'=>$request->name,
             'phone'=>$request->phone,
@@ -95,7 +96,8 @@ class HomeController extends BaseController
             'message'=>$request->message,
             'factory'=>$request->factory,
             'category'=>$request->category,
-            'products'=>json_encode($request->products)
+            'products'=>json_encode($request->products),
+            'distributor_rate'=>$distributor_rate
         ];
         $chanelTelegram = 5449285604;
         if(!is_null($request->npp)){
