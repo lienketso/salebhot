@@ -80,8 +80,6 @@ class SettingController extends BaseController
         $data = $request->except('_token');
 
         $data['site_logo'] = replace_thumbnail($data['site_logo']);
-        $data['site_profile'] = replace_thumbnail($data['site_profile']);
-
         $this->saveSetting($data);
         return redirect()->back()->with('edit','Sửa cấu hình thành công !');
     }

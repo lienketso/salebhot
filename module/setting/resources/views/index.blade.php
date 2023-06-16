@@ -80,6 +80,7 @@
                             <label>Link landing - website ( QRCode )</label>
                             <input class="form-control"
                                    name="link_qr_code"
+                                   disabled
                                    type="text"
                                    value="{{$setting->getSettingMeta('link_qr_code')}}"
                                    placeholder="VD : https://lienketso.vn">
@@ -194,17 +195,13 @@
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Tải lên profile</label>
+                            <label>Hoa hồng cho nhà phân phối (%)</label>
                             <div class="input-group col-xs-12" style="display: flex">
-                                <input type="text" name="site_profile" value="{{$setting->getSettingMeta('site_profile')}}"
-                                       id="ckfinder-input-2" class="form-control file-upload-info" placeholder="Upload Image">
-                                <span class="input-group-append">
-								<button class="file-upload-browse btn btn-primary" id="ckfinder-popup-2"  type="button">Chọn ảnh</button>
-							</span>
+                                <input type="number" name="commission_rate" value="{{$setting->getSettingMeta('commission_rate')}}"
+                                      class="form-control" placeholder="Tỷ lệ %">
+
                             </div>
-                            <div class="thumbnail_w" style="padding-top: 10px">
-                                <a href="{{upload_url($setting->getSettingMeta('site_profile'))}}"> <i class="fa fa-file-pdf-o"></i> File is here</a>
-                            </div>
+
                         </div>
 
 

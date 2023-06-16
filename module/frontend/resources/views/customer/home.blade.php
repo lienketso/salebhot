@@ -1,9 +1,8 @@
 @extends('frontend::customer.master')
 @section('content')
 <!-- Sidebar -->
+@include('frontend::customer.sidebar')
 <div class="dark-overlay"></div>
-
-
 <!-- Page Content -->
 <div class="page-content bottom-content">
     <div class="container m-t100">
@@ -51,62 +50,40 @@
             </div>
         </div>
 
-        <div class="card revenue-card">
-            <div class="card-header border-0">
-                <h6 class="mb-0 font-14">Revenue</h6>
-                <ul class="nav nav-pills dz-nav revenue-chart" id="pills-tab2" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-series="month" id="pills-month-tab2" data-bs-toggle="pill" data-bs-target="#pills-month1" type="button" role="tab" aria-selected="true">Monthly</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-week-tab2" data-series="week" data-bs-toggle="pill" data-bs-target="#pills-week1" type="button" role="tab" aria-selected="false" tabindex="-1">Weekly</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-today-tab2" data-series="today" data-bs-toggle="pill" data-bs-target="#pills-today1" type="button" role="tab" aria-selected="false" tabindex="-1">Today</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body p-0">
-                <div id="revenueChart"></div>
-            </div>
-        </div>
         <div class="title-bar">
-            <span class="title mb-0 font-18">Our Stores</span>
+            <span class="title mb-0 font-18">Đơn hàng mới</span>
         </div>
-        <div class="row">
-            <div class="col-md-6">
 
+                    @foreach($transactions as $d)
                     <div class="card order-box">
                         <div class="card-body">
-                            <a href="order-details.html">
+                            <a href="#">
                                 <div class="order-content">
-                                    <div class="media media-70 rounded me-3">
-                                        <img src="../assets/images/categorie/3.png" alt="image">
-                                    </div>
+
                                     <div class="right-content">
-                                        <h6 class="order-number">ORDER # 277</h6>
+                                        <h6 class="order-number">ORDER # {{$d->id}}</h6>
                                         <ul>
+                                            @if($d->orderProduct()->exists())
+                                                @foreach($d->orderProduct as $p)
+                                                    <li>
+                                                        <p class="order-name">{{$p->product->name}}</p>
+                                                    </li>
+                                                @endforeach
+                                            @endif
+                                            <li><h6 class="order-time">Khách hàng: {{$d->name}}</h6></li>
+                                                <li><h6 class="order-time">Điện thoại: {{$d->phone}}</h6></li>
                                             <li>
-                                                <p class="order-name">Apple Royal Gal... - 1kg - $10.0</p>
-                                                <span class="order-quantity">x9</span>
-                                            </li>
-                                            <li>
-                                                <h6 class="order-time">Monday, February 13,2023 6:53pm</h6>
+                                                <h6 class="order-time">Ngày đặt: {{format_date($d->created_at)}}</h6>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="badge badge-md badge-primary float-end rounded-sm">ONGOING</div>
+                                <div class="badge badge-md badge-primary float-end rounded-sm">XEM</div>
                             </a>
                         </div>
                     </div>
+                        @endforeach
 
-
-            </div>
-
-
-
-        </div>
     </div>
 </div>
 <!-- Page Content End-->
@@ -115,7 +92,7 @@
     <div class="toolbar-inner menubar-nav">
         <a href="home.html" class="nav-link active">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M506.555 208.064L263.859 30.367a13.3 13.3 0 0 0-15.716 0L5.445 208.064c-5.928 4.341-7.216 12.665-2.875 18.593a13.31 13.31 0 0 0 18.593 2.875L256 57.588l234.837 171.943c2.368 1.735 5.12 2.57 7.848 2.57 4.096 0 8.138-1.885 10.744-5.445 4.342-5.927 3.054-14.251-2.874-18.592zm-64.309 24.479c-7.346 0-13.303 5.956-13.303 13.303v211.749H322.521V342.009c0-36.68-29.842-66.52-66.52-66.52s-66.52 29.842-66.52 66.52v115.587H83.058V245.847c0-7.347-5.957-13.303-13.303-13.303s-13.303 5.956-13.303 13.303V470.9c0 7.347 5.957 13.303 13.303 13.303h133.029c6.996 0 12.721-5.405 13.251-12.267.032-.311.052-.651.052-1.036V342.01c0-22.009 17.905-39.914 39.914-39.914s39.914 17.906 39.914 39.914V470.9c0 .383.02.717.052 1.024.524 6.867 6.251 12.279 13.251 12.279h133.029c7.347 0 13.303-5.956 13.303-13.303V245.847c-.001-7.348-5.957-13.304-13.304-13.304z"/></svg>
-            <span>Home</span>
+
         </a>
         <a href="order.html" class="nav-link">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M386.689 304.403c-35.587 0-64.538 28.951-64.538 64.538s28.951 64.538 64.538 64.538c35.593 0 64.538-28.951 64.538-64.538s-28.951-64.538-64.538-64.538zm0 96.807c-17.796 0-32.269-14.473-32.269-32.269s14.473-32.269 32.269-32.269 32.269 14.473 32.269 32.269-14.473 32.269-32.269 32.269zm-220.504-96.807c-35.587 0-64.538 28.951-64.538 64.538s28.951 64.538 64.538 64.538 64.538-28.951 64.538-64.538-28.951-64.538-64.538-64.538zm0 96.807c-17.796 0-32.269-14.473-32.269-32.269s14.473-32.269 32.269-32.269 32.269 14.473 32.269 32.269-14.473 32.269-32.269 32.269zM430.15 119.675c-2.743-5.448-8.32-8.885-14.419-8.885h-84.975v32.269h75.025l43.934 87.384 28.838-14.5-48.403-96.268z"/><path d="M216.202 353.345h122.084v32.269H216.202zm-98.421 0H61.849c-8.912 0-16.134 7.223-16.134 16.134s7.223 16.134 16.134 16.134h55.933c8.912 0 16.134-7.223 16.134-16.134s-7.223-16.134-16.135-16.134zm390.831-98.636l-31.736-40.874c-3.049-3.937-7.755-6.239-12.741-6.239H346.891V94.655c0-8.912-7.223-16.134-16.134-16.134H61.849c-8.912 0-16.134 7.223-16.134 16.134s7.223 16.134 16.134 16.134h252.773V223.73c0 8.912 7.223 16.134 16.134 16.134h125.478l23.497 30.268v83.211h-44.639c-8.912 0-16.134 7.223-16.134 16.134s7.223 16.134 16.134 16.134h60.773c8.912 0 16.134-7.223 16.135-16.134V264.605c0-3.582-1.194-7.067-3.388-9.896zm-391.906 16.888H42.487c-8.912 0-16.134 7.223-16.134 16.134s7.223 16.134 16.134 16.134h74.218c8.912 0 16.134-7.223 16.134-16.134s-7.222-16.134-16.133-16.134zm37.109-63.463H16.134C7.223 208.134 0 215.357 0 224.269s7.223 16.134 16.134 16.134h137.681c8.912 0 16.134-7.223 16.134-16.134s-7.222-16.135-16.134-16.135zm26.353-63.462H42.487c-8.912 0-16.134 7.223-16.134 16.134s7.223 16.134 16.134 16.134h137.681c8.912 0 16.134-7.223 16.134-16.134s-7.222-16.134-16.134-16.134z"/></svg>

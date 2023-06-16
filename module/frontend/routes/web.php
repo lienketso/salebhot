@@ -91,5 +91,12 @@ Route::post('login-customer','LoginController@postLogin')->name('login-customer-
 //customer
 Route::group(['prefix'=>'customer'],function(Router $router){
     $router->get('/','CustomerController@home')->name('frontend::customer.index.get')->middleware('customer');
+    $router->get('order','CustomerController@order')->name('frontend::customer.order.get')->middleware('customer');
+    $router->get('order-single/{id}','CustomerController@orderDetail')
+        ->name('frontend::customer.order-single.get')
+        ->middleware('customer');
+    $router->get('revenue','CustomerController@revenue')
+        ->name('frontend::customer.revenue.get')
+        ->middleware('customer');
 
 });
