@@ -168,7 +168,7 @@
                             </select>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Ảnh chủ cửa hàng</label>
+                            <label>Ảnh NPP 01</label>
                             <div class="custom-file">
                                 <input type="file" name="thumbnail" value="" class="custom-file-input" id="inputGroupFile01" >
                                 <div class="thumbnail_w" style="padding-top: 10px">
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label>CMT / CCCD Mặt trước</label>
+                            <label>Ảnh NPP 02</label>
                             <div class="custom-file">
                                 <input type="file" name="cccd_mt" value="" class="custom-file-input" id="inputGroupFile02" >
                                 <div class="thumbnail_w" style="padding-top: 10px">
@@ -186,7 +186,7 @@
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label>CMT / CCCD Mặt sau</label>
+                            <label>Ảnh NPP 03</label>
                             <div class="custom-file">
                                 <input type="file" name="cccd_ms" value="" class="custom-file-input" id="inputGroupFile03" >
                                 <div class="thumbnail_w" style="padding-top: 10px">

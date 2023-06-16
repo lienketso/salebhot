@@ -168,14 +168,14 @@
 
 
                         <div class="form-group mb-3">
-                            <label>Ảnh chủ cửa hàng</label>
+                            <label>Ảnh NPP 01</label>
                             <div class="custom-file">
                                 <input type="file" name="thumbnail" value="{{old('thumbnail')}}" class="custom-file-input" id="inputGroupFile01" >
                                 <label class="custom-file-label" for="inputGroupFile01">{{old('thumbnail')}}</label>
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label>CMT / CCCD mặt trước</label>
+                            <label>Ảnh NPP 02</label>
                             <div class="custom-file">
                                 <input type="file" name="cccd_mt" value="{{old('cccd_mt')}}" class="custom-file-input" id="inputGroupFile02" >
                                 <label class="custom-file-label" for="inputGroupFile01">{{old('cccd_mt')}}</label>
@@ -183,7 +183,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label>CMT / CCCD mặt sau</label>
+                            <label>Ảnh NPP 03</label>
                             <div class="custom-file">
                                 <input type="file" name="cccd_ms" value="{{old('cccd_ms')}}" class="custom-file-input" id="inputGroupFile03" >
                                 <label class="custom-file-label" for="inputGroupFile01">{{old('cccd_ms')}}</label>

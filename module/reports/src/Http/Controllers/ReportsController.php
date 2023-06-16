@@ -9,6 +9,7 @@ use Commission\Models\Commission;
 use Company\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Setting\Repositories\SettingRepositories;
 use Transaction\Models\Transaction;
 use Users\Models\Users;
 
@@ -65,7 +66,7 @@ class ReportsController extends BaseController
         ));
     }
 
-    public function distributor(Request $request){
+    public function distributor(Request $request, SettingRepositories $settingRepositories){
         $q = new Company();
         $mon = $request->mon;
         $thang = date('m');
@@ -81,12 +82,7 @@ class ReportsController extends BaseController
                 'label' => $date->format('F'),
             ]);
         }
-//        $data = $q->with(['getTransaction'=>function($query) use($thang,$year){
-//            $query->where('order_status','active')->whereMonth('created_at',$thang)->whereYear('created_at',$year);
-//        }])
-//            ->orderBy('name','asc')
-//            ->where('status','active')->paginate(30);
-        $commissionRate = (40/100);
+        $commissionRate = intval($settingRepositories->getSettingMeta('commission_rate'));
 
         $data = Company::select('company.*')
             ->leftJoin('transaction', function ($join) use($thang,$year){
@@ -118,7 +114,7 @@ class ReportsController extends BaseController
         ));
     }
 
-    public function director(Request $request){
+    public function director(Request $request, SettingRepositories $settingRepositories){
         $q = new Users();
         $mon = $request->mon;
         $thang = date('m');
