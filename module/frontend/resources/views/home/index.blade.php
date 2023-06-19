@@ -14,7 +14,7 @@
                     <img src="{{asset('frontend/assets/images/left-bg.gif')}}" alt="BeRifma">
                 </div>
                 <ul class="links">
-                    <li><a href="https://baohiemoto.vn"><i class="fa-solid fa-usd"></i> Doanh thu của bạn</a></li>
+                    <li><a href="{{route('frontend::customer.index.get')}}"><i class="fa-solid fa-usd"></i> Doanh thu của bạn</a></li>
                     <li><a href="https://baohiemoto.vn/"><i class="fa-solid fa-users"></i> Trở thành đại lý</a></li>
                     <li><a href="https://baohiemoto.vn/"><i class="fa-solid fa-info-circle"></i> baohiemoto.vn</a></li>
                 </ul>

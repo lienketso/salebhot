@@ -6,20 +6,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui, viewport-fit=cover">
     <meta name="theme-color" content="#92E136">
-    <meta name="author" content="DexignZone">
+    <meta name="author" content="Lienketso">
     <meta name="robots" content="index, follow">
-    <meta name="keywords" content="android, ios, mobile, application template, progressive web app, ui kit, multiple color, dark layout">
-    <meta name="description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
-    <meta property="og:title" content="W3Grocery: Pre-Build Grocery Mobile App Template ( Bootstrap 5 + PWA )">
-    <meta property="og:description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
     <meta property="og:image" content="https://w3grocery.dexignzone.com/xhtml/social-image.png">
     <meta name="format-detection" content="telephone=no">
 
     <!-- Favicons Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('frontend/mobile/assets/images/favicon.png')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('frontend/mobile/assets/images/svg/favicon.jpg')}}">
 
     <!-- Title -->
-    <title>W3Grocery: Pre-Build Mobile App Template ( Bootstrap 5 + PWA )</title>
+    <title>Đăng nhập khách hàng</title>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/mobile/assets/css/style.css')}}">

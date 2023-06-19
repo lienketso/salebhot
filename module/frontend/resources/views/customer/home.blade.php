@@ -57,7 +57,7 @@
                     @foreach($transactions as $d)
                     <div class="card order-box">
                         <div class="card-body">
-                            <a href="#">
+                            <a href="{{route('frontend::customer.order-single.get',$d->id)}}">
                                 <div class="order-content">
 
                                     <div class="right-content">

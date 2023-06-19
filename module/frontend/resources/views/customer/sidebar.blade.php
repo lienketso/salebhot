@@ -74,16 +74,7 @@
                 <span>Logout</span>
             </a></li>
         <li class="nav-label">Settings</li>
-        <li class="nav-color" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
-            <a href="javascript:void(0);" class="nav-link">
-                    <span class="dz-icon">
-                        <svg class="color-plate" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000">
-							<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-						</svg>
-                    </span>
-                <span>Color Theme</span>
-            </a>
-        </li>
+
         <li>
             <div class="mode">
                     <span class="dz-icon">
@@ -98,9 +89,9 @@
             </div>
         </li>
     </ul>
-    <a href="javascript:void(0);" onclick="deleteAllCookie()" class="btn btn-primary btn-sm cookie-btn">Delete Cookie</a>
+    <a href="javascript:void(0);" onclick="deleteAllCookie()" class="btn btn-primary btn-sm cookie-btn">Xóa Cookie</a>
     <div class="sidebar-bottom d-none">
-        <h6 class="name">W3Grocery - Multipurpose App</h6>
+        <h6 class="name">Baohiemoto.vn</h6>
         <span class="ver-info">App Version 1.0</span>
     </div>
     <div class="author-box mt-auto mb-0">
