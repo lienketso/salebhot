@@ -5,6 +5,7 @@
 @endsection
 @section('js')
     <script type="text/javascript" src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/main.js')}}"></script>
 @endsection
 @section('js-init')
     <script type="text/javascript">
@@ -122,7 +123,11 @@
                                 </label>
                             @endforeach
                         </div>
-
+                        <div class="form-group">
+                            <label>Giá trị</label>
+                            <input class="form-control"  onkeyup="this.value=FormatNumber(this.value);" name="amount" value="{{old('amount',0)}}"
+                                   type="text" placeholder="Giá trị sản đơn hàng">
+                        </div>
                         <div class="form-group">
                             <h4>Hãng</h4>
                             @foreach($hangsx as $h)

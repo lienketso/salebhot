@@ -17,7 +17,9 @@ class Transaction extends Model
         'name','phone','email','license_plate','expiry','products','factory','amount','message','status','order_status','sale_admin','distributor_rate'
     ];
 
-
+    public function setAmountAttribute($value){
+        $this->attributes['amount'] = str_replace(',','',$value);
+    }
     public function setExpiryAttribute($value)
     {
         $this->attributes['expiry'] = convert_to_timestamp($value);

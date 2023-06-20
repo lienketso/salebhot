@@ -14,7 +14,7 @@ class AddColumnPasswordCompanyTable extends Migration
     public function up()
     {
         Schema::table('company', function (Blueprint $table) {
-            $table->string('password')->default(\Illuminate\Support\Facades\Hash::make('baohiemoto'));
+            $table->string('password')->default(\Illuminate\Support\Facades\Hash::make('baohiemoto.vn'));
         });
     }
 

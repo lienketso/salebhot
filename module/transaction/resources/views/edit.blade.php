@@ -5,6 +5,7 @@
 @endsection
 @section('js')
     <script type="text/javascript" src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/main.js')}}"></script>
 @endsection
 @section('js-init')
     <script type="text/javascript">
@@ -122,6 +123,16 @@
                                         {{(in_array($d->id,$currentProduct) ? 'checked' : '')}} ><span> {{$d->name}}</span>
                                 </label>
                             @endforeach
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giá trị đơn hàng</label>
+                            <input class="form-control"
+                                   onkeyup="this.value=FormatNumber(this.value);"
+                                   name="amount"
+                                   type="text"
+                                   value="{{number_format($data->amount)}}"
+                                   placeholder="">
                         </div>
 
                         <div class="form-group">
