@@ -159,10 +159,9 @@ class CompanyController extends BaseController
             $args[] = $cat['id'];
         }
         $cities = City::orderBy('name','asc')->get();
-        $users = Users::whereHas('roles', function ($query) {
-            $query->where('role_id', 6);
-        })->get();;
-
+        $users = Users::orderBy('id','desc')->where('status','active')->get();
+//        $qrCode = QrCode::size(1000)->generate('https://lienketso.vn/');
+//        dd($qrCode);
         $settingModel = $this->setting;
         return view('wadmin-company::edit',['data'=>$data,
             'categoryList'=>$categoryList,
