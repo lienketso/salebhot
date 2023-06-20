@@ -159,9 +159,10 @@ class CompanyController extends BaseController
             $args[] = $cat['id'];
         }
         $cities = City::orderBy('name','asc')->get();
-        $users = Users::orderBy('id','desc')->where('status','active')->get();
-//        $qrCode = QrCode::size(1000)->generate('https://lienketso.vn/');
-//        dd($qrCode);
+        $users = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 6);
+        })->get();;
+
         $settingModel = $this->setting;
         return view('wadmin-company::edit',['data'=>$data,
             'categoryList'=>$categoryList,
@@ -206,9 +207,7 @@ class CompanyController extends BaseController
             }
 
             $input['slug'] = $request->name;
-            if($data->company_code==''){
-                $input['company_code'] = $this->generateUniqueCode();
-            }
+
             //cấu hình seo
             $nhapp = $this->model->update($input, $id);
             return redirect()->route('wadmin::company.index.get')->with('edit','Bạn vừa cập nhật dữ liệu');

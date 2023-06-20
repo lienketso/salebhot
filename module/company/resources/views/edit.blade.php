@@ -160,12 +160,11 @@
                         <div class="form-group">
                             <label>Chuyên viên chăm sóc</label>
                             <select id="" name="user_id" class="form-control js-example-basic-single" style="width: 100%" >
-                                @if($userLog)
-                                    <option value="{{$userLog->id}}">{{$userLog->full_name}} - {{$userLog->phone}}</option>
-                                @endif
+
                                 @if($role->id==1)
                                 @foreach($users as $user)
-                                    <option value="{{$user->id}}" {{ ($data->user_id==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
+                                    <option value="{{$user->id}}"
+                                        {{ ($data->user_id==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
                                 @endforeach
                                     @endif
                             </select>
@@ -201,6 +200,7 @@
                             <label>Trạng thái</label>
                             <select id="" name="status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
                                 <option value="active" {{ ($data->status =='active') ? 'selected' : ''}}>Hiển thị</option>
+                                <option value="pending" {{ ($data->status =='pending') ? 'selected' : ''}}>Đợi duyệt</option>
                                 <option value="disable" {{ ($data->status=='disable') ? 'selected' : ''}}>Tạm ẩn</option>
                             </select>
                         </div>

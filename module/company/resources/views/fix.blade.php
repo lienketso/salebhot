@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label>Trạng thái</label>
                             <select id="" name="status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
-                                <option value="disable" {{ ($data->status=='disable') ? 'selected' : ''}}>Chưa duyệt</option>
+                                <option value="pending" {{ ($data->status=='pending') ? 'selected' : ''}}>Chưa duyệt</option>
                             </select>
                         </div>
 
