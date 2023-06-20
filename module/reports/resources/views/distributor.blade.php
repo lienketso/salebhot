@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tổng hoa hồng đại lý tháng {{$thang}}</h4>
-                                    <h3>{{number_format($totalAmountMonth*$commissionRate)}}</h3>
+                                    <h3>{{number_format($totalAmountMonth*($commissionRate/100))}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                             </td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
-                            <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}}</span> </td>
+                            <td><span class="bag-commission">{{number_format($d->total_amount*($commissionRate/100))}}</span> </td>
                         </tr>
                     @endforeach
 
