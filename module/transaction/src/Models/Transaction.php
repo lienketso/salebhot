@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Order\Models\OrderProduct;
 use Product\Models\Factory;
 use Product\Models\Catproduct;
+use Users\Models\Users;
 
 class Transaction extends Model
 {
@@ -47,6 +48,10 @@ class Transaction extends Model
         } else {
             echo '<span style="color:#c00">Null</span>';
         }
+    }
+
+    public function userTran(){
+        return $this->belongsTo(Users::class,'user_id','id');
     }
 
 }

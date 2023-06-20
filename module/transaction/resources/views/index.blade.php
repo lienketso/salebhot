@@ -156,8 +156,9 @@
                         </th>
                         <th>Tên khách hàng</th>
                         <th>Thông tin</th>
-                        <th width="300">Nhà PP</th>
+                        <th width="300">Nhà PP / CV</th>
                         <th>Nội dung</th>
+                        <th>Giá trị </th>
                         <th class="">Ngày gửi</th>
                         <th class="" width="180">Trạng thái</th>
                         <th width="100"></th>
@@ -174,8 +175,11 @@
                             <td>
                                 <a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a>
                             </td>
-                            <td> Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</td>
-                            <td>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</td>
+                            <td> Số điện thoại : {{$d->phone}}</td>
+                            <td>
+                                <p>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</p>
+                                <p>CV : {{$d->userTran->full_name}}</p>
+                            </td>
                             <td>
                                 <div class="product-in">
                                     <h4>Sản phẩm</h4>
@@ -193,6 +197,7 @@
                                 <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
                                 <p>Tin nhắn: {{$d->message}}</p>
                             </td>
+                            <td><span style="color: #F87D33">{{number_format($d->amount)}}</span></td>
                             <td>{{format_date($d->created_at)}}</td>
                             <td class="order-status">
                                 @if($d->order_status=='active')
