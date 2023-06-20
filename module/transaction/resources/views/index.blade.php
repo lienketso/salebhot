@@ -178,7 +178,7 @@
                             <td> Số điện thoại : {{$d->phone}}</td>
                             <td>
                                 <p>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</p>
-                                <p>CV : {{$d->userTran->full_name}}</p>
+                                <p>CV : {{ ($d->userTran()->exists()) ? $d->userTran->full_name : 'Chưa xác định'}}</p>
                             </td>
                             <td>
                                 <div class="product-in">
