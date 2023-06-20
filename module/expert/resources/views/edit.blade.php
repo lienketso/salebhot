@@ -157,14 +157,7 @@
                         <div class="form-group">
                             <label>Chuyên viên chăm sóc</label>
                             <select id="" name="user_id" class="form-control js-example-basic-single" style="width: 100%" >
-
-                                    <option value="{{$data->user->id}}">{{$data->user->full_name}} - {{$data->user->phone}}</option>
-
-                                @if($role->id==1)
-                                @foreach($users as $user)
-                                    <option value="{{$user->id}}" {{ ($data->user_id==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
-                                @endforeach
-                                    @endif
+                                <option value="{{$data->user->id}}">{{$data->user->full_name}} - {{$data->user->phone}}</option>
                             </select>
                         </div>
                         <div class="form-group mb-3">
