@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#92E136">
     <meta name="author" content="Lienketso">
     <meta name="robots" content="index, follow">
-    <meta property="og:image" content="https://w3grocery.dexignzone.com/xhtml/social-image.png">
+    <meta property="og:image" content="https://baohiemoto.vn/wp-content/uploads/2023/05/banner.jpg">
     <meta name="format-detection" content="telephone=no">
 
     <!-- Favicons Icon -->

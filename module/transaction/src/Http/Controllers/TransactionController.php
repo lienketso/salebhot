@@ -75,6 +75,7 @@ class TransactionController extends BaseController
             if(!is_null($request->company_id)){
                 $companyInfo = Company::find($request->company_id);
                 $input['company_code'] = $companyInfo->company_code;
+                $input['user_id'] = $companyInfo->user_id;
             }
 
             $data = $this->model->create($input);
