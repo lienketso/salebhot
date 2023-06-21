@@ -249,16 +249,11 @@ class CompanyController extends BaseController
     }
 
     public function changeStatus($id){
-        $input = [];
         $data = $this->model->find($id);
-        if($data->status=='pending'){
-            $input['status'] = 'active';
-        }elseif ($data->status=='active'){
-            $input['status'] = 'pending';
-        }
-        $update = $this->model->update($input,$id);
-        if(!$update->getWallet()->exists()){
-            $datas = ['company_id'=>$update->id];
+        $data->status = 'active';
+        $data->save();
+        if(!$data->getWallet()->exists()){
+            $datas = ['company_id'=>$data->id];
             $createWallet = $this->wallet->create($datas);
         }
         $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
