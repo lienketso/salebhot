@@ -125,15 +125,15 @@
                             @endforeach
                         </div>
 
-                        <div class="form-group">
-                            <label>Giá trị đơn hàng</label>
-                            <input class="form-control"
-                                   onkeyup="this.value=FormatNumber(this.value);"
-                                   name="amount"
-                                   type="text"
-                                   value="{{number_format($data->amount)}}"
-                                   placeholder="">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label>Giá trị đơn hàng</label>--}}
+{{--                            <input class="form-control"--}}
+{{--                                   onkeyup="this.value=FormatNumber(this.value);"--}}
+{{--                                   name="amount"--}}
+{{--                                   type="text"--}}
+{{--                                   value="{{number_format($data->amount)}}"--}}
+{{--                                   placeholder="">--}}
+{{--                        </div>--}}
 
                         <div class="form-group">
                             <h4>Hãng</h4>

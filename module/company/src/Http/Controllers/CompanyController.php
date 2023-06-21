@@ -13,6 +13,7 @@ use Company\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Location\Models\City;
+use Logs\Repositories\LogsRepository;
 use Maatwebsite\Excel\Facades\Excel;
 use Product\Repositories\CatproductRepository;
 use Setting\Repositories\SettingRepositories;
@@ -29,12 +30,18 @@ class CompanyController extends BaseController
     protected $langcode;
     protected $setting;
     protected $wallet;
-    public function __construct(CompanyRepository $companyRepository, SettingRepositories  $settingRepositories, WalletRepository $walletRepository)
+    protected $log;
+    public function __construct(CompanyRepository $companyRepository,
+                                SettingRepositories  $settingRepositories,
+                                WalletRepository $walletRepository,
+                                LogsRepository $logsRepository
+    )
     {
         $this->model = $companyRepository;
         $this->langcode = session('lang');
         $this->setting = $settingRepositories;
         $this->wallet = $walletRepository;
+        $this->log = $logsRepository;
     }
 
     public function createWallet(){
@@ -67,10 +74,8 @@ class CompanyController extends BaseController
         $export = $request->get('export');
         $q = Company::query();
         $page = 20;
-        if($id){
-            $data = $this->model->scopeQuery(function ($e) use($id){
-                return $e->orderBy('id','desc')->where('id',$id);
-            })->paginate(1);
+        if(!is_null($id)){
+            $q->where('id',$id);
         }
         if(!is_null($name)){
             $q->where('name','LIKE','%'.$name.'%');
@@ -131,6 +136,16 @@ class CompanyController extends BaseController
                     ->route('wadmin::company.create.get')
                     ->with('create','Thêm dữ liệu thành công');
             }
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'update',
+                'action_id'=>$data->id,
+                'module'=>'Company',
+                'description'=>'Thêm đại lý mới'.$dh
+            ];
+            $logs = $this->log->create($logdata);
             return redirect()->route('wadmin::company.index.get',['id'=>$data->id])
                 ->with('create','Thêm dữ liệu thành công');
         }catch (\Exception $e){
@@ -206,9 +221,18 @@ class CompanyController extends BaseController
             }
 
             $input['slug'] = $request->name;
-
             //cấu hình seo
             $nhapp = $this->model->update($input, $id);
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$nhapp->id]).'">#NPP'.$nhapp->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'update',
+                'action_id'=>$nhapp->id,
+                'module'=>'Company',
+                'description'=>'Sửa thông tin đại lý '.$dh
+            ];
+            $logs = $this->log->create($logdata);
             return redirect()->route('wadmin::company.index.get')->with('edit','Bạn vừa cập nhật dữ liệu');
         }catch (\Exception $e){
             return redirect()->back()->withErrors(config('messages.error'));
@@ -237,6 +261,15 @@ class CompanyController extends BaseController
             $data = ['company_id'=>$update->id];
             $createWallet = $this->wallet->create($data);
         }
+        $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
+        $logdata = [
+            'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+            'action'=>'publish',
+            'action_id'=>$data->id,
+            'module'=>'Company',
+            'description'=>'Duyệt tài khoản đại lý '.$dh
+        ];
+        $logs = $this->log->create($logdata);
         return redirect()->back()->with('edit','Bạn vừa duyệt nhà phân phối thành công');
     }
 
@@ -251,7 +284,17 @@ class CompanyController extends BaseController
                 $data->status = 'pending';
                 $data->description = $request->description;
                 $data->save();
-                return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa sửa nhà phân phối '.$data->name);
+                //logs
+                $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
+                $logdata = [
+                    'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                    'action'=>'pending',
+                    'action_id'=>$data->id,
+                    'module'=>'Company',
+                    'description'=>'Yêu cầu chuyên viên sửa thông tin đại lý '.$dh
+                ];
+                $logs = $this->log->create($logdata);
+                return redirect()->route('wadmin::company.status.get')->with('edit','Bạn vừa yêu cầu sửa nhà phân phối '.$data->name);
             }catch (\Exception $e){
                 return redirect()->back()->withErrors($e->getMessage());
             }

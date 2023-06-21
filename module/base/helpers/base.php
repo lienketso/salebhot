@@ -145,6 +145,13 @@ if (! function_exists('format_date')) {
     }
 }
 
+if (! function_exists('format_date_full')) {
+    function format_date_full($date = '')
+    {
+        return date_format(new DateTime($date), 'd/m/Y - h:i');
+    }
+}
+
 if(!function_exists('convert_to_timestamp')){
     function convert_to_timestamp($date){
         $time = strtotime($date);

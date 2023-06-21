@@ -15,6 +15,7 @@ use Company\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Location\Models\City;
+use Logs\Repositories\LogsRepository;
 use Maatwebsite\Excel\Facades\Excel;
 use Product\Repositories\CatproductRepository;
 use Setting\Repositories\SettingRepositories;
@@ -30,11 +31,13 @@ class ExpertController extends BaseController
     protected $cat;
     protected $langcode;
     protected $setting;
-    public function __construct(CompanyRepository $companyRepository, SettingRepositories  $settingRepositories)
+    protected $log;
+    public function __construct(CompanyRepository $companyRepository, SettingRepositories  $settingRepositories, LogsRepository $logsRepository)
     {
         $this->model = $companyRepository;
         $this->langcode = session('lang');
         $this->setting = $settingRepositories;
+        $this->log = $logsRepository;
     }
 
     public function export(){
@@ -172,6 +175,16 @@ class ExpertController extends BaseController
             if(!empty($companyInfo)){
                 $update = $this->model->update($input,$companyInfo->id);
             }
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$update->id]).'">#NPP'.$update->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'pending',
+                'action_id'=>$update->id,
+                'module'=>'Company',
+                'description'=>'Thêm đại lý mới '.$dh
+            ];
+            $logs = $this->log->create($logdata);
 
             if($request->has('continue_post')){
                 return redirect()
@@ -270,37 +283,24 @@ class ExpertController extends BaseController
             }
 
             $input['slug'] = $request->name;
-            // if($data->company_code==''){
-            //     $input['company_code'] = $this->generateUniqueCode();
-            // }
+
             //cấu hình seo
             $input['status'] = 'pending';
             $nhapp = $this->model->update($input, $id);
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'update',
+                'action_id'=>$data->id,
+                'module'=>'Company',
+                'description'=>'Cập nhật thông tin đại lý '.$dh
+            ];
+            $logs = $this->log->create($logdata);
             return redirect()->route('wadmin::expert.index.get')->with('edit','Bạn vừa cập nhật dữ liệu');
         }catch (\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }
-    }
-
-    function remove($id){
-        try{
-            $this->model->delete($id);
-            return redirect()->back()->with('delete','Bạn vừa xóa dữ liệu !');
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors(config('messages.error'));
-        }
-    }
-
-    public function changeStatus($id){
-        $input = [];
-        $data = $this->model->find($id);
-        if($data->status=='active'){
-            $input['status'] = 'disable';
-        }elseif ($data->status=='disable'){
-            $input['status'] = 'active';
-        }
-        $this->model->update($input,$id);
-        return redirect()->back();
     }
 
     public function revenue(Request $request){

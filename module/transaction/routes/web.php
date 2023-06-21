@@ -33,6 +33,9 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::transaction.price.get')->middleware('permission:transaction_price');
         $router->post('change-price/{id}','TransactionController@postPrice')
             ->name('wadmin::transaction.price.post')->middleware('permission:transaction_price');
+        // đơn hàng đã xóa
+        $router->get('removed','TransactionController@removed')
+            ->name('wadmin::transaction.removed.get')->middleware('permission:transaction_removed');
 
         $router->get('chanel-telegram','TransactionController@updatedActivity')->name('wadmin::telegrame.chanel.get');
     });

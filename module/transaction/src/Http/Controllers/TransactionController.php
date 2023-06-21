@@ -8,6 +8,7 @@ use Auth\Supports\Traits\Auth;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
 use Illuminate\Http\Request;
+use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
 use PHPUnit\Exception;
 use Product\Models\Factory;
@@ -25,21 +26,25 @@ class TransactionController extends BaseController
     protected $model;
     protected $wallet;
     protected $wallettrans;
+    protected $log;
     public function __construct(TransactionRepository $transactiontRepository, WalletRepository $walletRepository,
-                                WalletTransactionRepository $walletTransactionRepository)
+                                WalletTransactionRepository $walletTransactionRepository,LogsRepository $logsRepository)
     {
         $this->model = $transactiontRepository;
         $this->wallet = $walletRepository;
         $this->wallettrans = $walletTransactionRepository;
+        $this->log = $logsRepository;
     }
 
     public function getIndex(Request $request){
-
+        $id = $request->get('id');
         $name = $request->get('name');
         $company_code = $request->get('company_code');
         $status = $request->get('status');
         $q = Transaction::query();
-
+        if(!is_null($id)){
+            $q->where('id',$id);
+        }
         if(!is_null($name)){
             $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
         }
@@ -49,7 +54,8 @@ class TransactionController extends BaseController
         if(!is_null($status)){
             $q->where('order_status',$status);
         }
-        $data = $q->orderBy('created_at','desc')->paginate(20);
+        $data = $q->where('order_status','!=','removed')
+            ->orderBy('created_at','desc')->paginate(20);
 
         $countActive = Transaction::where('order_status','active')->count();
         $countPayment = Transaction::where('order_status','payment')->count();
@@ -156,6 +162,16 @@ class TransactionController extends BaseController
                     $createWalletTran = $this->wallettrans->create($d);
                 }
             }
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'update',
+                'action_id'=>$data->id,
+                'module'=>'Transaction',
+                'description'=>'Sửa thông tin đơn hàng '.$dh
+            ];
+            $logs = $this->log->create($logdata);
             return redirect()->route('wadmin::transaction.index.get')
                 ->with('create','Sửa dữ liệu thành công !');
         }catch (\Exception $e){
@@ -167,11 +183,35 @@ class TransactionController extends BaseController
 
     function remove($id){
         try{
-            $this->model->delete($id);
+            $data = $this->model->find($id);
+//            $this->model->delete($id);
+            $data->order_status = 'removed';
+            $data->save();
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::transaction.removed.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'delete',
+                'action_id'=>$data->id,
+                'module'=>'Transaction',
+                'description'=>'Xóa đơn hàng '.$dh
+            ];
+            $logs = $this->log->create($logdata);
             return redirect()->back()->with('delete','Bạn vừa xóa dữ liệu !');
         }catch (\Exception $e){
             return redirect()->back()->withErrors(config('messages.error'));
         }
+    }
+
+    public function removed(Request $request){
+        $query = Transaction::query();
+        if(!is_null($request->get('id'))){
+            $query->where('id',$request->get('id'));
+        }
+        $data = $query->orderBy('created_at','desc')
+            ->where('order_status','removed')
+            ->paginate(30);
+        return view('wadmin-transaction::removed',compact('data'));
     }
 
     public function changeStatus($id){
@@ -216,6 +256,14 @@ class TransactionController extends BaseController
             $d->order_status = $status;
             $d->save();
         }
+        //logs
+        $logdata = [
+            'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+            'action'=>'update',
+            'module'=>'Transaction',
+            'description'=>'Cập nhật trạng thái nhiều đơn hàng '.$ids
+        ];
+        $logs = $this->log->create($logdata);
         return response()->json($data);
     }
 
@@ -228,7 +276,17 @@ class TransactionController extends BaseController
             $data = $this->model->find($id);
             $data->amount = $request->amount;
             $data->save();
-            return redirect()->route('wadmin::transaction.index.get',['page'=>$request->page]);
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
+            $logdata = [
+              'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+              'action'=>'update',
+              'action_id'=>$data->id,
+              'module'=>'Transaction',
+              'description'=>'Sửa số tiền cho đơn hàng '.$dh
+            ];
+            $logs = $this->log->create($logdata);
+            return redirect()->route('wadmin::transaction.index.get',['page'=>$request->page])->with('edit','Sửa giá trị thành công');
         }catch (\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }

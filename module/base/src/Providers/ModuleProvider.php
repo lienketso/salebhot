@@ -86,6 +86,7 @@ class ModuleProvider extends ServiceProvider
         $this->app->register(\Commission\Providers\ModuleProvider::class);
         $this->app->register(\Reports\Providers\ModuleProvider::class);
         $this->app->register(\Wallets\Providers\ModuleProvider::class);
+        $this->app->register(\Logs\Providers\ModuleProvider::class);
     }
 
 }

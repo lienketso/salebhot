@@ -152,7 +152,7 @@
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::company.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
-                                    <li><a class="example-p-6" data-url="{{route('wadmin::company.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
+{{--                                    <li><a class="example-p-6" data-url="{{route('wadmin::company.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>--}}
                                 </ul>
                             </td>
                         </tr>

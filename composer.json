@@ -71,7 +71,8 @@
             "Expert\\": "module/expert/src",
             "Commission\\": "module/commission/src",
             "Reports\\": "module/reports/src",
-            "Wallets\\": "module/wallets/src"
+            "Wallets\\": "module/wallets/src",
+            "Logs\\": "module/logs/src"
         },
         "classmap": [
             "database/seeds",
