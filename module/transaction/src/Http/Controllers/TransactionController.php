@@ -219,6 +219,22 @@ class TransactionController extends BaseController
         return response()->json($data);
     }
 
+    public function price($id){
+        $data = $this->model->find($id);
+        return view('wadmin-transaction::price',compact('data'));
+    }
+    public function postPrice(Request $request, $id){
+        try {
+            $data = $this->model->find($id);
+            $data->amount = $request->amount;
+            $data->save();
+            return redirect()->route('wadmin::transaction.index.get',['page'=>$request->page]);
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+
+    }
+
     public function updatedActivity()
     {
         $activity = Telegram::getUpdates();

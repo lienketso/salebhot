@@ -98,7 +98,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Mã NPP</th>
-                        <th>Tên NPP</th>
+                        <th width="300">Tên NPP</th>
                         <th>Ảnh NPP</th>
                         <th>Hình ảnh 1</th>
                         <th>Hình ảnh 2</th>

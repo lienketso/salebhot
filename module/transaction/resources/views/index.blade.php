@@ -197,7 +197,10 @@
                                 <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
                                 <p>Tin nhắn: {{$d->message}}</p>
                             </td>
-                            <td><span style="color: #F87D33">{{number_format($d->amount)}}</span></td>
+                            <td>
+                                <span style="color: #F87D33">{{number_format($d->amount)}}</span>
+                                <a href="{{route('wadmin::transaction.price.get',$d->id)}}"><i class="fa fa-pencil"></i> Sửa giá trị</a>
+                            </td>
                             <td>{{format_date($d->created_at)}}</td>
                             <td class="order-status">
                                 @if($d->order_status=='active')
