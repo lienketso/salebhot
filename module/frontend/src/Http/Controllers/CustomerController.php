@@ -9,6 +9,7 @@ use Company\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Setting\Repositories\SettingRepositories;
 use Transaction\Repositories\TransactionRepository;
 
@@ -153,6 +154,53 @@ class CustomerController extends BaseController
         return view('frontend::customer.revenue',compact(
             'thang','year','totalRevenue','commissionRate','totalTransaction','monthList'
         ));
+    }
+
+    public function profile(){
+        $data = Auth::guard('customer')->user();
+        return view('frontend::customer.profiles.index',compact('data'));
+    }
+    public function profileEdit(){
+        $data = Auth::guard('customer')->user();
+        return view('frontend::customer.profiles.edit',compact('data'));
+    }
+    //ajax update profile
+    public function updateProfile(Request $request){
+        $rules = [
+            'name'=>'required',
+            'contact_name'=>'required',
+            'address'=>'required',
+            'bank_number'=>'required',
+            'bank_name'=>'required'
+        ];
+
+        $messages = [
+            'name.required'=>'name not empty',
+            'contact_name.required'=>'contact_name not empty',
+            'address.required'=>'address not empty',
+            'bank_number.required'=>'bank_number not empty',
+            'bank_name.required'=>'bank_name not empty',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $id = $request->get('id');
+        if(!is_null($id)){
+            $data = $this->com->find($id);
+            $data->name = $request->get('name');
+            $data->contact_name = $request->get('contact_name');
+            $data->address = $request->get('address');
+            $data->bank_number = $request->get('bank_number');
+            $data->bank_name = $request->get('bank_name');
+            $data->save();
+            return response()->json($data);
+        }else{
+            return response()->json(['errors' => 'Không tìm thấy thông tin đại lý'], 404);
+        }
+
     }
 
 }

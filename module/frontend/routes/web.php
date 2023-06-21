@@ -98,5 +98,11 @@ Route::group(['prefix'=>'customer'],function(Router $router){
     $router->get('revenue','CustomerController@revenue')
         ->name('frontend::customer.revenue.get')
         ->middleware('customer');
+    $router->get('profile','CustomerController@profile')
+        ->name('frontend::customer.profile.get')
+        ->middleware('customer');
+    $router->get('profile-edit','CustomerController@profileEdit')
+        ->name('frontend::customer.profile-edit.get')
+        ->middleware('customer');
 
 });

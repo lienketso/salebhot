@@ -6,3 +6,6 @@ Route::get('create-newsletter','HomeController@createNewletter')->name('ajax.new
 Route::get('create-partner','HomeController@createPartner')->name('ajax.create.partner.get');
 Route::post('booking-car','HomeController@postBooking')->name('ajax.create.booking.get');
 
+//customer
+Route::get('update-profile','CustomerController@updateProfile')->name('ajax.update-profile.get');
+
