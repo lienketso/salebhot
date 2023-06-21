@@ -258,8 +258,8 @@ class CompanyController extends BaseController
         }
         $update = $this->model->update($input,$id);
         if(!$update->getWallet()->exists()){
-            $data = ['company_id'=>$update->id];
-            $createWallet = $this->wallet->create($data);
+            $datas = ['company_id'=>$update->id];
+            $createWallet = $this->wallet->create($datas);
         }
         $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
         $logdata = [
