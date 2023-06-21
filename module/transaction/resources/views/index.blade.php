@@ -154,11 +154,10 @@
                                 <span></span>
                             </label>
                         </th>
-                        <th>Tên khách hàng</th>
-                        <th>Thông tin</th>
+                        <th>Khách hàng</th>
                         <th width="300">Nhà PP / CV</th>
                         <th>Nội dung</th>
-                        <th>Giá trị </th>
+                        <th>Tiền đơn hàng </th>
                         <th class="">Ngày gửi</th>
                         <th class="" width="180">Trạng thái</th>
                         <th width="100"></th>
@@ -173,9 +172,9 @@
                                 </label>
                             </td>
                             <td>
-                                <a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a>
+                                <p><a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a></p>
+                                <p> Số điện thoại : {{$d->phone}}</p>
                             </td>
-                            <td> Số điện thoại : {{$d->phone}}</td>
                             <td>
                                 <p>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</p>
                                 <p>CV : {{ ($d->userTran()->exists()) ? $d->userTran->full_name : 'Chưa xác định'}}</p>
@@ -219,7 +218,6 @@
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
-                                    <li><a class="example-p-6" data-url="{{route('wadmin::transaction.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
                                 </ul>
                             </td>
                         </tr>

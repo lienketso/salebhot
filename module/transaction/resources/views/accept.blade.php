@@ -128,10 +128,10 @@
                                 <span></span>
                             </label>
                         </th>
-                        <th>Tên khách hàng</th>
-                        <th>Thông tin</th>
+                        <th>Khách hàng</th>
                         <th width="300">Nhà PP</th>
                         <th>Nội dung</th>
+                        <th>Tiền đơn hàng</th>
                         <th class="">Ngày gửi</th>
                         <th class="" width="180">Trạng thái</th>
                         <th width="100"></th>
@@ -146,9 +146,9 @@
                                 </label>
                             </td>
                             <td>
-                                <a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a>
+                                <p><a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a></p>
+                                <p>Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</p>
                             </td>
-                            <td> Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</td>
                             <td>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</td>
                             <td>
                                 <div class="product-in">
@@ -166,6 +166,10 @@
                                 <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
                                 <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
                                 <p>Tin nhắn: {{$d->message}}</p>
+                            </td>
+                            <td>
+                                <span style="color: #F87D33">{{number_format($d->amount)}}</span>
+                                <a href="{{route('wadmin::transaction.price.get',$d->id)}}"><i class="fa fa-pencil"></i> Sửa giá trị</a>
                             </td>
                             <td>{{format_date($d->created_at)}}</td>
                             <td class="order-status">
@@ -185,7 +189,7 @@
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
-                                    <li><a class="example-p-6" data-url="{{route('wadmin::transaction.remove.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
+
                                 </ul>
                             </td>
                         </tr>

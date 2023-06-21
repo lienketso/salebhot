@@ -231,6 +231,7 @@ class TransactionController extends BaseController
         $q = Transaction::query();
         $data = $q->where('sale_admin',$saleLogin->id)
             ->where('order_status','!=','active')
+            ->where('order_status','!=','removed')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }
