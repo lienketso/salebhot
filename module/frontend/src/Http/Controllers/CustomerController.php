@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManagerStatic as Image;
 use Setting\Repositories\SettingRepositories;
 use Transaction\Repositories\TransactionRepository;
+use File;
 
 class CustomerController extends BaseController
 {
@@ -188,8 +190,10 @@ class CustomerController extends BaseController
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $id = $request->get('id');
+
         if(!is_null($id)){
             $data = $this->com->find($id);
+
             $data->name = $request->get('name');
             $data->contact_name = $request->get('contact_name');
             $data->address = $request->get('address');
@@ -201,6 +205,31 @@ class CustomerController extends BaseController
             return response()->json(['errors' => 'Không tìm thấy thông tin đại lý'], 404);
         }
 
+    }
+
+    public function updateAvatar(Request $request){
+        $data = Auth::guard('customer')->user();
+        $paths = 'npp/'.$data->company_code;
+        $pathNew = 'upload/npp/'.$data->company_code;
+        if(!File::isDirectory($pathNew)){
+            File::makeDirectory($pathNew, 0777, true, true);
+        }
+        try {
+            if ($request->hasFile('avatar')) {
+                $avatar = $request->file('avatar');
+                $newnname = time() . '-' . $avatar->getClientOriginalName();
+                $newnname = convert_vi_to_en(str_replace(' ', '-', $newnname));
+                $data->avatar = $paths . '/' . $newnname;
+                $img = Image::make($avatar->path());
+                $img->resize(400, 400, function ($const) {
+                    $const->aspectRatio();
+                })->save($pathNew . '/' . $newnname);
+                $data->save();
+                return response()->json(['avatar_url'=>upload_url($data->avatar)]);
+            }
+        }catch (\Exception $e){
+            return response()->json($e->getMessage());
+        }
     }
 
 }

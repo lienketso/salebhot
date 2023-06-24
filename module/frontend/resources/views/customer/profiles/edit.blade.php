@@ -12,6 +12,7 @@
            let address = $('input[name="address"]').val();
            let bank_number = $('input[name="bank_number"]').val();
            let bank_name = $('input[name="bank_name"]').val();
+
             if(name.length <=0){
                 mess += 'err';
                 $('#dName').addClass('errorClass');
@@ -69,7 +70,6 @@
                     dataType: "json",
                     data: {id,name,contact_name,address,bank_number,bank_name},
                     success: function (result) {
-                        console.log(result);
                         $('.success-update').show(500);
                     },
                     error: function (data) {
@@ -78,6 +78,29 @@
                 });
             }
         });
+
+        //avatar
+        $('#avatar').on('change',function(e){
+            let form = document.getElementById('avatar-form');
+            let formData = new FormData(form);
+
+            $.ajax({
+                url: "{{ route('ajax.update-avatar.get') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Nếu upload thành công, cập nhật lại ảnh đại diện mới
+                    let avatarImage = document.getElementById('preview-avatar');
+                    avatarImage.src = response.avatar_url;
+                    console.log(response);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        })
     </script>
 @endsection
 @section('content')
@@ -113,10 +136,13 @@
         <div class="container">
             <div class="edit-profile">
                 <div class="profile-image">
-                    <div class="media media-100 rounded-circle">
-                        <img src="{{asset('frontend/mobile/assets/images/avatar.png')}}" alt="/">
-                    </div>
-                    <a href="javascript:void(0);">Thay ảnh đại diện</a>
+                    <form id="avatar-form" enctype="multipart/form-data">
+                        <div class="media media-100 rounded-circle">
+                            <img id="preview-avatar"
+                                 src="{{ ($data->avatar!='') ? upload_url($data->avatar) : asset('frontend/mobile/assets/images/avatar.png')}}" alt="/">
+                        </div>
+                        <input type="file" name="avatar" id="avatar" >
+                    </form>
                 </div>
                 <div class="success-update">
                     <div class="alert alert-success solid alert-dismissible fade show">

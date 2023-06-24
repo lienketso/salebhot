@@ -14,7 +14,7 @@ class Company extends Model
 {
     protected $table = 'company';
     protected $fillable = ['name','company_code','contact_name','slug','city','address','phone','email','bank_number','bank_name','description','content','thumbnail',
-        'user_id','cccd_mt','cccd_ms','count_view','status'];
+        'user_id','cccd_mt','cccd_ms','count_view','status','avatar'];
 
     public function setSlugAttribute($value)
     {

@@ -21,3 +21,9 @@
 .success-update{
     display: none;
 }
+.profile-image input[type="file"]{
+    background: orange;
+    color: #fff;
+    padding: 5px;
+}
+

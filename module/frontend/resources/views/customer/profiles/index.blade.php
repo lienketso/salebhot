@@ -64,12 +64,17 @@
                         <a href="#">
                             <i class="fa-solid fa-bell"></i>
                             Thông báo
-                            <span class="badge badge-circle align-items-center badge-danger ms-auto me-3">1</span>
+                            <span class="badge badge-circle align-items-center badge-danger ms-auto me-3">0</span>
                         </a>
                     </li>
-
-                    <li class="border-0">
+                    <li>
                         <a href="#">
+                            <i class="fa-solid fa-star"></i>
+                            Đổi mật khẩu
+                        </a>
+                    </li>
+                    <li class="border-0">
+                        <a href="{{route('customer-logout')}}">
                             <i class="fa-solid fa-power-off"></i>
                             LogOut
                         </a>
