@@ -68,8 +68,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="fa-solid fa-star"></i>
+                        <a href="{{route('frontend::customer.change-password.get')}}">
+                            <i class="fa-solid fa-lock"></i>
                             Đổi mật khẩu
                         </a>
                     </li>

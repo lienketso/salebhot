@@ -104,5 +104,11 @@ Route::group(['prefix'=>'customer'],function(Router $router){
     $router->get('profile-edit','CustomerController@profileEdit')
         ->name('frontend::customer.profile-edit.get')
         ->middleware('customer');
+    $router->get('change-password','CustomerController@changePassword')
+        ->name('frontend::customer.change-password.get')
+        ->middleware('customer');
+    $router->post('change-password','CustomerController@postChangePassword')
+        ->name('frontend::customer.change-password.post')
+        ->middleware('customer');
 
 });

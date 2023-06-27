@@ -4,6 +4,7 @@
 namespace Company\Http\Controllers;
 
 
+use App\ExcelCompany;
 use App\Exports;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Http\Requests\CompanyCreateRequest;
@@ -320,7 +321,7 @@ class CompanyController extends BaseController
 
     public function accept(Request $request){
         $name = $request->get('name');
-        $status = $request->get('status');
+        $updated = $request->get('updated');
         $count = $request->get('count');
         $company_code = $request->get('company_code');
         $export = $request->get('export');
@@ -330,8 +331,8 @@ class CompanyController extends BaseController
         if(!is_null($name)){
             $q->where('name','LIKE','%'.$name.'%');
         }
-        if(!is_null($status)){
-            $q->where('status',$status);
+        if(!is_null($updated)){
+            $q->whereDate('updated_at',$updated);
         }
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
@@ -344,6 +345,9 @@ class CompanyController extends BaseController
             ->where('status','active')
             ->orderBy('created_at','desc')
             ->paginate($page);
+        if(!is_null($request->get('export'))){
+            return Excel::download(new ExcelCompany($data), 'danh-sach-dai-ly.xlsx');
+        }
         return view('wadmin-company::accept',compact('data'));
     }
 

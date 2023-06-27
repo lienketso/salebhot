@@ -62,18 +62,17 @@
                             <input type="text" name="company_code" value="{{old('company_code',request('company_code'))}}" placeholder="Mã NPP" class="form-control">
                         </div>
                         <div class="col-sm-2 txt-field">
-                            <select name="status" class="form-control">
-                                <option value="">Trạng thái</option>
-                                <option value="disable" {{(request('status')=='disable') ? 'selected' : ''}}>Chưa xác thực</option>
-                                <option value="active" {{(request('status')=='active') ? 'selected' : ''}}>Đã xác thực</option>
-                            </select>
+                            <input type="date" name="updated" class="form-control">
                         </div>
                         <div class="col-sm-2 txt-field">
                             <input type="number" min="1" name="count" value="{{old('count',request('count'))}}" placeholder="Số lượng npp cần lấy ra" class="form-control">
                         </div>
                         <div class="col-sm-2 txt-field">
+                            <button class="btn btn-secondary" name="export" value="1"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                        </div>
+                        <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::company.status.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::company.accept.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>

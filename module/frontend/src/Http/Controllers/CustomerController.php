@@ -9,6 +9,7 @@ use Company\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Setting\Repositories\SettingRepositories;
@@ -230,6 +231,30 @@ class CustomerController extends BaseController
         }catch (\Exception $e){
             return response()->json($e->getMessage());
         }
+    }
+
+    public function changePassword(){
+        return view('frontend::customer.profiles.change-password');
+    }
+    public function postChangePassword(Request $request){
+        # Validation
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        #Match The Old Password
+        if(!Hash::check($request->old_password, Auth::guard('customer')->user()->password)){
+            return back()->with("error", "Mật khẩu cũ không đúng");
+        }
+
+        #Update the new Password
+        Company::whereId(Auth::guard('customer')->id())->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return back()->with("status", "Password changed successfully!");
+
     }
 
 }

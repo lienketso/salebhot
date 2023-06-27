@@ -4,6 +4,7 @@
 namespace Frontend\Http\Controllers;
 
 
+use App\Mail\SendError;
 use App\Mail\SendMail;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Category\Repositories\CategoryRepository;
@@ -100,57 +101,61 @@ class HomeController extends BaseController
             'distributor_rate'=>$distributor_rate
         ];
         $chanelTelegram = 5449285604;
-        if(!is_null($request->npp)){
-            $nhapp = Company::where('company_code',$request->npp)->first();
-            $userNPP = Users::where('id',$nhapp->user_id)->first();
-            $sale = Users::where('id',$userNPP->sale_admin)->first();
-            if(!is_null($sale)){
-                $chanelTelegram = $sale->telegram;
+        try {
+            if (!is_null($request->npp)) {
+                $nhapp = Company::where('company_code', $request->npp)->first();
+                $userNPP = Users::where('id', $nhapp->user_id)->first();
+                $sale = Users::where('id', $userNPP->sale_admin)->first();
+                if (!is_null($sale)) {
+                    $chanelTelegram = $sale->telegram;
+                }
+                $input['user_id'] = $nhapp->user_id;
+                $input['company_id'] = $nhapp->id;
+                $input['company_code'] = $request->npp;
+                $input['sale_admin'] = $userNPP->sale_admin;
+            } else {
+                return response()->json(['error' => 'Đặt hàng không thành công']);
             }
-            $input['user_id'] = $nhapp->user_id;
-            $input['company_id'] = $nhapp->id;
-            $input['company_code'] = $request->npp;
-            $input['sale_admin'] = $userNPP->sale_admin;
-        }else{
-            return response()->json(['error'=>'Đặt hàng không thành công']);
-        }
-        $input['order_status'] = 'pending';
-        $transaction = $this->tran->create($input);
-        $totallamount = 0;
-        foreach($request->products as $p){
-            $productInfo = Product::find($p);
-            $totallamount = $totallamount + $productInfo->price;
-            $pro = [
-                'product_id'=>$p,
-                'transaction_id'=>$transaction->id,
-                'qty'=>1,
-                'amount'=>$productInfo->price
-            ];
-            $order = OrderProduct::create($pro);
-        }
-        $amountUp = ['amount'=>$totallamount];
-        $updateAmount = $this->tran->update($amountUp,$transaction->id);
+            $input['order_status'] = 'pending';
+            $transaction = $this->tran->create($input);
+            $totallamount = 0;
+            foreach ($request->products as $p) {
+                $productInfo = Product::find($p);
+                $totallamount = $totallamount + $productInfo->price;
+                $pro = [
+                    'product_id' => $p,
+                    'transaction_id' => $transaction->id,
+                    'qty' => 1,
+                    'amount' => $productInfo->price
+                ];
+                $order = OrderProduct::create($pro);
+            }
+            $amountUp = ['amount' => $totallamount];
+            $updateAmount = $this->tran->update($amountUp, $transaction->id);
 
-        $text = "";
-        $text .= "Đơn hàng mới từ đại lý <b>".$nhapp->name." - Mã:".$nhapp->company_code."</b>\n";
-        $text .= "Địa chỉ <b>".$nhapp->address."</b>\n";
-        $text .= "Khách hàng: <b>".$transaction->name."</b>\n";
-        $text .= "Số điện thoại: <b>".$transaction->phone."</b>\n";
-        $text .= "Sản phẩm: \n";
-        foreach($transaction->orderProduct as $p){
-            $text .= "".$p->product->name."\n";
+            $text = "";
+            $text .= "Đơn hàng mới từ đại lý <b>" . $nhapp->name . " - Mã:" . $nhapp->company_code . "</b>\n";
+            $text .= "Địa chỉ <b>" . $nhapp->address . "</b>\n";
+            $text .= "Khách hàng: <b>" . $transaction->name . "</b>\n";
+            $text .= "Số điện thoại: <b>" . $transaction->phone . "</b>\n";
+            $text .= "Sản phẩm: \n";
+            foreach ($transaction->orderProduct as $p) {
+                $text .= "" . $p->product->name . "\n";
+            }
+            $text .= "Ngày hết hạn: <b>" . format_date($transaction->expiry) . "</b>\n";
+            $text .= "Biển số xe: <b>" . $transaction->license_plate . "</b>\n";
+            $text .= "Chuyên viên: <b>" . $userNPP->full_name . "</b>\n";
+            $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $transaction->id) . "'>Xem đơn hàng </a>";
+
+            Telegram::sendMessage([
+                'chat_id' => 1049968534,
+                'parse_mode' => 'HTML',
+                'text' => $text
+            ]);
+        }catch (\Exception $e){
+            Mail::to('thanhan1507@gmail.com')
+           ->send(new SendError($e->getMessage()));
         }
-        $text .= "Ngày hết hạn: <b>".format_date($transaction->expiry)."</b>\n";
-        $text .= "Biển số xe: <b>".$transaction->license_plate."</b>\n";
-        $text .= "Chuyên viên: <b>".$userNPP->full_name."</b>\n";
-        $text .= "<a target='_blank' href='".\route('wadmin::transaction.edit.get',$transaction->id)."'>Xem đơn hàng </a>";
-
-        Telegram::sendMessage([
-            'chat_id' => 1049968534,
-            'parse_mode' => 'HTML',
-            'text' => $text
-        ]);
-
 //       Mail::to($emailSetting)
 //           ->send(new SendMail($transaction));
         return response()->json($transaction);
