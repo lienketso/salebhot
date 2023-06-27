@@ -291,4 +291,12 @@ class CustomerController extends BaseController
         }
     }
 
+    public function removeAccount(){
+        $mysuser = Auth::guard('customer')->user();
+        $mysuser->status = 'pending';
+        $mysuser->save();
+        Auth::guard('customer')->logout();
+        return redirect()->route('login-customer');
+    }
+
 }

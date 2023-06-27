@@ -15,7 +15,7 @@ class LoginController extends BaseController
     public function postLogin(Request $request){
 //        dd($request->input());
         $check = $request->all();
-        if(Auth::guard('customer')->attempt(['phone'=>$check['phone'],'password'=>$check['password']])){
+        if(Auth::guard('customer')->attempt(['phone'=>$check['phone'],'password'=>$check['password'],'status'=>'active'])){
             return redirect()->route('frontend::customer.index.get');
         }else{
             return back()->with('error','Đăng nhập thất bại !');

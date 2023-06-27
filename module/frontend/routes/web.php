@@ -113,5 +113,8 @@ Route::group(['prefix'=>'customer'],function(Router $router){
     $router->get('my-wallet','CustomerController@wallet')
         ->name('frontend::customer.wallet.get')
         ->middleware('customer');
+    $router->get('remove-account','CustomerController@removeAccount')
+        ->name('frontend::customer.remove.get')
+        ->middleware('customer');
 
 });

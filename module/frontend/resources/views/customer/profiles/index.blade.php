@@ -1,5 +1,44 @@
 @extends('frontend::customer.master')
 
+@section('css')
+    <link rel="stylesheet" href="{{asset('frontend/mobile/assets/css/jquery-confirm.min.css')}}">
+@endsection
+@section('js')
+    <script type="text/javascript" src="{{asset('frontend/mobile/assets/js/jquery-confirm.min.js')}}"></script>
+@endsection
+
+@section('js-init')
+    <script type="text/javascript">
+        // auto close
+        $('.example2').on('click', function(e){
+            e.preventDefault();
+            let _this = $(e.currentTarget);
+            let url = _this.attr('data-url');
+            $.confirm({
+                title: 'Xác nhận xóa',
+                content: 'Bạn có chắc chắn muốn xóa tài khoản không',
+                autoClose: 'cancelAction|10000',
+                escapeKey: 'cancelAction',
+                buttons: {
+                    confirm: {
+                        btnClass: 'btn-red',
+                        text: 'Xác nhận',
+                        action: function(){
+                            location.href = url;
+                        }
+                    },
+                    cancelAction: {
+                        text: 'Hủy xóa',
+                        action: function(){
+                            $.alert('Đã hủy xóa tài khoản !');
+                        }
+                    }
+                }
+            });
+        });
+
+    </script>
+@endsection
 @section('content')
     <header class="header">
         <div class="main-bar">
@@ -77,6 +116,12 @@
                         <a href="{{route('customer-logout')}}">
                             <i class="fa-solid fa-power-off"></i>
                             LogOut
+                        </a>
+                    </li>
+                    <li class="border-0">
+                        <a href="javascript:void(0);" class="example2" data-url="{{route('frontend::customer.remove.get')}}">
+                            <i class="fa fa-minus-circle"></i>
+                            Xóa tài khoản
                         </a>
                     </li>
                 </ul>
