@@ -347,7 +347,7 @@ class CompanyController extends BaseController
             ->paginate($page);
         if(!is_null($request->get('export'))){
             $exports = $q->where('lang_code',$this->langcode)
-                ->where('status','active')->orderBy('created_at','desc')->get();
+                ->where('status','active')->orderBy('created_at','desc')->paginate(2000);
             return Excel::download(new ExcelCompany($exports), 'danh-sach-dai-ly.xlsx');
         }
         return view('wadmin-company::accept',compact('data'));
