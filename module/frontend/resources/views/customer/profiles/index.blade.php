@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{route('frontend::customer.wallet.get')}}">
                             <i class="fa-solid fa-credit-card"></i>
                             Ví của tôi
                         </a>

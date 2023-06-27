@@ -68,7 +68,7 @@
                                     @endif
                             </td>
                             <td>{{$d->company->name}}</td>
-                            <td>DH{{$d->transaction->id}}</td>
+                            <td>@if($d->transaction_type=='plus') DH{{$d->transaction->id}} @else Yêu cầu rút tiền @endif</td>
                             <td>
                                 @if($d->transaction_type=='plus')
                                 <span class="bag-amount">+ {{number_format($d->amount)}}</span>

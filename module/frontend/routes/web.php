@@ -110,5 +110,8 @@ Route::group(['prefix'=>'customer'],function(Router $router){
     $router->post('change-password','CustomerController@postChangePassword')
         ->name('frontend::customer.change-password.post')
         ->middleware('customer');
+    $router->get('my-wallet','CustomerController@wallet')
+        ->name('frontend::customer.wallet.get')
+        ->middleware('customer');
 
 });

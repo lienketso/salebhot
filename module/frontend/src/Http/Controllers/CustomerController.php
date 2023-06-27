@@ -15,6 +15,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Setting\Repositories\SettingRepositories;
 use Transaction\Repositories\TransactionRepository;
 use File;
+use Wallets\Models\Wallets;
+use Wallets\Models\WalletTransaction;
 
 class CustomerController extends BaseController
 {
@@ -255,6 +257,38 @@ class CustomerController extends BaseController
 
         return back()->with("status", "Password changed successfully!");
 
+    }
+
+    public function wallet(){
+        $mysuser = Auth::guard('customer')->user();
+        $q = Wallets::query();
+        $data = $q->where('company_id',$mysuser->id)->first();
+        $e = WalletTransaction::query();
+        $history = $e->where('company_id',$mysuser->id)->paginate(20);
+        return view('frontend::customer.wallet',compact('data','history','mysuser'));
+    }
+
+    public function requestMoney(Request $request){
+        $company = $request->company;
+        $amount = $request->amount;
+        $balance = $request->balance;
+        $request->validate([
+            'amount' => 'required',
+        ]);
+        $q = Wallets::query();
+        try {
+            $wallet = $q->where('company_id',$company)->first();
+            $data = new WalletTransaction();
+            $data->company_id = $company;
+            $data->wallet_id = $wallet->id;
+            $data->transaction_type = 'minus';
+            $data->amount = $amount;
+            $data->status = 'pending';
+            $data->save();
+            return response()->json($data);
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage());
+        }
     }
 
 }

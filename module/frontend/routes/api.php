@@ -9,4 +9,5 @@ Route::post('booking-car','HomeController@postBooking')->name('ajax.create.booki
 //customer
 Route::get('update-profile','CustomerController@updateProfile')->name('ajax.update-profile.get');
 Route::post('user-update-avatar','CustomerController@updateAvatar')->name('ajax.update-avatar.get');
+Route::post('user-request-money','CustomerController@requestMoney')->name('ajax.request-money.post');
 

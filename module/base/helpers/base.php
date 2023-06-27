@@ -152,6 +152,13 @@ if (! function_exists('format_date_full')) {
     }
 }
 
+if (! function_exists('format_hour')) {
+    function format_hour($date = '')
+    {
+        return date_format(new DateTime($date), 'h:i');
+    }
+}
+
 if(!function_exists('convert_to_timestamp')){
     function convert_to_timestamp($date){
         $time = strtotime($date);

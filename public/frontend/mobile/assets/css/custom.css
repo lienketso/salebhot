@@ -30,3 +30,20 @@
     padding-top: 20px;
     padding-bottom: 20px;
 }
+.icon-box-2 i{
+    color: #fff;
+    font-size: 22px;
+}
+.date-span{
+    color: #666;
+}
+.form-request-money{
+    padding-top: 20px;
+    display: none;
+}
+.error-request{
+    display: none;
+}
+.success-request{
+    display: none;
+}
