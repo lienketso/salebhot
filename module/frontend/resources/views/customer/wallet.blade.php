@@ -4,45 +4,46 @@
 @endsection
 @section('js-init')
 <script type="text/javascript">
+    $(document).ready(function()
+    {
     $('#btnRequest').on('click',function (e){
         $('.form-request-money').toggle();
     });
-    $('#smRequest').on('click',function (e){
-       e.preventDefault();
-       let _this = $(e.currentTarget);
-       let url = _this.attr('data-url');
-       let company = _this.attr('data-company');
-       let balance_ = _this.attr('data-balance');
-       let balance = parseInt(balance_);
-       let mess = '';
-       let price = $('input[name="amount"]').val();
-       var amount = parseInt(price.replace(/,/g, ""));
+    $('#smRequest').on('click',function (e) {
+        e.preventDefault();
+        let _this = $(e.currentTarget);
+        let url = _this.attr('data-url');
+        let company = _this.attr('data-company');
+        let balance_ = _this.attr('data-balance');
+        let balance = parseInt(balance_);
+        let mess = '';
+        let price = $('input[name="amount"]').val();
+        var amount = parseInt(price.replace(/,/g, ""));
 
-        if(amount>balance){
-            let mess = 'Số dư ví không đủ để thực hiện';
+        if (amount > balance) {
+            mess += 'Số dư ví không đủ để thực hiện';
             $('.error-request').show();
             $('.err-request').text(mess);
-        }else{
+        } else {
             $('.error-request').hide();
-            let mess = '';
         }
-        if(amount<100000){
-            let mess = 'Số tiền nhập phải lớn hơn 100.000';
+        if (amount < 100000) {
+            mess += 'Số tiền nhập phải lớn hơn 100.000';
             $('.error-request').show();
             $('.err-request').text(mess);
         }
-        if(price.length<=0){
-            let mess = 'Bạn chưa nhập số tiền cần rút';
+        if (price.length <= 0) {
+            mess += 'Bạn chưa nhập số tiền cần rút';
             $('.error-request').show();
             $('.err-request').text(mess);
         }
 
-        if(mess.length <=0 ) {
+        if (mess.length <= 0) {
             $.ajax({
                 type: "POST",
                 url: url,
                 dataType: "json",
-                data: {company,balance,amount},
+                data: {company, balance, amount},
                 success: function (result) {
                     console.log(result);
                     $('.success-request').show(300);
@@ -54,7 +55,7 @@
                 }
             });
         }
-
+    });
     });
 </script>
 @endsection
