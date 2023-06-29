@@ -3,6 +3,7 @@ namespace Wallets\Models;
 use Company\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 use Transaction\Models\Transaction;
+use Users\Models\Users;
 
 class WalletTransaction extends Model
 {
@@ -15,6 +16,14 @@ class WalletTransaction extends Model
 
     public function transaction(){
         return $this->belongsTo(Transaction::class,'transaction_id','id');
+    }
+
+    public function users(){
+        return $this->belongsTo(Users::class,'user_id','id');
+    }
+
+    public function wallet(){
+        return $this->belongsTo(Wallets::class,'wallet_id','id');
     }
 
 }

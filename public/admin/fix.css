@@ -275,6 +275,10 @@ ul.tree1 li span a{
 .action-block{
     padding-bottom: 20px;
 }
+.pull-right{
+    position: relative;
+    left: -5px;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

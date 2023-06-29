@@ -35,9 +35,13 @@ class AppServiceProvider extends ServiceProvider
         $countContact = DB::table('contact')->where('status','disable')->count();
         View::share('countContact',$countContact);
         //số nhà phân phối chưa được duyệt
-        $countComPending = DB::table('company')->where('status','pending')->count();
+        $countComPending = DB::table('company')
+            ->where('status','pending')->where('c_type','distributor')->count();
         View::share('countComPending',$countComPending);
-
+        //Số yêu cầu rút tiền
+        $countWithdraw = DB::table('wallet_transaction')->where('transaction_type','minus')
+            ->where('status','pending')->count();
+        View::share('countWithdraw',$countWithdraw);
         if(!session('lang') || session('lang')==null){
             session()->put(['lang'=>config('app.locale')]);
         }

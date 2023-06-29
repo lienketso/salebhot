@@ -12,5 +12,11 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::wallet.index.get')->middleware('permission:wallets_index');
         $router->get('history','WalletController@history')
             ->name('wadmin::wallet.history.get')->middleware('permission:wallets_history');
+        $router->get('withdraw','WalletController@withdraw')
+            ->name('wadmin::wallet.withdraw.get')->middleware('permission:wallets_withdraw');
+        $router->get('withdraw-post/{id}','WalletController@withdrawAccept')
+            ->name('wadmin::wallet.withdraw.post')->middleware('permission:wallets_withdraw');
+        $router->get('withdraw-accept','WalletController@withdrawDone')
+            ->name('wadmin::wallet.accept.get')->middleware('permission:wallets_withdraw');
     });
 });
