@@ -74,6 +74,7 @@ class ExpertController extends BaseController
         }
 
         $data = $q->where('lang_code',$this->langcode)
+            ->where('c_type','distributor')
         ->where('user_id',$userLog->id)
         ->where('status','active')
         ->orderBy('created_at','desc')->paginate($page);
@@ -108,6 +109,7 @@ class ExpertController extends BaseController
         }
 
         $data = $q->where('lang_code',$this->langcode)
+            ->where('c_type','distributor')
             ->where('user_id',$userLog->id)
             ->where(function ($query){
                 $query->where('status','disable')->orWhere('status','pending');

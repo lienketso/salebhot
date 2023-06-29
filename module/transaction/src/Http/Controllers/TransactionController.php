@@ -69,7 +69,7 @@ class TransactionController extends BaseController
     public function getCreate(){
         $products = Product::orderBy('created_at','desc')->where('status','active')->get();
         $hangsx = Factory::orderBy('sort_order','asc')->where('status','active')->get();
-        $company = Company::orderBy('name','asc')->where('status','active')->get();
+        $company = Company::orderBy('name','asc')->where('status','active')->where('c_type','distributor')->get();
         return view('wadmin-transaction::create',compact('products','hangsx','company'));
     }
 

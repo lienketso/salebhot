@@ -16,6 +16,7 @@ use Gallery\Repositories\GalleryRepository;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Newsletter\Repositories\NewsletterRepository;
 use Order\Models\OrderProduct;
@@ -117,7 +118,9 @@ class HomeController extends BaseController
                 return response()->json(['error' => 'Đặt hàng không thành công']);
             }
             $input['order_status'] = 'pending';
+            //create transaction
             $transaction = $this->tran->create($input);
+            //create product transaction
             $totallamount = 0;
             foreach ($request->products as $p) {
                 $productInfo = Product::find($p);
@@ -130,9 +133,10 @@ class HomeController extends BaseController
                 ];
                 $order = OrderProduct::create($pro);
             }
+            //update total amount
             $amountUp = ['amount' => $totallamount];
             $updateAmount = $this->tran->update($amountUp, $transaction->id);
-
+            //send messenger telegram
             $text = "";
             $text .= "Đơn hàng mới từ đại lý <b>" . $nhapp->name . " - Mã:" . $nhapp->company_code . "</b>\n";
             $text .= "Địa chỉ <b>" . $nhapp->address . "</b>\n";
@@ -152,6 +156,17 @@ class HomeController extends BaseController
                 'parse_mode' => 'HTML',
                 'text' => $text
             ]);
+
+            //create guest account
+            $company = Company::firstOrCreate(['phone'=>$transaction->phone],
+                ['name'=>'Guest',
+                    'contact_name'=>$transaction->name,
+                    'parent'=>$transaction->company_id,
+                    'c_type'=>'guest',
+                    'status'=>'pending',
+                    'password'=>Hash::make('baohiemoto.vn')
+                ]);
+
         }catch (\Exception $e){
             Mail::to('thanhan1507@gmail.com')
            ->send(new SendError($e->getMessage()));

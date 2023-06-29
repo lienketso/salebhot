@@ -95,7 +95,7 @@ class ReportsController extends BaseController
             ->selectRaw('COUNT(transaction.id) as totalOrder')
             ->groupBy('company.id')
             ->orderBy('total_amount', 'DESC')
-            ->where('company.status','active')->paginate(30);
+            ->where('company.status','active')->where('company.c_type','distributor')->paginate(30);
 
 //        dd($data);
         $totalOrderMonth = Transaction::where('order_status','active')
@@ -171,10 +171,10 @@ class ReportsController extends BaseController
             $w->whereMonth('updated_at',$mon)->whereYear('updated_at',$year);
             $v->whereMonth('updated_at',$mon)->whereYear('updated_at',$year);
         }
-        $totalCompanyActive = $q->where('status','active')->count();
-        $totalCompanyPending = $w->where('status','pending')->count();
+        $totalCompanyActive = $q->where('status','active')->where('c_type','distributor')->count();
+        $totalCompanyPending = $w->where('status','pending')->where('c_type','distributor')->count();
         $totalCompany = $v->where(function($e){
-            $e->where('status','active')->orWhere('status','pending');
+            $e->where('c_type','distributor')->where('status','active')->orWhere('status','pending');
         })->count();
 
 //        $users = Users::whereHas('roles', function ($query){

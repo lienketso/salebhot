@@ -91,7 +91,8 @@ class CompanyController extends BaseController
             $page = $count;
         }
 
-        $data = $q->where('lang_code',$this->langcode)->orderBy('created_at','desc')->paginate($page);
+        $data = $q->where('lang_code',$this->langcode)->where('c_type','distributor')
+            ->orderBy('created_at','desc')->paginate($page);
         $users = Users::orderBy('id','desc')->where('status','active')->get();
         return view('wadmin-company::index',['data'=>$data,'users'=>$users]);
     }
@@ -315,7 +316,7 @@ class CompanyController extends BaseController
             $q->where('company_code',$company_code);
         }
 
-        $data = $q->where('status','pending')->paginate(20);
+        $data = $q->where('status','pending')->where('c_type','distributor')->paginate(20);
         return view('wadmin-company::status',compact('data'));
     }
 
@@ -342,6 +343,7 @@ class CompanyController extends BaseController
         }
 
         $data = $q->where('lang_code',$this->langcode)
+            ->where('c_type','distributor')
             ->where('status','active')
             ->orderBy('created_at','desc')
             ->paginate($page);
