@@ -149,15 +149,17 @@ class TransactionController extends BaseController
             //cộng tiền vào ví
             if($data->order_status!='active') {
                 if ($update->order_status == 'active') {
+                    $vat = $update->amount * 0.1;
+                    $sauVat = $update->amount - $vat;
                     $nppWallet = $this->wallet->findWhere(['company_id' => $update->company_id])->first();
-                    $nppWallet->balance = $nppWallet->balance + ($update->amount * 0.4);
+                    $nppWallet->balance = $nppWallet->balance + ($sauVat * 0.4);
                     $nppWallet->save();
                     $d = [
                         'company_id' => $update->company_id,
                         'wallet_id' => $nppWallet->id,
                         'transaction_type' => 'plus',
                         'transaction_id' => $update->id,
-                        'amount' => ($update->amount * 0.4)
+                        'amount' => ($sauVat * 0.4)
                     ];
                     $createWalletTran = $this->wallettrans->create($d);
                 }
@@ -240,17 +242,20 @@ class TransactionController extends BaseController
         $ids = $request->ids;
         $status = $request->status;
         $data = Transaction::whereIn('id',explode(",",$ids))->get();
+
         foreach($data as $d){
-            if($d->order_status!='active' && $status == 'active') {
+            if($d->order_status!='active') {
+                $vat = $d->amount * 0.1;
+                $sauVat = $d->amount - $vat;
                 $nppWallet = $this->wallet->findWhere(['company_id' => $d->company_id])->first();
-                $nppWallet->balance = $nppWallet->balance + ($d->amount * 0.4);
+                $nppWallet->balance = $nppWallet->balance + ($sauVat * 0.4);
                 $nppWallet->save();
                 $don = [
                     'company_id' => $d->company_id,
                     'wallet_id' => $nppWallet->id,
                     'transaction_type' => 'plus',
                     'transaction_id' => $d->id,
-                    'amount' => ($d->amount * 0.4)
+                    'amount' => ($sauVat * 0.4)
                 ];
                 $createWalletTran = $this->wallettrans->create($don);
             }
