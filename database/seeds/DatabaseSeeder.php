@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Chưa cập nhật',
                 'company_code' => $this->generateUniqueCode(),
                 'status' => 'disable',
-                'password'=>\Illuminate\Support\Facades\Hash::make('baohiemoto')
+                'password'=>\Illuminate\Support\Facades\Hash::make('baohiemoto.vn')
             ]);
         }
     }
