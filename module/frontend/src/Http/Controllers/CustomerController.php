@@ -38,30 +38,22 @@ class CustomerController extends BaseController
         $year = date('Y');
         $totalRevenue = $this->tran->scopeQuery(function ($e) use ($authLogin,$month,$year){
             return $e->where('order_status','active')
-                ->where('company_id',$authLogin)
-                ->whereMonth('created_at',$month)
-                ->whereYear('created_at',$year);
+                ->where('company_id',$authLogin);
         })->sum('amount');
         //đơn hàng hoàn thành
         $totalSuccess = $this->tran->scopeQuery(function ($query) use($authLogin,$month,$year){
             return $query->where('order_status','active')
-                ->where('company_id',$authLogin)
-                ->whereMonth('created_at',$month)
-                ->whereYear('created_at',$year);
+                ->where('company_id',$authLogin);
         })->count();
         //đơn hàng đợi duyệt
         $totalPending = $this->tran->scopeQuery(function ($query) use($authLogin,$month,$year){
             return $query->where('order_status','pending')
-                ->where('company_id',$authLogin)
-                ->whereMonth('created_at',$month)
-                ->whereYear('created_at',$year);
+                ->where('company_id',$authLogin);
         })->count();
         //đơn hàng hủy
         $totalCancel = $this->tran->scopeQuery(function ($query) use($authLogin,$month,$year){
             return $query->where('order_status','cancel')
-                ->where('company_id',$authLogin)
-                ->whereMonth('created_at',$month)
-                ->whereYear('created_at',$year);
+                ->where('company_id',$authLogin);
         })->count();
         //danh sách đơn hàng mới nhất
         $transactions = $this->tran->scopeQuery(function($e) use ($authLogin){
