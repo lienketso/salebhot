@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f0bec8bfc01a973e894107deba05626",
+    "content-hash": "83a76a96dec99f962bb06e896d87f43f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6357,6 +6357,55 @@
                 }
             ],
             "time": "2022-01-24T18:55:24+00:00"
+        },
+        {
+            "name": "zaloplatform/zalo-php-sdk",
+            "version": "4.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zaloplatform/zalo-php-sdk.git",
+                "reference": "87b30627b578e25d0c4c9661a9ef600045bff640"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zaloplatform/zalo-php-sdk/zipball/87b30627b578e25d0c4c9661a9ef600045bff640",
+                "reference": "87b30627b578e25d0c4c9661a9ef600045bff640",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.2"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Zalo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "zaloplatform",
+                    "email": "zaloplatform@gmail.com"
+                }
+            ],
+            "description": "sdk for zalo developers",
+            "keywords": [
+                "composer",
+                "sdk",
+                "zalo",
+                "zalosdk"
+            ],
+            "support": {
+                "issues": "https://github.com/zaloplatform/zalo-php-sdk/issues",
+                "source": "https://github.com/zaloplatform/zalo-php-sdk/tree/4.0.3"
+            },
+            "time": "2023-05-29T10:15:39+00:00"
         }
     ],
     "packages-dev": [

@@ -8,7 +8,7 @@ use Users\Models\Users;
 class WalletTransaction extends Model
 {
     protected $table = 'wallet_transaction';
-    protected $fillable = ['user_id','company_id','wallet_id','amount','transaction_type','status','transaction_id'];
+    protected $fillable = ['user_id','company_id','wallet_id','amount','transaction_type','status','transaction_id','description'];
 
     public function company(){
         return $this->belongsTo(Company::class,'company_id','id');

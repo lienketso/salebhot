@@ -204,6 +204,35 @@
 
                         </div>
 
+                        <div class="form-group mb-3">
+                            <label>Zalo App ID</label>
+                            <div class="input-group col-xs-12" style="display: flex">
+                                <input type="text" name="zalo_app_id" value="{{$setting->getSettingMeta('zalo_app_id')}}"
+                                       class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Zalo App Secret</label>
+                            <div class="input-group col-xs-12" style="display: flex">
+                                <input type="text" name="zalo_app_secret" value="{{$setting->getSettingMeta('zalo_app_secret')}}"
+                                       class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Zalo Access token</label>
+                            <div class="input-group col-xs-12" style="display: flex">
+                                <input type="text" name="zalo_access_token" value="{{$setting->getSettingMeta('zalo_access_token')}}"
+                                       class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Zalo Refresh token</label>
+                            <div class="input-group col-xs-12" style="display: flex">
+                                <input type="text" name="zalo_refresh_token" value="{{$setting->getSettingMeta('zalo_refresh_token')}}"
+                                       class="form-control" placeholder="">
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>

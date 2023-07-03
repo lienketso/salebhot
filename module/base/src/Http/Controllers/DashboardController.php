@@ -6,10 +6,15 @@ namespace Base\Http\Controllers;
 
 use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use League\Flysystem\Exception;
 use Post\Repositories\PostRepository;
+use Setting\Models\Setting;
 use Setting\Repositories\SettingRepositories;
+use Zalo\Zalo;
+use Zalo\ZaloEndPoint;
 
 class DashboardController extends BaseController
 {
@@ -87,6 +92,32 @@ class DashboardController extends BaseController
             return $data ? 'Tin nhắn đã được gửi đi.' : 'Gửi tin nhắn thất bại.';
         }
 
+
+    }
+
+    public function getAccessToken()
+    {
+        $setting = Setting::where('setting_key','zalo_refresh_token')->first();
+        $secretKey = env('ZALO_SECRET_KEY');
+        $code_verifier = bin2hex(random_bytes(32));
+        $code_challenge = base64_url_encode_zalo(hash('sha256', $code_verifier, true));
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'secret_key' => "${secretKey}",
+            ]
+        ]);
+        $response = $client->post('https://oauth.zaloapp.com/v4/oa/access_token', [
+            'form_params' => [
+                'app_id' => env('ZALO_OA_ID'),
+                'grant_type' => 'refresh_token',
+                'refresh_token'=>$setting->setting_value,
+            ]
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+        Setting::updateOrCreate(['setting_key'=>'zalo_refresh_token'],['setting_value'=>$data['refresh_token']]);
+        return $data;
 
     }
 

@@ -114,7 +114,7 @@
                             <input class="form-control"  onkeyup="this.value=FormatNumber(this.value);" name="price" value="{{old('price',0)}}" type="text" placeholder="Giá bán">
                         </div>
                         <div class="form-group">
-                            <label>Giá cũ</label>
+                            <label>Giá trước thuế</label>
                             <input class="form-control" onkeyup="this.value=FormatNumber(this.value);" name="disprice" value="{{old('disprice',0)}}" type="text" placeholder="Giá gốc">
                         </div>
                         <div class="form-group">

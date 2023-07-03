@@ -18,5 +18,11 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::wallet.withdraw.post')->middleware('permission:wallets_withdraw');
         $router->get('withdraw-accept','WalletController@withdrawDone')
             ->name('wadmin::wallet.accept.get')->middleware('permission:wallets_withdraw');
+        $router->get('withdraw-refund/{id}','WalletController@getRefund')
+            ->name('wadmin::wallet.refund.get')->middleware('permission:wallets_refund');
+        $router->post('withdraw-refund/{id}','WalletController@postRefund')
+            ->name('wadmin::wallet.refund.post')->middleware('permission:wallets_refund');
+        $router->get('withdraw-list-refund','WalletController@refundList')
+            ->name('wadmin::wallet.list-refund.get')->middleware('permission:wallets_refund');
     });
 });

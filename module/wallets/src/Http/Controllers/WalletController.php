@@ -10,15 +10,18 @@ use Maatwebsite\Excel\Facades\Excel;
 use Wallets\Models\Wallets;
 use Wallets\Models\WalletTransaction;
 use Wallets\Repositories\WalletRepository;
+use Wallets\Repositories\WalletTransactionRepository;
 
 class WalletController extends BaseController
 {
     protected $model;
     protected $log;
-    public function __construct(WalletRepository $walletRepository, LogsRepository $logsRepository)
+    protected $wa;
+    public function __construct(WalletRepository $walletRepository, LogsRepository $logsRepository, WalletTransactionRepository $walletTransactionRepository)
     {
         $this->model = $walletRepository;
         $this->log = $logsRepository;
+        $this->wa = $walletTransactionRepository;
     }
 
     public function getIndex(Request $request){
@@ -104,6 +107,68 @@ class WalletController extends BaseController
             ->where('transaction_type','minus')
             ->paginate(30);
         return view('wadmin-wallets::withdraw.accept',compact('data'));
+    }
+
+    public function getRefund($id){
+        $q = WalletTransaction::query();
+        $data = $q->where('id',$id)->first();
+        return view('wadmin-wallets::withdraw.refund',compact('data'));
+    }
+    public function postRefund(Request $request,$id){
+        $request->validate([
+            'description' => 'required|min:5',
+        ]);
+        try {
+            $q = WalletTransaction::query();
+            $data = $q->where('id',$id)->first();
+            $data->description = $request->description;
+            $data->status = $request->status;
+            $data->save();
+            //tạo thêm đơn hoàn tiền
+            $new =[
+                'user_id'=>Auth::id(),
+                'company_id'=>$data->company_id,
+                'wallet_id'=>$data->wallet_id,
+                'transaction_type'=>'refund',
+                'status'=>'refunded',
+                'amount'=>$data->amount,
+                'description'=>$data->description
+            ];
+            $create = $this->wa->create($new);
+            //hoàn tiền + vào ví
+            $wallet = $this->model->find($data->wallet_id);
+            $fund = $wallet->balance + $data->amount;
+            $wallet->balance = $fund;
+            $wallet->save();
+            //Log
+            $dh = '<a target="_blank" href="'.route('wadmin::wallet.list-refund.get',['id'=>$data->id]).'">#REFUND'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'refund',
+                'action_id'=>$data->id,
+                'module'=>'Wallets',
+                'description'=>'Đã hoàn tiền +'.number_format($data->amount).' vào ví cho đại lý '.$dh
+            ];
+            $logs = $this->log->create($logdata);
+            return redirect()->route('wadmin::wallet.accept.get')
+                ->with('create','Hoàn tiền thành công !');
+        }catch (\Exception $e){
+            return redirect()->back()
+                ->with('delete',$e->getMessage());
+        }
+
+    }
+
+    public function refundList(Request $request){
+
+        $q = WalletTransaction::query();
+        if(!is_null($request->get('id'))){
+            $q->where('id',$request->get('id'));
+        }
+        $data = $q->where('status','refunded')
+            ->where('transaction_type','refund')
+            ->paginate(30);
+        return view('wadmin-wallets::withdraw.refund-list',compact('data'));
     }
 
 }

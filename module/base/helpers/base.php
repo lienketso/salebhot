@@ -244,3 +244,7 @@ function utf8_converter($array){
     });
     return $array;
 }
+
+function base64_url_encode_zalo($input) {
+    return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
+}

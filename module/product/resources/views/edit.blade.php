@@ -131,7 +131,7 @@
                             <input class="form-control"  onkeyup="this.value=FormatNumber(this.value);" name="price" value="{{number_format($data->price)}}" type="text" placeholder="Giá bán">
                         </div>
                         <div class="form-group">
-                            <label>Giá cũ</label>
+                            <label>Giá trước thuế</label>
                             <input class="form-control" onkeyup="this.value=FormatNumber(this.value);" name="disprice" value="{{number_format($data->disprice)}}" type="text" placeholder="Giá gốc">
                         </div>
                         <div class="form-group">
