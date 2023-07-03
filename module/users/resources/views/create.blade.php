@@ -146,6 +146,7 @@
                                     <div class="form-group">
                                         <label>Giám đốc vùng quản lý</label>
                                         <select id="selectGDV" name="parent" class="form-control" style="width: 100%" >
+                                            <option value="">---Chọn giám đốc vùng---</option>
                                             @foreach($userGDV as $d)
                                                 <option value="{{$d->id}}" >{{$d->full_name}} </option>
                                             @endforeach
