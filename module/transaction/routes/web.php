@@ -36,6 +36,12 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         // đơn hàng đã xóa
         $router->get('removed','TransactionController@removed')
             ->name('wadmin::transaction.removed.get')->middleware('permission:transaction_removed');
+        //chi tiết đơn hàng
+        $router->get('transaction-detail/{id}','TransactionController@detail')
+            ->name('wadmin::transaction.detail.get')->middleware('permission:transaction_detail');
+        //Đơn hàng sắp hết hạn
+        $router->get('transaction-expiry','TransactionController@expiry')
+            ->name('wadmin::transaction.expiry.get')->middleware('permission:transaction_expiry');
 
         $router->get('chanel-telegram','TransactionController@updatedActivity')->name('wadmin::telegrame.chanel.get');
     });

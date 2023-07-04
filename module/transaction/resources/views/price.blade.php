@@ -18,7 +18,7 @@
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
         <li><a href="{{route('wadmin::transaction.index.get')}}">Đơn hàng</a></li>
-        <li class="active">Sửa giá trị đơn hàng #{{$data->name}}</li>
+        <li class="active">Sửa giá trị đơn hàng #{{$data->phone}}</li>
     </ol>
 
     <div class="row">

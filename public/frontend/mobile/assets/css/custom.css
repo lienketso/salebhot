@@ -47,3 +47,12 @@
 .success-request{
     display: none;
 }
+.dz-meta{
+    padding-bottom: 10px;
+}
+.dz-meta p{
+    margin-bottom: 2px;
+}
+.form-submit-check{
+    padding-top: 20px;
+}

@@ -76,8 +76,8 @@
                             <select name="status" class="form-control">
                                 <option value="">Trạng thái</option>
                                 <option value="disable" {{(request('status')=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
+                                <option value="received" {{(request('status')=='received') ? 'selected' : ''}}>Đang tiếp nhận</option>
                                 <option value="active" {{(request('status')=='pending') ? 'selected' : ''}}>Đang xử lý</option>
-                                <option value="payment" {{(request('status')=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
                                 <option value="cancel" {{(request('status')=='cancel') ? 'selected' : ''}}>Đã hủy</option>
                             </select>
                         </div>
@@ -91,15 +91,15 @@
 
                 <div class="row">
                     <div class="col-lg-12">
+
                         <div class="hulk-site">
                             <a href="{{route('wadmin::transaction.index.get')}}" class="btn btn-default btn-quirk ">Tất cả ({{$countAll}})</a>
                         </div>
                         <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'active'])}}" class="btn btn-primary btn-quirk ">Đã hoàn thành ({{$countActive }})</a>
+                            <a href="{{route('wadmin::transaction.index.get',['status'=>'received'])}}" class="btn btn-success btn-quirk">Đã tiếp nhận ({{$countReceived}})</a>
                         </div>
-
                         <div class="hulk-site">
-                            <a href="{{route('wadmin::transaction.index.get',['status'=>'payment'])}}" class="btn btn-success btn-quirk">Đã thanh toán ({{$countPayment}})</a>
+                            <a href="{{route('wadmin::transaction.index.get',['status'=>'active'])}}" class="btn btn-primary btn-quirk ">Đã hoàn thành ({{$countActive }})</a>
                         </div>
 
                         <div class="hulk-site">
@@ -126,11 +126,11 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a class="accept-action" data-status="disable">Đang xử lý</a></li>
-                            <li><a class="accept-action" data-status="payment">Đã thanh toán</a></li>
-                            <li><a class="accept-action" data-status="active">Đã hoàn thành</a></li>
+                            <li><a class="accept-action" data-status="received">Đã tiếp nhận đơn hàng</a></li>
+                            <li><a class="accept-action" data-status="pending">Đơn hàng đang xử lý</a></li>
+                            <li><a class="accept-action" data-status="active">Đơn hàng hoàn thành</a></li>
                             <li class="divider"></li>
-                            <li><a class="accept-action" data-status="cancel">Đã hủy</a></li>
+                            <li><a class="accept-action" data-status="cancel">Đơn hàng đã hủy</a></li>
                         </ul>
                     </div><!-- btn-group -->
 
@@ -206,10 +206,13 @@
                                     <span class="order-success"><i class="fa fa-check-circle-o"></i> Đã hoàn thành</span>
                                 @endif
                                 @if($d->order_status=='disable' || $d->order_status=='pending')
-                                    <span class="order-pending"><i class="fa fa-exclamation-circle"></i> Đang xử lý</span>
+                                    <span class="order-pending"><i class="fa fa-spinner"></i> Đang xử lý</span>
                                 @endif
-                                    @if($d->order_status=='payment')
-                                        <span class="order-payment"><i class="fa fa-usd"></i> Đã thanh toán</span>
+                                    @if($d->order_status=='received')
+                                        <span class="order-payment"><i class="fa fa-clock-o"></i> Đã tiếp nhận TT</span>
+                                    @endif
+                                    @if($d->order_status=='new')
+                                        <span class="order-new"><i class="fa fa-exclamation-triangle"></i> Chưa tiếp nhận</span>
                                     @endif
                                     @if($d->order_status=='cancel')
                                         <span class="order-cancel"><i class="fa fa-ban"></i> Đã hủy</span>
@@ -218,6 +221,8 @@
                             <td>
                                 <ul class="table-options">
                                     <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
+                                    <li><a href="{{route('wadmin::transaction.detail.get',$d->id)}}"><i class="fa fa-eye"></i></a></li>
+
                                 </ul>
                             </td>
                         </tr>

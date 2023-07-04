@@ -4,10 +4,12 @@
 namespace Transaction\Http\Controllers;
 
 
-use Auth\Supports\Traits\Auth;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
 use PHPUnit\Exception;
@@ -17,6 +19,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
+use Transaction\Models\TransactionStatus;
 use Transaction\Repositories\TransactionRepository;
 use Wallets\Repositories\WalletRepository;
 use Wallets\Repositories\WalletTransactionRepository;
@@ -58,12 +61,12 @@ class TransactionController extends BaseController
             ->orderBy('created_at','desc')->paginate(20);
 
         $countActive = Transaction::where('order_status','active')->count();
-        $countPayment = Transaction::where('order_status','payment')->count();
+        $countReceived = Transaction::where('order_status','received')->count();
         $countPending = Transaction::where('order_status','disable')->count();
         $countCancel = Transaction::where('order_status','cancel')->count();
         $countAll = Transaction::count();
 
-        return view('wadmin-transaction::index',compact('data','countActive','countPayment','countPending','countCancel','countAll'));
+        return view('wadmin-transaction::index',compact('data','countActive','countReceived','countPending','countCancel','countAll'));
     }
 
     public function getCreate(){
@@ -101,6 +104,14 @@ class TransactionController extends BaseController
             }
             $amountUp = ['amount'=>$totallamount];
             $updateAmount = $this->model->update($amountUp,$data->id);
+            //trạng thái đơn hàng
+            $transaction_status = TransactionStatus::updateOrCreate(['status'=>$request->order_status,'transaction_id'=>$data->id],
+                [
+                    'transaction_id'=>$data->id,
+                    'user_id'=>Auth::id(),
+                    'status'=>$request->order_status,
+                    'description'=>'Cập nhật trạng thái đơn hàng'
+                ]);
             if($request->has('continue_post')){
                 return redirect()
                     ->route('wadmin::transaction.create.get')
@@ -174,6 +185,14 @@ class TransactionController extends BaseController
                 'description'=>'Sửa thông tin đơn hàng '.$dh
             ];
             $logs = $this->log->create($logdata);
+            //Thêm trạng thái cập nhật đơn hàng
+            $transaction_status = TransactionStatus::updateOrCreate(['status'=>$request->order_status,'transaction_id'=>$id],
+                [
+                    'transaction_id'=>$id,
+                    'user_id'=>Auth::id(),
+                    'status'=>$request->order_status,
+                    'description'=>'Cập nhật trạng thái đơn hàng'
+                ]);
             return redirect()->route('wadmin::transaction.index.get')
                 ->with('create','Sửa dữ liệu thành công !');
         }catch (\Exception $e){
@@ -261,6 +280,14 @@ class TransactionController extends BaseController
             }
             $d->order_status = $status;
             $d->save();
+            //Trạng thái đơn hàng
+            $transaction_status = TransactionStatus::updateOrCreate(['status'=>$status,'transaction_id'=>$d->id],
+                [
+                    'transaction_id'=>$d->id,
+                    'user_id'=>Auth::id(),
+                    'status'=>$status,
+                    'description'=>'Cập nhật trạng thái đơn hàng'
+                ]);
         }
         //logs
         $logdata = [
@@ -297,6 +324,19 @@ class TransactionController extends BaseController
             return redirect()->back()->withErrors($e->getMessage());
         }
 
+    }
+
+    public function detail($id){
+        $data = $this->model->find($id);
+        return view('wadmin-transaction::detail',compact('data'));
+    }
+
+    public function expiry(){
+        $startDate = Carbon::now()->subDays(30);
+        $endDate = Carbon::now();
+        $data = Transaction::where('sale_admin',Auth::id())->whereBetween('expiry', [$startDate, $endDate])
+            ->paginate(30);
+        return view('wadmin-transaction::expiry',compact('data'));
     }
 
     public function updatedActivity()

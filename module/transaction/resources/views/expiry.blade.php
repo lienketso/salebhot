@@ -59,7 +59,7 @@
     <div class="panel">
         <div class="panel-heading">
             <h4 class="panel-title">Danh sách đơn hàng</h4>
-            <p>Danh sách đơn hàng bạn cần duyệt</p>
+            <p>Danh sách đơn hàng sắp hết hạn bảo hiểm</p>
         </div>
 
         <div class="search_page">
@@ -83,11 +83,13 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::transaction.accept.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::transaction.index.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
                 </div>
+
+
 
             </div>
         </div>
@@ -126,22 +128,22 @@
                     <tr>
                         <th>
                             <label class="ckbox ckbox-primary">
-                                <input class="select-all" type="checkbox" id="checkboxesMain" wfd-id="id0">
+                                <input class="select-all" type="checkbox" id="checkboxesMain" >
                                 <span></span>
                             </label>
                         </th>
                         <th>Khách hàng</th>
-                        <th width="300">Nhà PP</th>
+                        <th width="300">Nhà PP / CV</th>
                         <th>Nội dung</th>
-                        <th>Tiền đơn hàng</th>
-                        <th class="">Ngày gửi</th>
+                        <th>Ngày hết hạn </th>
+                        <th class="">Ngày tạo</th>
                         <th class="" width="180">Trạng thái</th>
-                        <th width="100"></th>
+                        <th>Chi tiết</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($data as $d)
-                        <tr>
+                        <tr id="tr_{{$d->id}}">
                             <td>
                                 <label class="ckbox ckbox-primary">
                                     <input type="checkbox" class="checkbox" data-id="{{$d->id}}" wfd-id="{{$d->id}}"><span></span>
@@ -149,9 +151,12 @@
                             </td>
                             <td>
                                 <p><a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a></p>
-                                <p>Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</p>
+                                <p> Số điện thoại : {{$d->phone}}</p>
                             </td>
-                            <td>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</td>
+                            <td>
+                                <p>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</p>
+                                <p>CV : {{ ($d->userTran()->exists()) ? $d->userTran->full_name : 'Chưa xác định'}}</p>
+                            </td>
                             <td>
                                 <div class="product-in">
                                     <h4>Sản phẩm</h4>
@@ -166,12 +171,10 @@
                                 @endif
 
                                 <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
-                                <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
                                 <p>Tin nhắn: {{$d->message}}</p>
                             </td>
                             <td>
-                                <span style="color: #F87D33">{{number_format($d->amount)}}</span>
-                                <a href="{{route('wadmin::transaction.price.get',$d->id)}}"><i class="fa fa-pencil"></i> Sửa giá trị</a>
+                                <span style="color: #F87D33">{{ngay_thang($d->expiry)}}</span>
                             </td>
                             <td>{{format_date($d->created_at)}}</td>
                             <td class="order-status">
@@ -193,7 +196,6 @@
                             </td>
                             <td>
                                 <ul class="table-options">
-                                    <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
                                     <li><a href="{{route('wadmin::transaction.detail.get',$d->id)}}"><i class="fa fa-eye"></i></a></li>
                                 </ul>
                             </td>

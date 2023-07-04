@@ -54,4 +54,8 @@ class Transaction extends Model
         return $this->belongsTo(Users::class,'user_id','id');
     }
 
+    public function tranStatus(){
+        return $this->hasMany(TransactionStatus::class,'transaction_id','id');
+    }
+
 }

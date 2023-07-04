@@ -117,7 +117,7 @@ class HomeController extends BaseController
             } else {
                 return response()->json(['error' => 'Đặt hàng không thành công']);
             }
-            $input['order_status'] = 'pending';
+            $input['order_status'] = 'new';
             //create transaction
             $transaction = $this->tran->create($input);
             //create product transaction

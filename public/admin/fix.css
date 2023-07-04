@@ -257,9 +257,13 @@ ul.tree1 li span a{
 }
 .order-status span.order-payment{
     background: #56c2e8;
+    color: #fff;
 }
 .order-status span.order-cancel{
     background: #e55869;
+}
+.order-status span.order-new{
+    background: #e3d8d2;
 }
 .alert-an{
     line-height: 25px;
@@ -278,6 +282,42 @@ ul.tree1 li span a{
 .pull-right{
     position: relative;
     left: -5px;
+}
+.dz-timeline{
+    list-style: none;
+    padding-left: 0;
+}
+.dz-timeline li.active{
+    background: #009688;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+}
+.dz-timeline li.active h6{
+    color: #fff;
+}
+.dz-timeline li h6{
+    font-size: 16px;
+}
+.timeline-item{
+    margin-top: 15px;
+    border-bottom: 1px solid #ccc;
+}
+.process h6{
+    color:#009688;
+}
+.process{
+    color: #009688;
+}
+.timeline-tilte{
+    position: relative;
+}
+.timeline-tilte span{
+    position: absolute;
+    right: 0;
+    color: #999;
+    font-size: 14px;
+    font-weight: 400;
 }
 @media(max-width: 767px){
     .txt-field{

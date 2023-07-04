@@ -88,7 +88,6 @@
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>
-                            <button class="btn btn-success" name="continue_post" value="1">Lưu và tiếp tục thêm</button>
                         </div>
                     </div>
                 </div><!-- panel -->
@@ -125,15 +124,7 @@
                             @endforeach
                         </div>
 
-{{--                        <div class="form-group">--}}
-{{--                            <label>Giá trị đơn hàng</label>--}}
-{{--                            <input class="form-control"--}}
-{{--                                   onkeyup="this.value=FormatNumber(this.value);"--}}
-{{--                                   name="amount"--}}
-{{--                                   type="text"--}}
-{{--                                   value="{{number_format($data->amount)}}"--}}
-{{--                                   placeholder="">--}}
-{{--                        </div>--}}
+
 
                         <div class="form-group">
                             <h4>Hãng</h4>
@@ -144,18 +135,31 @@
                                 </label>
                             @endforeach
                         </div>
-
+                        <div class="form-group">
+                            <label>Giá trị đơn hàng</label>
+                            <input class="form-control"
+                                   onkeyup="this.value=FormatNumber(this.value);"
+                                   name="amount"
+                                   type="text"
+                                   value="{{number_format($data->amount)}}"
+                                   placeholder="">
+                        </div>
                         <div class="form-group">
                             <label>Cập nhật trạng thái đơn hàng</label>
-                            <p class="alert-an">Chú ý : Trạng thái "<b class="alert-warning">Đang xử lý</b>" : đang tiếp nhận đơn hàng ; "<b class="alert-info">Đã thanh toán</b>" : Xác nhận đã thanh toán
-                                ; "<b class="alert-success">Đã hoàn thành</b>": Xác nhận đơn hàng hoàn thành cộng doanh thu và hoa hồng cho đại lý, chuyên viên, giám đốc vùng;
-                                "<b class="alert-danger">Đã hủy</b>" : Hủy đơn hàng
-                            </p>
+
+                            <ul>
+                                <li><b class="alert-info">Đã tiếp nhận đơn hàng</b> : Sale admin đã xác nhận đơn hàng </li>
+                                <li><b class="alert-warning">Đang xử lý</b> : đang xử lý đơn hàng </li>
+                                <li><b class="alert-success">Đơn hàng thành công</b>: Xác nhận đơn hàng hoàn thành cộng doanh thu và hoa hồng cho đại lý, chuyên viên, giám đốc vùng </li>
+                                <li><b class="alert-danger">Đơn hàng đã hủy</b> : Đơn hàng đã hủy</li>
+                            </ul>
+
                             <select id="" name="order_status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
+                                    <option value="new" {{ ($data->order_status=='new') ? 'selected' : ''}}>---Chọn trạng thái---</option>
+                                    <option value="received" {{ ($data->order_status=='received') ? 'selected' : ''}}>Đã tiếp nhận thông tin</option>
                                     <option value="pending" {{ ($data->order_status=='pending') ? 'selected' : ''}}>Đang xử lý</option>
-                                    <option value="payment" {{ ($data->order_status=='payment') ? 'selected' : ''}}>Đã thanh toán</option>
-                                    <option value="active" {{ ($data->order_status=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
-                                    <option value="cancel" {{ ($data->order_status=='cancel') ? 'selected' : ''}}>Đã hủy</option>
+                                    <option value="active" {{ ($data->order_status=='active') ? 'selected' : ''}}>Đơn hàng thành công</option>
+                                    <option value="cancel" {{ ($data->order_status=='cancel') ? 'selected' : ''}}>Đơn hàng đã hủy</option>
                             </select>
                         </div>
 

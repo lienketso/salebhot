@@ -140,15 +140,18 @@
 
                         <div class="form-group">
                             <label>Cập nhật trạng thái đơn hàng</label>
-                            <p class="alert-an">Chú ý : Trạng thái "<b class="alert-warning">Đang xử lý</b>" : đang tiếp nhận đơn hàng ; "<b class="alert-info">Đã thanh toán</b>" : Xác nhận đã thanh toán
-                                ; "<b class="alert-success">Đã hoàn thành</b>": Xác nhận đơn hàng hoàn thành cộng doanh thu và hoa hồng cho đại lý, chuyên viên, giám đốc vùng;
-                                "<b class="alert-danger">Đã hủy</b>" : Hủy đơn hàng
-                            </p>
+                            <ul>
+                                <li><b class="alert-info">Đã tiếp nhận đơn hàng</b> : Sale admin đã xác nhận đơn hàng </li>
+                                <li><b class="alert-warning">Đang xử lý</b> : đang xử lý đơn hàng </li>
+                                <li><b class="alert-success">Đơn hàng thành công</b>: Xác nhận đơn hàng hoàn thành cộng doanh thu và hoa hồng cho đại lý, chuyên viên, giám đốc vùng </li>
+                                <li><b class="alert-danger">Đơn hàng đã hủy</b> : Đơn hàng đã hủy</li>
+                            </ul>
                             <select id="" name="order_status" class="form-control" style="width: 100%" data-placeholder="Trạng thái">
-                                <option value="pending">Đang xử lý</option>
-                                <option value="payment">Đã thanh toán</option>
-                                <option value="active">Đã hoàn thành</option>
-                                <option value="cancel">Đã hủy</option>
+                                <option value="new">---Chọn trạng thái---</option>
+                                <option value="received" >Đã tiếp nhận thông tin</option>
+                                <option value="pending" >Đang xử lý</option>
+                                <option value="active" >Đơn hàng thành công</option>
+                                <option value="cancel" >Đơn hàng đã hủy</option>
                             </select>
                         </div>
 

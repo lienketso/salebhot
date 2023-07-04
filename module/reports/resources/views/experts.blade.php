@@ -113,7 +113,7 @@
 
                     </tbody>
                 </table>
-                {{$chuyenvien->links()}}
+                {{$chuyenvien->withQueryString()->links()}}
             </div><!-- table-responsive -->
         </div>
     </div>

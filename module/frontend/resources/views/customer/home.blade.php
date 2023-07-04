@@ -50,6 +50,23 @@
             </div>
         </div>
 
+        <h6 class="title-head mb-3">Tạo đơn hàng</h6>
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="package-box box-1">
+                    <div class="media media-70">
+                        <img src="{{asset('frontend/mobile/assets/images/shop.svg')}}" alt="image">
+                    </div>
+                    <h6 class="title-head">Thêm đơn hàng</h6>
+                    <p class="sub-title">Tạo đơn hàng mới</p>
+                    <a href="{{route('frontend::product.index.get')}}" class="btn package-btn">Thêm ngay
+                        <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
         <div class="title-bar">
             <span class="title mb-0 font-18">Đơn hàng mới</span>
         </div>

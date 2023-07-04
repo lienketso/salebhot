@@ -11,24 +11,11 @@ Route::get('lang/{lang}', 'HomeController@changeLang')->name('frontend::lang');
 Route::get('about', 'HomeController@about')->name('frontend::about.detail.get');
 
 
-
-Route::group(['prefix'=>'solution'],function(Router $router){
-    $router->get('/','ProjectController@index')
-        ->name('frontend::solution.index.get');
-    $router->get('{slug}','ProjectController@detail')
-        ->name('frontend::solution.detail.get');
-});
-
-Route::group(['prefix'=>'category'],function(Router $router){
-    $router->get('/','CategoryController@index')
-        ->name('frontend::category.index.get');
-    $router->get('{slug}','ProductController@index')
-        ->name('frontend::product.index.get');
-});
-
 Route::group(['prefix'=>'product'],function(Router $router){
-   $router->get('{slug}','ProductController@detail')
-       ->name('frontend::product.detail.get');
+   $router->get('/','ProductController@index')
+       ->name('frontend::product.index.get');
+    $router->get('checkout/{id}','ProductController@checkout')
+        ->name('frontend::product.index.get');
 });
 
 Route::group(['prefix'=>'page'],function(Router $router){

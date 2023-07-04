@@ -145,6 +145,13 @@ if (! function_exists('format_date')) {
     }
 }
 
+if (! function_exists('ngay_thang')) {
+    function ngay_thang($date = '')
+    {
+        return date_format(new DateTime($date), 'd/m');
+    }
+}
+
 if (! function_exists('format_date_full')) {
     function format_date_full($date = '')
     {
@@ -211,6 +218,31 @@ function sw_get_current_weekday() {
             break;
     }
     return $weekday.', '.date('d/m/Y');
+}
+
+function getTranStatus($status){
+    $mess = '';
+    switch ($status){
+        case 'new':
+            $mess = 'Đơn hàng mới khởi tạo';
+            break;
+        case 'pending':
+            $mess = 'Đơn hàng đang xử lý';
+            break;
+        case 'received':
+            $mess = 'Đã tiếp nhận đơn hàng';
+            break;
+        case 'active':
+            $mess = 'Đơn hàng hoàn thành';
+            break;
+        case 'cancel':
+            $mess = 'Đơn hàng hủy';
+            break;
+        default:
+            $mess = 'Đơn hàng mới khởi tạo';
+            break;
+    }
+    return $mess;
 }
 
 function youtubeToembed($link){
