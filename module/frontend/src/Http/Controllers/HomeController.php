@@ -134,8 +134,11 @@ class HomeController extends BaseController
                 ];
                 $order = OrderProduct::create($pro);
             }
-            //update total amount
-            $amountUp = ['amount' => $totallamount];
+            //update total amount and commission
+            $vatMoney = $totallamount*0.1;
+            $sauthue = $totallamount - $vatMoney;
+            $commission = $sauthue * ($distributor_rate/100);
+            $amountUp = ['amount' => $totallamount,'commission'=>$commission];
             $updateAmount = $this->tran->update($amountUp, $transaction->id);
             //send messenger telegram
             $text = "";
