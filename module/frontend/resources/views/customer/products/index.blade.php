@@ -38,7 +38,7 @@
                         {!! $d->content !!}
                     </div>
                     <div class="mt-2">
-                        <a class="btn btn-primary add-btn light" href="{{route('frontend::product.index.get',$d->id)}}">Mua ngay</a>
+                        <a class="btn btn-primary add-btn light" href="{{route('frontend::product.checkout.get',$d->id)}}">Mua ngay</a>
                     </div>
                 </div>
             </div>
