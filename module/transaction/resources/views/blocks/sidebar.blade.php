@@ -3,7 +3,9 @@
         'wadmin::transaction.index.get',
         'wadmin::transaction.edit.get',
         'wadmin::transaction.accept.get',
-        'wadmin::transaction.expiry.get'
+        'wadmin::transaction.expiry.get',
+        'wadmin::transaction.success.get',
+        'wadmin::transaction.refunded.get'
     ];
     $indexRoute = [
          'wadmin::transaction.index.get'
@@ -11,6 +13,8 @@
     $createRoute = ['wadmin::transaction.create.get','wadmin::transaction.edit.get'];
     $acceptRoute = ['wadmin::transaction.accept.get'];
     $expiryRoute = ['wadmin::transaction.expiry.get'];
+    $successRoute = ['wadmin::transaction.success.get'];
+    $refundedRoute = ['wadmin::transaction.refunded.get'];
 @endphp
 
 @php
@@ -34,6 +38,12 @@
             </li>
             <li class="{{in_array(Route::currentRouteName(), $acceptRoute) ? 'active' : '' }}">
                 <a href="{{route('wadmin::transaction.accept.get')}}"><span class="badge pull-right">{{$countOrderSale}}</span> Đơn hàng cần duyệt</a>
+            </li>
+            <li class="{{in_array(Route::currentRouteName(), $successRoute) ? 'active' : '' }}">
+                <a href="{{route('wadmin::transaction.success.get')}}">Đơn hàng thành công</a>
+            </li>
+            <li class="{{in_array(Route::currentRouteName(), $refundedRoute) ? 'active' : '' }}">
+                <a href="{{route('wadmin::transaction.refunded.get')}}">Đơn hàng đã hoàn lại</a>
             </li>
             <li class="{{in_array(Route::currentRouteName(), $expiryRoute) ? 'active' : '' }}">
                 <a href="{{route('wadmin::transaction.expiry.get')}}"><span class="badge pull-right">{{$countOrderExpiry}}</span> Sắp hết hạn BH</a>

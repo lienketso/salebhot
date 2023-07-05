@@ -21,6 +21,7 @@ use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
 use Transaction\Models\TransactionStatus;
 use Transaction\Repositories\TransactionRepository;
+use Wallets\Models\Wallets;
 use Wallets\Repositories\WalletRepository;
 use Wallets\Repositories\WalletTransactionRepository;
 
@@ -57,8 +58,7 @@ class TransactionController extends BaseController
         if(!is_null($status)){
             $q->where('order_status',$status);
         }
-        $data = $q->where('order_status','!=','removed')
-            ->orderBy('created_at','desc')->paginate(20);
+        $data = $q->orderBy('created_at','desc')->paginate(20);
 
         $countActive = Transaction::where('order_status','active')->count();
         $countReceived = Transaction::where('order_status','received')->count();
@@ -110,7 +110,7 @@ class TransactionController extends BaseController
                     'transaction_id'=>$data->id,
                     'user_id'=>Auth::id(),
                     'status'=>$request->order_status,
-                    'description'=>'Cập nhật trạng thái đơn hàng'
+                    'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
                 ]);
             if($request->has('continue_post')){
                 return redirect()
@@ -191,7 +191,7 @@ class TransactionController extends BaseController
                     'transaction_id'=>$id,
                     'user_id'=>Auth::id(),
                     'status'=>$request->order_status,
-                    'description'=>'Cập nhật trạng thái đơn hàng'
+                    'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
                 ]);
             return redirect()->route('wadmin::transaction.index.get')
                 ->with('create','Sửa dữ liệu thành công !');
@@ -253,6 +253,7 @@ class TransactionController extends BaseController
         $data = $q->where('sale_admin',$saleLogin->id)
             ->where('order_status','!=','active')
             ->where('order_status','!=','cancel')
+            ->where('order_status','!=','refunded')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }
@@ -289,7 +290,7 @@ class TransactionController extends BaseController
                     'transaction_id'=>$d->id,
                     'user_id'=>Auth::id(),
                     'status'=>$status,
-                    'description'=>'Cập nhật trạng thái đơn hàng'
+                    'description'=>'Cập nhật trạng thái đơn hàng: '.$status
                 ]);
         }
         //logs
@@ -340,6 +341,90 @@ class TransactionController extends BaseController
         $data = Transaction::where('sale_admin',Auth::id())->whereBetween('expiry', [$startDate, $endDate])
             ->paginate(30);
         return view('wadmin-transaction::expiry',compact('data'));
+    }
+
+    public function orderSuccess(Request $request){
+        $name = $request->get('name');
+        $company_code = $request->get('company_code');
+
+        $q = Transaction::query();
+
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+
+        $data = $q->where('order_status','active')
+            ->orderBy('updated_at','desc')->paginate(20);
+        return view('wadmin-transaction::success',compact('data'));
+    }
+
+    public function refundOrder($id){
+        $data = $this->model->find($id);
+        $vat = $data->amount*0.1;
+        $amount = ($data->amount-$vat) * ($data->distributor_rate/100);
+        try {
+            $data->order_status = 'refunded';
+            $data->save();
+            //Trừ tiền trong ví khách hàng
+            $wallet = Wallets::where('company_id',$data->company_id)->first();
+            $money = $wallet->balance - $amount;
+            $wallet->balance = $money;
+            $wallet->save();
+            //Tạo giao dịch transaction_wallet
+            $dh = [
+              'user_id'=>Auth::id(),
+              'company_id'=>$data->company_id,
+              'wallet_id'=>$wallet->id,
+              'transaction_type'=>'minus',
+              'amount'=>$amount,
+              'transaction_id'=>$data->id,
+              'description'=>'Trừ tiền từ ví hoa hồng cho đơn hàng hoàn',
+              'status'=>'refunded'
+            ];
+            $walletTransaction = $this->wallettrans->create($dh);
+            //Thêm trạng thái cập nhật đơn hàng
+            $transaction_status = TransactionStatus::updateOrCreate(['status'=>'refunded','transaction_id'=>$id],
+                [
+                    'transaction_id'=>$id,
+                    'user_id'=>Auth::id(),
+                    'status'=>'refunded',
+                    'description'=>'Cập nhật trạng thái đơn hàng ( Hoàn đơn hàng )'
+                ]);
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'refund',
+                'action_id'=>$data->id,
+                'module'=>'Transaction',
+                'description'=>'Trừ -'.number_format($amount).' tiền hoa hồng từ ví cho đơn hàng hoàn '.$dh
+            ];
+            $logs = $this->log->create($logdata);
+            return redirect()->back()->with('create','Đơn hàng hoàn thành công, đơn hàng không được tính doanh thu, hoa hồng !');
+        }catch (\Exception $e){
+            return redirect()->back()->with('delete',$e->getMessage());
+        }
+    }
+
+    public function orderRefunded(Request $request){
+        $name = $request->get('name');
+        $company_code = $request->get('company_code');
+
+        $q = Transaction::query();
+
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+
+        $data = $q->where('order_status','refunded')
+            ->orderBy('updated_at','desc')->paginate(20);
+        return view('wadmin-transaction::refunded',compact('data'));
     }
 
     public function updatedActivity()

@@ -75,9 +75,9 @@
                         <div class="col-sm-2 txt-field">
                             <select name="status" class="form-control">
                                 <option value="">Trạng thái</option>
-                                <option value="disable" {{(request('status')=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
+                                <option value="active" {{(request('status')=='active') ? 'selected' : ''}}>Đã hoàn thành</option>
                                 <option value="received" {{(request('status')=='received') ? 'selected' : ''}}>Đang tiếp nhận</option>
-                                <option value="active" {{(request('status')=='pending') ? 'selected' : ''}}>Đang xử lý</option>
+                                <option value="pending" {{(request('status')=='pending') ? 'selected' : ''}}>Đang xử lý</option>
                                 <option value="cancel" {{(request('status')=='cancel') ? 'selected' : ''}}>Đã hủy</option>
                             </select>
                         </div>
@@ -105,7 +105,6 @@
                         <div class="hulk-site">
                             <a href="{{route('wadmin::transaction.index.get',['status'=>'pending'])}}" class="btn btn-warning btn-quirk">Đang xử lý ({{$countPending}})</a>
                         </div>
-
 
                         <div class="hulk-site">
                             <a href="{{route('wadmin::transaction.index.get',['status'=>'cancel'])}}" class="btn btn-danger btn-quirk">Đã hủy ({{$countCancel}})</a>
@@ -217,6 +216,9 @@
                                     @endif
                                     @if($d->order_status=='cancel')
                                         <span class="order-cancel"><i class="fa fa-ban"></i> Đã hủy</span>
+                                    @endif
+                                    @if($d->order_status=='refunded')
+                                        <span class="order-cancel"><i class="fa fa-history"></i> Đã hoàn đơn</span>
                                     @endif
                             </td>
                             <td>

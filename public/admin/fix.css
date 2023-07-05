@@ -248,6 +248,7 @@ ul.tree1 li span a{
     color: #000;
     position: relative;
     display: block;
+    text-align: center;
 }
 .order-status span.order-success{
     background: #9ed566;
@@ -261,9 +262,23 @@ ul.tree1 li span a{
 }
 .order-status span.order-cancel{
     background: #e55869;
+    color: #fff;
 }
 .order-status span.order-new{
     background: #e3d8d2;
+}
+.btn-hoandon{
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #fff;
+    position: relative;
+    display: block;
+    background: #037bda;
+    text-align: center;
+}
+.btn-hoandon:hover{
+    background: #1e7e34;
+    color: #fff;
 }
 .alert-an{
     line-height: 25px;

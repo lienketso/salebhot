@@ -238,6 +238,9 @@ function getTranStatus($status){
         case 'cancel':
             $mess = 'Đơn hàng hủy';
             break;
+        case 'refunded':
+            $mess = 'Đơn hàng hoàn lại';
+            break;
         default:
             $mess = 'Đơn hàng mới khởi tạo';
             break;
