@@ -40,8 +40,8 @@ class ReportsController extends BaseController
             ->leftJoin('transaction', function ($join) use($thang,$year){
                 $join->on('users.id','=','transaction.user_id')
                     ->where('transaction.order_status','active')
-                    ->whereMonth('transaction.created_at',$thang)
-                    ->whereYear('transaction.created_at',$year);
+                    ->whereMonth('transaction.updated_at',$thang)
+                    ->whereYear('transaction.updated_at',$year);
             })
             ->selectRaw('SUM(transaction.amount) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
@@ -52,12 +52,12 @@ class ReportsController extends BaseController
             })->paginate(30);
 
         $totalOrderMonth = Transaction::where('order_status','active')
-            ->whereMonth('created_at',$thang)
-            ->whereYear('created_at',$year)
+            ->whereMonth('updated_at',$thang)
+            ->whereYear('updated_at',$year)
             ->count();
         $totalAmountMonth = Transaction::where('order_status','active')
-            ->whereMonth('created_at',$thang)
-            ->whereYear('created_at',$year)
+            ->whereMonth('updated_at',$thang)
+            ->whereYear('updated_at',$year)
             ->sum('amount');
 
         return view('wadmin-report::experts',compact(

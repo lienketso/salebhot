@@ -18,7 +18,7 @@
                             <select name="mon" class="form-control">
                                 <option value="">Lọc theo tháng</option>
                                 @foreach($monthList as $m)
-                                    <option value="{{$m['value']}}" {{(request('mon')==$m['value']) ? 'selected' : ''}}>Tháng {{$m['value']}}</option>
+                                    <option value="{{$m['value']}}" {{(request('mon')==$m['value'] || date('m')==$m['value']) ? 'selected' : ''}}>Tháng {{$m['value']}}</option>
                                 @endforeach
 
                             </select>
