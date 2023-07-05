@@ -15,7 +15,8 @@ class Transaction extends Model
 {
     protected $table = 'transaction';
     protected $fillable = ['user_id','company_id','company_code','category',
-        'name','phone','email','license_plate','expiry','products','factory','amount','message','status','order_status','sale_admin','distributor_rate'
+        'name','phone','email','license_plate','expiry','products','factory','amount','message','status','order_status','sale_admin',
+        'distributor_rate','director'
     ];
 
     public function setAmountAttribute($value){

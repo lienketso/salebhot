@@ -114,6 +114,7 @@ class HomeController extends BaseController
                 $input['company_id'] = $nhapp->id;
                 $input['company_code'] = $request->npp;
                 $input['sale_admin'] = $userNPP->sale_admin;
+                $input['director'] = $userNPP->parent;
             } else {
                 return response()->json(['error' => 'Đặt hàng không thành công']);
             }

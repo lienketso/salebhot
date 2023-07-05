@@ -21,6 +21,7 @@ use Transaction\Http\Requests\TransactionEditRequest;
 use Transaction\Models\Transaction;
 use Transaction\Models\TransactionStatus;
 use Transaction\Repositories\TransactionRepository;
+use Users\Models\Users;
 use Wallets\Models\Wallets;
 use Wallets\Repositories\WalletRepository;
 use Wallets\Repositories\WalletTransactionRepository;
@@ -83,8 +84,11 @@ class TransactionController extends BaseController
             $input['products'] = $products;
             if(!is_null($request->company_id)){
                 $companyInfo = Company::find($request->company_id);
+                $userInfo = Users::find($companyInfo->user_id);
                 $input['company_code'] = $companyInfo->company_code;
                 $input['user_id'] = $companyInfo->user_id;
+                $input['sale_admin'] = $userInfo->sale_admin;
+                $input['director'] = $userInfo->parent;
             }
 
             $data = $this->model->create($input);
