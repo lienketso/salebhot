@@ -14,6 +14,7 @@ class TransactionEditRequest extends FormRequest
         return [
             'name'=> 'required',
             'phone'=>'required|numeric',
+            'amount'=>'required',
         ];
     }
 
@@ -22,6 +23,7 @@ class TransactionEditRequest extends FormRequest
             'name.required'=>'Bạn chưa nhập họ tên',
             'phone.required'=>'Bạn chưa nhập số điện thoại',
             'phone.numeric'=>'Số điện thoại không đúng định dạng',
+            'amount.required'=>'Bạn chưa nhập số tiền đơn hàng'
         ];
     }
 }

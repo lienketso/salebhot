@@ -23,7 +23,8 @@
     $userLog = Auth::user();
     $roles = $userLog->load('roles.perms');
     $permissions = $roles->roles->first()->perms;
-    $countOrderSale = Transaction::where('sale_admin',$userLog->id)->where('order_status','!=','active')->count();
+    $countOrderSale = Transaction::where('sale_admin',$userLog->id)
+    ->where('order_status','pending')->orWhere('order_status','received')->count();
     $startDate = \Illuminate\Support\Carbon::now()->subDays(30);
     $endDate = \Illuminate\Support\Carbon::now();
     $countOrderExpiry = Transaction::where('sale_admin',$userLog->id)->whereBetween('expiry', [$startDate, $endDate])->count();

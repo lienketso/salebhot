@@ -15,6 +15,7 @@ use Order\Models\OrderProduct;
 use PHPUnit\Exception;
 use Product\Models\Factory;
 use Product\Models\Product;
+use Setting\Repositories\SettingRepositories;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Http\Requests\TransactionEditRequest;
@@ -32,13 +33,15 @@ class TransactionController extends BaseController
     protected $wallet;
     protected $wallettrans;
     protected $log;
+    protected $setting;
     public function __construct(TransactionRepository $transactiontRepository, WalletRepository $walletRepository,
-                                WalletTransactionRepository $walletTransactionRepository,LogsRepository $logsRepository)
+                                WalletTransactionRepository $walletTransactionRepository,LogsRepository $logsRepository, SettingRepositories $settingRepositories)
     {
         $this->model = $transactiontRepository;
         $this->wallet = $walletRepository;
         $this->wallettrans = $walletTransactionRepository;
         $this->log = $logsRepository;
+        $this->setting = $settingRepositories;
     }
 
     public function getIndex(Request $request){
@@ -147,10 +150,18 @@ class TransactionController extends BaseController
     public function postEdit($id,TransactionEditRequest $request){
         $input = $request->except(['_token', 'continue_post']);
         $data = $this->model->find($id);
+        $amount = str_replace(',','',$request->amount);
+        $amount = intval($amount);
+        $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
+        $vatMoney = $amount * 0.1;
+        $tienSauthue = $amount - $vatMoney;
+        $commission = $tienSauthue * ($distributor_rate/100);
+
         try {
             if(!is_null($request->company_id)){
                 $companyInfo = Company::find($request->company_id);
                 $input['company_code'] = $companyInfo->company_code;
+                $input['commission'] = $commission;
             }
             $update = $this->model->update($input,$id);
             $totallamount = 0;
@@ -164,17 +175,15 @@ class TransactionController extends BaseController
             //cộng tiền vào ví
             if($data->order_status!='active') {
                 if ($update->order_status == 'active') {
-                    $vat = $update->amount * 0.1;
-                    $sauVat = $update->amount - $vat;
                     $nppWallet = $this->wallet->findWhere(['company_id' => $update->company_id])->first();
-                    $nppWallet->balance = $nppWallet->balance + ($sauVat * 0.4);
+                    $nppWallet->balance = $nppWallet->balance + $commission;
                     $nppWallet->save();
                     $d = [
                         'company_id' => $update->company_id,
                         'wallet_id' => $nppWallet->id,
                         'transaction_type' => 'plus',
                         'transaction_id' => $update->id,
-                        'amount' => ($sauVat * 0.4)
+                        'amount' => $commission
                     ];
                     $createWalletTran = $this->wallettrans->create($d);
                 }
@@ -255,9 +264,8 @@ class TransactionController extends BaseController
         $saleLogin = \Illuminate\Support\Facades\Auth::user();
         $q = Transaction::query();
         $data = $q->where('sale_admin',$saleLogin->id)
-            ->where('order_status','!=','active')
-            ->where('order_status','!=','cancel')
-            ->where('order_status','!=','refunded')
+            ->where('order_status','pending')
+            ->orWhere('order_status','received')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }
@@ -266,20 +274,21 @@ class TransactionController extends BaseController
         $ids = $request->ids;
         $status = $request->status;
         $data = Transaction::whereIn('id',explode(",",$ids))->get();
-
+        $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
+        $rate = $distributor_rate/100;
         foreach($data as $d){
             if($d->order_status!='active') {
                 $vat = $d->amount * 0.1;
                 $sauVat = $d->amount - $vat;
                 $nppWallet = $this->wallet->findWhere(['company_id' => $d->company_id])->first();
-                $nppWallet->balance = $nppWallet->balance + ($sauVat * 0.4);
+                $nppWallet->balance = $nppWallet->balance + ($sauVat * $rate);
                 $nppWallet->save();
                 $don = [
                     'company_id' => $d->company_id,
                     'wallet_id' => $nppWallet->id,
                     'transaction_type' => 'plus',
                     'transaction_id' => $d->id,
-                    'amount' => ($sauVat * 0.4)
+                    'amount' => ($sauVat * $rate)
                 ];
                 // cập nhật giao dịch
                 $createWalletTran = $this->wallettrans->create($don);
@@ -315,7 +324,12 @@ class TransactionController extends BaseController
     public function postPrice(Request $request, $id){
         try {
             $data = $this->model->find($id);
+            $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
+            $vatMoney = $data->amount * 0.1;
+            $tienSauthue = $data->amount- $vatMoney;
+            $commission = $tienSauthue * ($distributor_rate/100);
             $data->amount = $request->amount;
+            $data->commission = $commission;
             $data->save();
             //logs
             $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
