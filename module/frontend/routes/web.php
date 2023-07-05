@@ -15,7 +15,7 @@ Route::group(['prefix'=>'product'],function(Router $router){
    $router->get('/','ProductController@index')
        ->name('frontend::product.index.get');
     $router->get('checkout/{id}','ProductController@checkout')
-        ->name('frontend::product.index.get');
+        ->name('frontend::product.checkout.get');
 });
 
 Route::group(['prefix'=>'page'],function(Router $router){
