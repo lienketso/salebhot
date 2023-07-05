@@ -93,6 +93,7 @@ class ReportsController extends BaseController
             })
             ->selectRaw('SUM(transaction.amount) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
+            ->selectRaw('SUM(transaction.commission) as total_commission')
             ->groupBy('company.id')
             ->orderBy('total_amount', 'DESC')
             ->where('company.status','active')->where('company.c_type','distributor')->paginate(30);

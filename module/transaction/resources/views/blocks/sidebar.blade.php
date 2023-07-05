@@ -1,6 +1,7 @@
 @php
     $listRoute = [
         'wadmin::transaction.index.get',
+        'wadmin::transaction.create.get',
         'wadmin::transaction.edit.get',
         'wadmin::transaction.accept.get',
         'wadmin::transaction.expiry.get',

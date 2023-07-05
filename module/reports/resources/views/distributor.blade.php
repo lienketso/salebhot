@@ -102,6 +102,9 @@
                     </thead>
                     <tbody>
                     @foreach($data as $key=>$d)
+                        @php
+                            $tienVat = $d->total_amount*0.1;
+                        @endphp
                         <tr>
                             <td>{{$key+1}}</td>
                             <td>
@@ -111,7 +114,7 @@
                             </td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
-                            <td><span class="bag-commission">{{number_format(($d->total_amount- $d->total_amount*0.1) *($commissionRate/100))}}</span> </td>
+                            <td><span class="bag-commission">{{number_format($d->total_commission)}}</span> </td>
                         </tr>
                     @endforeach
 
