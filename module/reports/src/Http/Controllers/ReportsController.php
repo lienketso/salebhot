@@ -131,10 +131,23 @@ class ReportsController extends BaseController
                 'label' => $date->format('F'),
             ]);
         }
-
-        $data = $q->whereHas('roles', function ($query) {
-            $query->where('role_id', 7);
-        })->paginate(20);
+        $data = Users::select('users.*')
+            ->leftJoin('transaction', function ($join) use($thang,$year){
+                $join->on('users.id','=','transaction.director')
+                    ->where('transaction.order_status','active')
+                    ->whereMonth('transaction.updated_at',$thang)
+                    ->whereYear('transaction.updated_at',$year);
+            })
+            ->selectRaw('SUM(transaction.amount) as total_amount')
+            ->selectRaw('COUNT(transaction.id) as totalOrder')
+            ->groupBy('users.id')
+            ->orderBy('total_amount', 'DESC')
+            ->whereHas('roles', function ($query) {
+                $query->where('role_id', 7);
+            })->paginate(30);
+//        $data = $q->whereHas('roles', function ($query) {
+//            $query->where('role_id', 7);
+//        })->paginate(20);
         $commission = Commission::where('role_id',7)->first();
         $commissionRate = ($commission->commission_rate / 100);
 

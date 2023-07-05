@@ -68,28 +68,9 @@
                             <td>
                                 <p>{{$d->full_name}} - {{$d->phone}}</p>
                             </td>
-                            <td><span class="bag-count">
-
-                                    @if($d->childs()->exists())
-                                        @php
-                                            $totalOrder = 0;
-                                        @endphp
-                                            @foreach($d->childs as $p)
-
-                                                @if($p->getTransaction()->exists())
-                                                @php
-                                                    $totalOrder = $totalOrder + $p->getTransaction->count()
-                                                @endphp
-                                                    {{$totalOrder}}
-                                                @endif
-                                             @endforeach
-                                        @else
-                                        0
-                                        @endif
-
-                                </span></td>
-                            <td><span class="bag-amount">{{($d->getTransaction()->exists()) ? number_format($d->getTransaction->sum('amount')) : 0}}</span></td>
-                            <td><span class="bag-commission">{{($d->getTransaction()->exists()) ? number_format( $commissionRate * $d->getTransaction->sum('amount')) : 0}}</span> </td>
+                            <td><span class="bag-count">{{$d->totalOrder}}</span></td>
+                            <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
+                            <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}}</span> </td>
                         </tr>
                     @endforeach
 
