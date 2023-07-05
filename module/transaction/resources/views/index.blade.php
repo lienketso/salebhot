@@ -204,6 +204,7 @@
                             <td class="order-status">
                                 @if($d->order_status=='active')
                                     <span class="order-success"><i class="fa fa-check-circle-o"></i> Đã hoàn thành</span>
+                                    <em>Duyệt ngày: {{format_date($d->updated_at)}}</em>
                                 @endif
                                 @if($d->order_status=='disable' || $d->order_status=='pending')
                                     <span class="order-pending"><i class="fa fa-spinner"></i> Đang xử lý</span>
@@ -220,7 +221,9 @@
                             </td>
                             <td>
                                 <ul class="table-options">
-                                    <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
+                                    @if($d->order_status!='active')
+                                        <li><a href="{{route('wadmin::transaction.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
+                                    @endif
                                     <li><a href="{{route('wadmin::transaction.detail.get',$d->id)}}"><i class="fa fa-eye"></i></a></li>
 
                                 </ul>

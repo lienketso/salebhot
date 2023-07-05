@@ -319,6 +319,11 @@ ul.tree1 li span a{
     font-size: 14px;
     font-weight: 400;
 }
+.order-status em{
+    font-size: 13px;
+    position: relative;
+    top: 5px;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

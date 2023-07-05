@@ -95,7 +95,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Nhà phân phối</th>
-                        <th>Đơn hàng</th>
+                        <th>Đơn hàng thành công</th>
                         <th>Doanh số</th>
                         <th>Hoa hồng</th>
                     </tr>

@@ -252,7 +252,7 @@ class TransactionController extends BaseController
         $q = Transaction::query();
         $data = $q->where('sale_admin',$saleLogin->id)
             ->where('order_status','!=','active')
-            ->where('order_status','!=','removed')
+            ->where('order_status','!=','cancel')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }
@@ -276,10 +276,13 @@ class TransactionController extends BaseController
                     'transaction_id' => $d->id,
                     'amount' => ($sauVat * 0.4)
                 ];
+                // cập nhật giao dịch
                 $createWalletTran = $this->wallettrans->create($don);
+                //lưu trạng thái nếu status != active
+                $d->order_status = $status;
+                $d->save();
             }
-            $d->order_status = $status;
-            $d->save();
+
             //Trạng thái đơn hàng
             $transaction_status = TransactionStatus::updateOrCreate(['status'=>$status,'transaction_id'=>$d->id],
                 [
