@@ -90,6 +90,7 @@ class HomeController extends BaseController
     public function postBooking(Request $request,SettingRepositories  $settingRepositories){
         $emailSetting = $settingRepositories->getSettingMeta('site_email_vn');
         $distributor_rate = intval($settingRepositories->getSettingMeta('commission_rate'));
+        $telegrame_bot_api = $settingRepositories->getSettingMeta('bot_api_telegram');
         $input = [
             'name'=>$request->name,
             'phone'=>$request->phone,
@@ -155,11 +156,24 @@ class HomeController extends BaseController
             $text .= "Chuyên viên: <b>" . $userNPP->full_name . "</b>\n";
             $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $transaction->id) . "'>Xem đơn hàng </a>";
 
-            Telegram::sendMessage([
-                'chat_id' => 1049968534,
+            $apiToken = $telegrame_bot_api;
+            if($sale->telegrame!=''){
+                $chat_id = $sale->telegram;
+            }else{
+                $chat_id = '@salebaohiemoto01';
+            }
+            $data = [
+                'chat_id' => $chat_id,
                 'parse_mode' => 'HTML',
                 'text' => $text
-            ]);
+            ];
+            $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
+
+//            Telegram::sendMessage([
+//                'chat_id' => 1049968534,
+//                'parse_mode' => 'HTML',
+//                'text' => $text
+//            ]);
 
             //create guest account
             $company = Company::firstOrCreate(['phone'=>$transaction->phone],
