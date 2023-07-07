@@ -220,6 +220,7 @@ class ExpertController extends BaseController
         foreach ($currentPermision as $cat) {
             $args[] = $cat['id'];
         }
+
         $cities = City::orderBy('name','asc')->get();
         $users = Users::orderBy('id','desc')->where('status','active')->get();
 //        $qrCode = QrCode::size(1000)->generate('https://lienketso.vn/');

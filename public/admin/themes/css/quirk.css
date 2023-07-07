@@ -7427,7 +7427,7 @@ fieldset[disabled] .btn-info.active {
   border-bottom-left-radius: 2px;
 }
 .panel-body p + p {
-  margin: 15px 0 0;
+  margin: 5px 0 0;
 }
 .panel-body .list-inline > li:first-child {
   padding-left: 0;
@@ -13078,8 +13078,9 @@ fieldset[disabled] .btn-fb.active {
   text-align: center;
 }
 .table-options > li {
-  display: inline-block;
+  display: block;
   margin-left: 5px;
+    padding-bottom: 15px;
 }
 .table-options > li:first-child {
   margin-left: 0;

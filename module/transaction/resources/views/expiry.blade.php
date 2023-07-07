@@ -133,11 +133,11 @@
                             </label>
                         </th>
                         <th>Khách hàng</th>
-                        <th width="300">Nhà PP / CV</th>
+                        <th width="">Nhà PP / CV</th>
                         <th>Nội dung</th>
                         <th>Ngày hết hạn </th>
                         <th class="">Ngày tạo</th>
-                        <th class="" width="180">Trạng thái</th>
+                        <th class="" width="">Trạng thái</th>
                         <th>Chi tiết</th>
                     </tr>
                     </thead>
@@ -166,12 +166,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                                @if(!is_null($d->trancategory) || !is_null($d->category))
-                                    <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
-                                @endif
 
-                                <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
-                                <p>Tin nhắn: {{$d->message}}</p>
                             </td>
                             <td>
                                 <span style="color: #F87D33">{{ngay_thang($d->expiry)}}</span>
@@ -196,7 +191,7 @@
                             </td>
                             <td>
                                 <ul class="table-options">
-                                    <li><a href="{{route('wadmin::transaction.detail.get',$d->id)}}"><i class="fa fa-eye"></i></a></li>
+                                    <li><a href="{{route('wadmin::transaction.detail.get',$d->id)}}"><i class="fa fa-eye"></i> Chi tiết</a></li>
                                 </ul>
                             </td>
                         </tr>

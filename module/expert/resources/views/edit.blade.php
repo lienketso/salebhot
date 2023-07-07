@@ -145,7 +145,12 @@
             </div><!-- col-sm-6 -->
 
             <!-- ####################################################### -->
-
+            @php
+                    use Illuminate\Support\Facades\Auth;
+                    $userLog = Auth::user();
+                    $roles = $userLog->load('roles.perms');
+                    $permissions = $roles->roles->first();
+            @endphp
             <div class="col-sm-4">
                 <div class="panel">
                     <div class="panel-heading">
@@ -158,6 +163,11 @@
                             <label>Chuyên viên chăm sóc</label>
                             <select id="" name="user_id" class="form-control js-example-basic-single" style="width: 100%" >
                                 <option value="{{$data->user->id}}">{{$data->user->full_name}} - {{$data->user->phone}}</option>
+                                @if($permissions->id==1)
+                                    @foreach($users as $u)
+                                    <option value="{{$u->id}}">{{$u->full_name}} - {{$u->phone}}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="form-group mb-3">

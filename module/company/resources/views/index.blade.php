@@ -82,7 +82,8 @@
                         <th>Tên NPP</th>
                         <th>Hình 1</th>
                         <th>Hình 2</th>
-                        <th>Chuyên viên cs</th>
+                        <th>Chuyên viên</th>
+                        <th>Giám đốc vùng</th>
                         <th class="">Trạng thái</th>
                         <th></th>
                     </tr>
@@ -131,6 +132,7 @@
                                     <span><strong>{{($d->user()->exists()) ? $d->user->full_name : 'Chưa xác định'}}</strong></span>
                                 </div>
                             </td>
+                            <td><strong>{{ ($d->user()->exists() && !is_null($d->user->parents)) ? $d->user->parents->full_name : '' }}</strong></td>
                             <td>
                                 @if($d->status=='active')
                                 <a href="#"

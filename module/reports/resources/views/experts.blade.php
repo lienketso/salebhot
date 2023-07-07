@@ -95,6 +95,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Tên chuyên viên</th>
+                        <th>Giám đốc vùng</th>
                         <th>Đơn hàng</th>
                         <th>Doanh số</th>
                         <th>Hoa hồng</th>
@@ -105,6 +106,7 @@
                         <tr>
                             <td>{{$key+1}}</td>
                             <td>{{$d->full_name}} - {{$d->phone}}</td>
+                            <td>{{($d->parents()->exists()) ? $d->parents->full_name : 'Chưa xác định'}} </td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
                             <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}} </span></td>

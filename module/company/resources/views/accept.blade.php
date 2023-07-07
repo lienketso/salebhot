@@ -101,7 +101,8 @@
                         <th>Ảnh NPP</th>
                         <th>Hình ảnh 1</th>
                         <th>Hình ảnh 2</th>
-                        <th>Chuyên viên cs</th>
+                        <th>Chuyên viên</th>
+                        <th>Giám đốc vùng</th>
                         <th class="">Duyệt NPP</th>
                         <th></th>
                     </tr>
@@ -151,6 +152,7 @@
                                     <span>{{($d->user()->exists()) ? $d->user->full_name : 'Null'}}</span>
                                 </div>
                             </td>
+                            <td><strong>{{ ($d->user()->exists() && !is_null($d->user->parents)) ? $d->user->parents->full_name : '' }}</strong></td>
                             <td>
                                     <a href="" class="btn btn-sm btn-success radius-30"><i class="fa fa-check-circle"></i> Đã duyệt </a>
                             </td>

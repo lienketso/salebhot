@@ -95,6 +95,8 @@
                     <tr>
                         <th>STT</th>
                         <th>Nhà phân phối</th>
+                        <th>CV phụ trách</th>
+                        <th>Giám đốc vùng</th>
                         <th>Đơn hàng thành công</th>
                         <th>Doanh số</th>
                         <th>Hoa hồng</th>
@@ -112,6 +114,8 @@
                                 <p>Địa chỉ: {{$d->address}}</p>
                                 <p>ID: <strong>{{$d->company_code}}</strong></p>
                             </td>
+                            <td>{{($d->user()->exists()) ? $d->user->full_name : 'Chưa xác định'}}</td>
+                            <td>{{ (!is_null($d->user->parents)) ? $d->user->parents->full_name : 'Chưa xác định' }}</td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
                             <td><span class="bag-commission">{{number_format($d->total_commission)}}</span> </td>

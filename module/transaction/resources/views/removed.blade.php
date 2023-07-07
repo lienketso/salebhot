@@ -67,11 +67,11 @@
                         </th>
                         <th>Tên khách hàng</th>
                         <th>Thông tin</th>
-                        <th width="300">Nhà PP / CV</th>
+                        <th width="">Nhà PP / CV</th>
                         <th>Nội dung</th>
                         <th>Giá trị </th>
                         <th class="">Ngày gửi</th>
-                        <th width="150"></th>
+                        <th width="100"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -99,13 +99,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                                @if(!is_null($d->trancategory) || !is_null($d->category))
-                                    <p>Loại xe: <strong>{{$d->trancategory->name}}</strong></p>
-                                @endif
-
-                                <p>Biến số xe: <strong>{{$d->license_plate}}</strong></p>
                                 <p>Ngày hết hạn: <strong>{{format_date($d->expiry)}}</strong></p>
-                                <p>Tin nhắn: {{$d->message}}</p>
                             </td>
                             <td>
                                 <span style="color: #F87D33">{{number_format($d->amount)}}</span>

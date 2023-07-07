@@ -93,4 +93,8 @@ class Users extends Authenticatable
         });
     }
 
+    public function parents(){
+        return $this->belongsTo(Users::class,'parent','id');
+    }
+
 }

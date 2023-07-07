@@ -81,25 +81,18 @@
             <h5 class="title border-bottom pb-2 mb-2 font-w600">Trạng thái đơn hàng</h5>
             <ul class="dz-timeline style-2 mb-5">
                 <li class="timeline-item active">
-                    <h6 class="timeline-tilte">Order Created</h6>
-                    <p class="timeline-date">Feb 8,2023-12:20pm</p>
+                    <h6 class="timeline-tilte">Đơn hàng khởi tạo</h6>
+                    <p class="timeline-date">{{format_date($data->created_at)}} Lúc: {{format_hour($data->created_at)}}</p>
                 </li>
-                <li class="timeline-item process">
-                    <h6 class="timeline-tilte">Order Recived</h6>
-                    <p class="timeline-date">Feb 8,2023-12:20pm</p>
+                @if($data->tranStatus()->exists())
+                    @foreach($data->tranStatus as $d)
+                <li class="timeline-item {{($d->status==$data->order_status) ? 'process' : ''}}">
+                    <h6 class="timeline-tilte">{{ getTranStatus($d->status) }}</h6>
+                    <p class="timeline-date">{{format_date($d->updated_at)}} Lúc: {{format_hour($d->updated_at)}}</p>
                 </li>
-                <li class="timeline-item">
-                    <h6 class="timeline-tilte">Order Confirmed</h6>
-                    <p class="timeline-date">Feb 8,2023-12:20pm</p>
-                </li>
-                <li class="timeline-item">
-                    <h6 class="timeline-tilte">Order Processed</h6>
-                    <p class="timeline-date">Feb 8,2023-12:20pm</p>
-                </li>
-                <li class="timeline-item">
-                    <h6 class="timeline-tilte">Order Delivered</h6>
-                    <p class="timeline-date">Feb 8,2023-12:20pm</p>
-                </li>
+                    @endforeach
+                @endif
+
             </ul>
             <h5 class="title border-bottom pb-2 mb-2 font-w600">Thông tin khách hàng</h5>
             <div class="item-list style-6 m-b30">

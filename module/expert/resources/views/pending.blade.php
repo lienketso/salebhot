@@ -74,6 +74,7 @@
                     <thead>
                     <tr>
                         <th>STT</th>
+                        <th>Giám đốc vùng</th>
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
                         <th>Ảnh NPP</th>
@@ -86,7 +87,8 @@
                     <tbody>
                     @foreach($data as $key=>$d)
                         <tr>
-                            <td>{{$key}}</td>
+                            <td>{{$key+1}}</td>
+                            <td>{{ (!is_null($d->user->parents)) ? $d->user->parents->full_name : 'Chưa xác định' }}</td>
                             <td><a href="{{route('wadmin::expert.edit.get',$d->id)}}">{{$d->company_code}}</a></td>
                             <td class="namego">
                                 <h4>{{$d->name}} - {{$d->contact_name}}</h4>
