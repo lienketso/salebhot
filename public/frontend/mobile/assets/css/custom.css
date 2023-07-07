@@ -56,3 +56,22 @@
 .form-submit-check{
     padding-top: 20px;
 }
+.book-section{
+    padding-bottom: 50px;
+}
+.form-item{
+    position: relative;
+}
+.form-item span{
+    position: absolute;
+    right: 10px;
+    top: 48px;
+    color: #ff9500;
+    font-size: 12px;
+}
+.err_alert{
+    border: 1px solid #ff9500
+}
+.list-icons{
+    padding: 10px 0;
+}

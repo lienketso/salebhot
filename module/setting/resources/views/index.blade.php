@@ -233,6 +233,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group mb-3">
+                            <label>BOT_API_KEY_Telegram ( token to access the HTTP API)</label>
+                            <div class="input-group col-xs-12" style="display: flex">
+                                <input type="text" name="bot_api_telegram" value="{{$setting->getSettingMeta('bot_api_telegram')}}"
+                                       class="form-control" placeholder="Là key mà khi bạn tạo BOT, BotFather đã đưa cho bạn">
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>

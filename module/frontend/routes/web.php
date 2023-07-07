@@ -15,7 +15,11 @@ Route::group(['prefix'=>'product'],function(Router $router){
    $router->get('/','ProductController@index')
        ->name('frontend::product.index.get');
     $router->get('checkout/{id}','ProductController@checkout')
-        ->name('frontend::product.checkout.get');
+        ->name('frontend::product.checkout.get')->middleware('customer');
+    $router->post('checkout/{id}','ProductController@postCheckout')
+        ->name('frontend::product.checkout.post')->middleware('customer');
+    $router->get('checkout-success','ProductController@checkoutSuccess')
+        ->name('frontend::product.checkout-success.get');
 });
 
 Route::group(['prefix'=>'page'],function(Router $router){

@@ -29,6 +29,11 @@
                 $('#selectSale').attr('disabled',true);
             }
 
+            if(nodeType.val()==='9'){
+                $('#Telegram').show();
+            }else{
+                $('#Telegram').hide();
+            }
 
 
         });
@@ -168,7 +173,7 @@
                         </div>
 
                         <div class="form-group" id="Telegram">
-                            <label>ID nhóm Telegram</label>
+                            <label>Username channel của bạn, bắt đầu bằng @. Ví dụ: @baohiemoto</label>
                             <input class="form-control"
                                    name="telegram"
                                    value="{{$data->telegram}}"
