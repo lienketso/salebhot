@@ -130,7 +130,7 @@ class ProductController extends BaseController
             $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $transaction->id) . "'>Xem đơn hàng </a>";
 
             $apiToken = $telegrame_bot_api;
-            if($sale->telegrame!=''){
+            if($sale->telegram!=''){
                 $chat_id = $sale->telegram;
             }else{
                 $chat_id = '@salebaohiemoto01';
