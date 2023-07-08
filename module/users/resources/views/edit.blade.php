@@ -164,6 +164,7 @@
                                 <div class="form-group">
                                     <label>Sale chốt đơn</label>
                                     <select id="selectSale" name="sale_admin" class="form-control" style="width: 100%" >
+                                        <option value="">Chọn sale chốt đơn</option>
                                         @foreach($saleAdmin as $d)
                                             <option value="{{$d->id}}" {{ ($data->sale_admin == $d->id) ? 'selected' : '' }} >{{$d->full_name}} </option>
                                         @endforeach
