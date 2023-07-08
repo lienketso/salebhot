@@ -102,9 +102,9 @@ class HomeController extends BaseController
             'products'=>json_encode($request->products),
             'distributor_rate'=>$distributor_rate
         ];
-        $chanelTelegram = 5449285604;
+        $chanelTelegram = '@salebaohiemoto01';
         try {
-            if (!is_null($request->npp)) {
+
                 $nhapp = Company::where('company_code', $request->npp)->first();
                 $userNPP = Users::where('id', $nhapp->user_id)->first();
                 $sale = Users::where('id', $userNPP->sale_admin)->first();
@@ -116,9 +116,7 @@ class HomeController extends BaseController
                 $input['company_code'] = $request->npp;
                 $input['sale_admin'] = $userNPP->sale_admin;
                 $input['director'] = $userNPP->parent;
-            } else {
-                return response()->json(['error' => 'Đặt hàng không thành công']);
-            }
+
             $input['order_status'] = 'new';
             //create transaction
             $transaction = $this->tran->create($input);
@@ -158,7 +156,7 @@ class HomeController extends BaseController
 
             $apiToken = $telegrame_bot_api;
             if($sale->telegrame!=''){
-                $chat_id = $sale->telegram;
+                $chat_id = $chanelTelegram;
             }else{
                 $chat_id = '@salebaohiemoto01';
             }
