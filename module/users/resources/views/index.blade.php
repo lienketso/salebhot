@@ -64,7 +64,12 @@
                                 </div>
                             </td>
                             <td>{{$d->email}}</td>
-                            <td>{{$d->full_name}}</td>
+                            <td>
+                                <p>{{$d->full_name}}</p>
+                                @if($d->saleAdmin()->exists())
+                                <p>Sale chăm sóc : {{$d->saleAdmin->full_name}}</p>
+                                @endif
+                            </td>
                             <td>{{$d->getRole()}}</td>
                             <td>{{$d->created_at}}</td>
                             <td><a href="#" class="btn btn-sm btn-success radius-30">Đã kích hoạt</a></td>

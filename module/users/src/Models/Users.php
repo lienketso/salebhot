@@ -97,4 +97,8 @@ class Users extends Authenticatable
         return $this->belongsTo(Users::class,'parent','id');
     }
 
+    public function saleAdmin(){
+        return $this->belongsTo(Users::class,'sale_admin','id');
+    }
+
 }
