@@ -104,7 +104,6 @@ class HomeController extends BaseController
         ];
         $chanelTelegram = '@salebaohiemoto01';
         try {
-
                 $nhapp = Company::where('company_code', $request->npp)->first();
                 $userNPP = Users::where('id', $nhapp->user_id)->first();
                 $sale = Users::where('id', $userNPP->sale_admin)->first();
@@ -155,11 +154,9 @@ class HomeController extends BaseController
             $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $transaction->id) . "'>Xem đơn hàng </a>";
 
             $apiToken = $telegrame_bot_api;
-            if($sale->telegrame!=''){
-                $chat_id = $chanelTelegram;
-            }else{
-                $chat_id = '@salebaohiemoto01';
-            }
+
+            $chat_id = $chanelTelegram;
+
             $data = [
                 'chat_id' => $chat_id,
                 'parse_mode' => 'HTML',
