@@ -68,6 +68,7 @@ class ReportsController extends BaseController
 
     public function distributor(Request $request, SettingRepositories $settingRepositories){
         $q = new Company();
+        $user_id = $request->get('user_id');
         $mon = $request->mon;
         $thang = date('m');
         $year = date('Y');
@@ -83,8 +84,10 @@ class ReportsController extends BaseController
             ]);
         }
         $commissionRate = intval($settingRepositories->getSettingMeta('commission_rate'));
-
-        $data = Company::select('company.*')
+        if(!is_null($user_id)){
+            $q->where('company.user_id',$user_id);
+        }
+        $data = $q->select('company.*')
             ->leftJoin('transaction', function ($join) use($thang,$year){
                 $join->on('company.id','=','transaction.company_id')
                     ->where('transaction.order_status','active')
@@ -96,7 +99,9 @@ class ReportsController extends BaseController
             ->selectRaw('SUM(transaction.commission) as total_commission')
             ->groupBy('company.id')
             ->orderBy('total_amount', 'DESC')
-            ->where('company.status','active')->where('company.c_type','distributor')->paginate(30);
+            ->where('company.status','active')
+            ->where('company.c_type','distributor')
+            ->paginate(30);
 
 //        dd($data);
         $totalOrderMonth = Transaction::where('order_status','active')
@@ -107,16 +112,19 @@ class ReportsController extends BaseController
             ->whereMonth('updated_at',$thang)
             ->whereYear('updated_at',$year)
             ->sum('amount');
-
+        $userChuyenvien = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 6);
+        })->get();
         return view('wadmin-report::distributor',compact(
             'data','monthList',
             'thang','commissionRate',
-            'totalOrderMonth','totalAmountMonth'
+            'totalOrderMonth','totalAmountMonth','userChuyenvien'
         ));
     }
 
     public function director(Request $request, SettingRepositories $settingRepositories){
         $q = new Users();
+        $user = $request->user;
         $mon = $request->mon;
         $thang = date('m');
         $year = date('Y');
@@ -145,9 +153,7 @@ class ReportsController extends BaseController
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 7);
             })->paginate(30);
-//        $data = $q->whereHas('roles', function ($query) {
-//            $query->where('role_id', 7);
-//        })->paginate(20);
+
         $commission = Commission::where('role_id',7)->first();
         $commissionRate = ($commission->commission_rate / 100);
 

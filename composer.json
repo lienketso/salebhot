@@ -73,7 +73,8 @@
             "Commission\\": "module/commission/src",
             "Reports\\": "module/reports/src",
             "Wallets\\": "module/wallets/src",
-            "Logs\\": "module/logs/src"
+            "Logs\\": "module/logs/src",
+            "Discounts\\": "module/discounts/src"
         },
         "classmap": [
             "database/seeds",

@@ -36,8 +36,8 @@
             <div class="col-sm-8">
                 <div class="panel">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Thêm trang tĩnh</h4>
-                        <p>Bạn cần nhập đầy đủ các thông tin để thêm trang tĩnh mới</p>
+                        <h4 class="panel-title">Thêm đơn hàng</h4>
+                        <p>Bạn cần nhập đầy đủ các thông tin để thêm đơn hàng mới</p>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">

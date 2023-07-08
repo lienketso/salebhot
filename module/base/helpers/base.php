@@ -283,3 +283,10 @@ function utf8_converter($array){
 function base64_url_encode_zalo($input) {
     return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
 }
+
+function quickRandom($length)
+{
+    $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+}

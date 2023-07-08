@@ -81,13 +81,17 @@ class TransactionController extends BaseController
     }
 
     public function postCreate(TransactionCreateRequest $request){
+        $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
         try {
             $input = $request->except(['_token', 'continue_post']);
             $products = json_encode($request->products);
             $input['products'] = $products;
+            $sale_admin = '@salebaohiemoto01';
             if(!is_null($request->company_id)){
                 $companyInfo = Company::find($request->company_id);
                 $userInfo = Users::find($companyInfo->user_id);
+                $saleInfo = Users::find($userInfo->sale_admin);
+                $sale_admin = $saleInfo->telegram;
                 $input['company_code'] = $companyInfo->company_code;
                 $input['user_id'] = $companyInfo->user_id;
                 $input['sale_admin'] = $userInfo->sale_admin;
@@ -119,6 +123,32 @@ class TransactionController extends BaseController
                     'status'=>$request->order_status,
                     'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
                 ]);
+            //gửi nhóm telegram
+
+            $telegrame_bot_api = $this->setting->getSettingMeta('bot_api_telegram');
+            $apiToken = $telegrame_bot_api;
+            $chat_id = $sale_admin;
+            $text = "";
+            $text .= "Đơn hàng mới từ đại lý <b>" . $companyInfo->name . " - Mã:" . $companyInfo->company_code . "</b>\n";
+            $text .= "Địa chỉ <b>" . $companyInfo->address . "</b>\n";
+            $text .= "Khách hàng: <b>" . $data->name . "</b>\n";
+            $text .= "Số điện thoại: <b>" . $data->phone . "</b>\n";
+            $text .= "Sản phẩm: \n";
+            foreach ($data->orderProduct as $p) {
+                $text .= "" . $p->product->name . "\n";
+            }
+            $text .= "Ngày hết hạn: <b>" . format_date($data->expiry) . "</b>\n";
+            $text .= "Biển số xe: <b>" . $data->license_plate . "</b>\n";
+            $text .= "Chuyên viên: <b>" . $userInfo->full_name . "</b>\n";
+            $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $data->id) . "'>Xem đơn hàng </a>";
+
+            $tele = [
+                'chat_id' => $chat_id,
+                'parse_mode' => 'HTML',
+                'text' => $text
+            ];
+            $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($tele));
+
             if($request->has('continue_post')){
                 return redirect()
                     ->route('wadmin::transaction.create.get')

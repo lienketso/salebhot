@@ -3,7 +3,7 @@
     <div class="container p-0">
         <div class="header-content">
             <div class="media-60 me-3 user-image">
-                <img class="rounded-circle" src="{{asset('frontend/mobile/assets/images/avatar.png')}}" alt="user-image">
+                <img class="rounded-circle" src="{{  asset('frontend/mobile/assets/images/avatar.png')}}" alt="user-image">
             </div>
             <div class="flex-1">
                 <h5 class="title-head font-w700 mb-0">

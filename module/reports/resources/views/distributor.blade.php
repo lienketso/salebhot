@@ -1,4 +1,16 @@
 @extends('wadmin-dashboard::master')
+@section('css')
+    <link rel="stylesheet" href="{{asset('admin/themes/lib/select2/select2.css')}}">
+@endsection
+@section('js')
+    <script src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
+@endsection
+@section('js-init')
+    <script type="text/javascript">
+        $("#select6").select2({ tags: true, maximumSelectionLength: 3 });
+        $('.js-example-basic-single').select2();
+    </script>
+@endsection
 @section('content')
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
@@ -25,7 +37,17 @@
                         </div>
 
                         <div class="col-sm-2 txt-field">
-                            <button type="submit" class="btn btn-info">Tìm kiếm</button>
+                            <select name="user_id" class="form-control js-example-basic-single">
+                                <option value="">Lọc theo chuyên viên</option>
+                                @foreach($userChuyenvien as $d)
+                                    <option value="{{$d->id}}" {{(request('user_id')==$d->id) ? 'selected' : ''}}>{{$d->full_name}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2 txt-field">
+                            <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Lọc dữ liệu</button>
                             <a href="{{route('wadmin::reports.distributor.get')}}" class="btn btn-default"><i class="fa fa-refresh"></i> Làm lại</a>
                         </div>
 
