@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a class="export-npp btn btn-danger" href="{{route('wadmin::company.export.get')}}" >Export excel</a>
+{{--                            <a class="export-npp btn btn-danger" href="{{route('wadmin::company.export.get')}}" >Export excel</a>--}}
                             <a href="{{route('wadmin::company.index.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
                         <div class="col-sm-2 txt-field">

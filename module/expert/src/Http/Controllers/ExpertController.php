@@ -170,9 +170,11 @@ class ExpertController extends BaseController
                     $const->aspectRatio();
                 })->save($pathNew.'/'.$newnname);
             }
+            $userLog = Auth::user();
             $input['slug'] = $request->name;
             $input['lang_code'] = $this->langcode;
             $input['status'] = 'pending';
+
 
             if(!empty($companyInfo)){
                 $update = $this->model->update($input,$companyInfo->id);
