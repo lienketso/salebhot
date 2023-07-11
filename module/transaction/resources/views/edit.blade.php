@@ -20,12 +20,16 @@
                 $('#showChietkhau').hide();
             }
 
-            var SeatChecked = $('#seatID').find('option:selected').attr('data-price');
-            $('#BHvalue').text(SeatChecked.toLocaleString());
-            var vatEdit =  SeatChecked*0.1;
-            $('#BHvat').text(vatEdit.toLocaleString());
-            $('input[name="vat"]').val(vatEdit);
-            $('input[name="price"]').val(SeatChecked);
+            var SeatChecked = 0;
+            if ($('#seatID').find('option:selected').val() > 0) {
+                var SeatChecked = $('#seatID').find('option:selected').attr('data-price');
+                $('#BHvalue').text(SeatChecked);
+                var vatEdit =  SeatChecked*0.1;
+                $('#BHvat').text(vatEdit.toLocaleString());
+                $('input[name="vat"]').val(vatEdit);
+                $('input[name="price"]').val(SeatChecked);
+            }
+
 
             let defaultAmount = {{$data->amount}};
             $('#checker').on('click',function(e){
@@ -39,6 +43,10 @@
                     $('input[name="discount"]').prop('checked',false);
                     $('input[name="amount"]').attr('readonly',false);
                     $('#amountCK').text(defaultAmount.toLocaleString());
+                    $('input[name="discount_amount"]').val(0);
+                    $('input[name="discount_id"]').val(0);
+                    var reamount = $('input[name="amount"]').val();
+                    $('input[name="sub_total"]').val(reamount);
                 }
             });
 
@@ -78,6 +86,7 @@
                 $('input[name="amount"]').val(total);
                 $('input[name="vat"]').val(vat);
                 $('input[name="price"]').val(price);
+                $('input[name="sub_total"]').val(total);
                 $('#amountCK').text(total.toLocaleString());
 
             });
