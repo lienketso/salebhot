@@ -131,7 +131,7 @@
                             </label>
                         </th>
                         <th>Khách hàng</th>
-                        <th width="">Nhà PP</th>
+                        <th width="">Nhà PP / CV</th>
                         <th>Nội dung</th>
                         <th class="">Ngày gửi</th>
                         <th class="" width="">Trạng thái</th>
@@ -150,7 +150,10 @@
                                 <p><a href="{{route('wadmin::transaction.edit.get',$d->id)}}">{{$d->name}}</a></p>
                                 <p>Số điện thoại : {{$d->phone}} - Email : {{$d->email}}</p>
                             </td>
-                            <td>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</td>
+                            <td>
+                                <p>{{($d->company()->exists()) ? $d->company->name.' - ID: '. $d->company->company_code : 'Chưa xác định'}}</p>
+                                <p>CV : {{ ($d->userTran()->exists()) ? $d->userTran->full_name : 'Chưa xác định'}}</p>
+                            </td>
                             <td>
                                 <div class="product-in">
                                     <h4>Sản phẩm</h4>

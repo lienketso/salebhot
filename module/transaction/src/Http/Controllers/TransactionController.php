@@ -363,6 +363,7 @@ class TransactionController extends BaseController
             ->where('order_status','!=','active')
             ->where('order_status','!=','cancel')
             ->where('order_status','!=','refunded')
+            ->orderBy('created_at','desc')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }
