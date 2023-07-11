@@ -288,9 +288,7 @@ class ExpertController extends BaseController
             }
 
             $input['slug'] = $request->name;
-
-            //cấu hình seo
-            $input['status'] = 'pending';
+            $input['order_status'] = 'pending';
             $nhapp = $this->model->update($input, $id);
             //logs
             $dh = '<a target="_blank" href="'.route('wadmin::company.index.get',['id'=>$data->id]).'">#NPP'.$data->id.'</a>';
