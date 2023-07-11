@@ -25,12 +25,12 @@
     $roles = $userLog->load('roles.perms');
     $permissions = $roles->roles->first()->perms;
     $countOrderSale = Transaction::where('sale_admin',$userLog->id)
-    ->where('order_status','pending')->orWhere('order_status','received')->count();
+    ->where('order_status','!=','active')->where('order_status','!=','cancel')->where('order_status','!=','refunded')->count();
     $startDate = \Illuminate\Support\Carbon::now()->subDays(30);
     $endDate = \Illuminate\Support\Carbon::now();
     $countOrderExpiry = Transaction::where('sale_admin',$userLog->id)->whereBetween('expiry', [$startDate, $endDate])->count();
 @endphp
-@if ($permissions->contains('name','transaction_index'))
+@if ($permissions->contains('name','transaction_module'))
     <li class="nav-parent {{in_array(Route::currentRouteName(), $listRoute) ? 'nav-active active' : '' }}">
         <a href="" ><i class="fa fa-cart-plus"></i> <span>Đơn hàng</span></a>
         <ul class="children">

@@ -74,7 +74,7 @@
                             @endif
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Sản phẩm</h4>
                             </div>
@@ -93,6 +93,18 @@
                                         <li><strong>Ngày hết hạn:</strong> {{format_date($data->expiry)}}</li>
                                         <li><strong>Comment:</strong> {{$data->message}}</li>
                                 </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Giá trị sản phẩm</h4>
+                            </div>
+                            <div class="panel-body">
+                                <p>Tiền đơn hàng : <strong class="price-strong">{{number_format($data->amount)}}</strong></p>
+                                <p>Chiết khấu ( -{{($data->discount()->exists()) ? $data->discount->value : 0 }}% ) :
+                                    <strong class="price-strong">{{ number_format($data->discount_amount)  }}</strong></p>
+                                <p>Tổng tiền phải thu: <strong class="price-strong">{{ number_format($data->sub_total)  }}</strong></p>
                             </div>
                         </div>
 

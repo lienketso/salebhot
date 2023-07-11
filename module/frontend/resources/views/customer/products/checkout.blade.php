@@ -38,6 +38,41 @@
                 }
             });
 
+            //áp dụng chiết khấu
+            var editChecked = $('#checker').prop('checked');
+            if(editChecked===true){
+                $('#showDiscount').show();
+            }else{
+                $('#showDiscount').hide();
+            }
+
+            $('#checker').on('click',function(e){
+                var isChecked = $('#checker').prop('checked');
+                if(isChecked===true){
+                    $('#showDiscount').show();
+                }else{
+                    $('#showDiscount').hide();
+                    $('input[name="discount"]').prop('checked',false);
+                }
+            });
+
+            $('input[name="discount"]').on('change',function (e){
+                e.preventDefault();
+                let _this = $(e.currentTarget);
+                let id = _this.attr('data-id');
+                var selectedValue = $('input[name="discount"]:checked').val();
+
+                var amount = {{$data->price}};
+                var sauVat = {{$sauVat}};
+                var tyle = selectedValue/100;
+                var chietkhau = sauVat*tyle;
+                var totalAmount = amount - chietkhau;
+                $('#amountCK').text(totalAmount.toLocaleString());
+                $('input[name="sub_total"]').val(totalAmount);
+                $('input[name="discount_amount"]').val(chietkhau);
+                $('input[name="discount_id"]').val(id);
+            })
+
         });
 
     </script>
@@ -127,6 +162,48 @@
                             @endforeach
                         </div>
                     </div>
+
+                       <div class="mb-2">
+                           <div class="bao-discount">
+                               <label class="label-discount">Áp dụng chiết khấu ?
+                                   <input type="checkbox" name="show_discount" value="1" id="checker">
+                                   <span class="checkmark"></span>
+                               </label>
+                           </div>
+                       </div>
+
+                       <div class="mb-2">
+                           <div class="showDiscount" id="showDiscount">
+                               <input type="hidden" name="discount_amount" value="">
+                               <input type="hidden" name="discount_id" value="">
+                               <input type="hidden" name="sub_total" value="{{$data->amount}}">
+                                @foreach($discountList as $key=>$d)
+                                   <label>
+                                   <div class="toast style-1 fade mb-2 show">
+
+                                       <div class="toast-body">
+                                           <input type="radio" name="discount"
+                                                  value="{{$d->value}}"
+                                                  data-id="{{$d->id}}"
+                                           >
+                                           <div class="toast-content ms-3 me-2">
+                                               <strong>{{$d->name}}</strong>
+                                           </div>
+                                       </div>
+
+                                   </div>
+                                   </label>
+                               @endforeach
+
+                           </div>
+                       </div>
+
+                       <div class="mb-2">
+                           <h3 class="priceSale">Giá trị đơn hàng:
+                               <span id="amountCK">{{  number_format($data->price) }}</span>
+                           </h3>
+                       </div>
+
                     <div class="form-submit-check">
                         <a href="javascript:void(0)" id="btnBooking" class="btn btn-primary text-start w-100">
                             <svg class="cart me-4" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

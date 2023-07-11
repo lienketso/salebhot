@@ -52,6 +52,7 @@
                         <th>Loại giao dịch</th>
                         <th>Nhà phân phối</th>
                         <th>Đơn hàng</th>
+                        <th>Nội dung</th>
                         <th>Số tiền</th>
                         <th>Ngày giao dịch</th>
                     </tr>
@@ -69,6 +70,7 @@
                             </td>
                             <td>{{$d->company->name}}</td>
                             <td>@if($d->transaction_type=='plus') DH{{$d->transaction->id}} @else Yêu cầu rút tiền @endif</td>
+                            <td>{{$d->description}}</td>
                             <td>
                                 @if($d->transaction_type=='plus')
                                 <span class="bag-amount">+ {{number_format($d->amount)}}</span>

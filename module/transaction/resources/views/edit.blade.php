@@ -11,6 +11,49 @@
     <script type="text/javascript">
         $('.js-select-single').select2();
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var editChecked = $('#checker').prop('checked');
+            if(editChecked===true){
+                $('#showChietkhau').show();
+            }else{
+                $('#showChietkhau').hide();
+            }
+
+            let defaultAmount = {{$data->amount}};
+            $('#checker').on('click',function(e){
+                var isChecked = $('#checker').prop('checked');
+                if(isChecked===true){
+                    $('#showChietkhau').show();
+                    $('input[name="amount"]').attr('readonly',true);
+
+                }else{
+                    $('#showChietkhau').hide();
+                    $('input[name="discount"]').prop('checked',false);
+                    $('input[name="amount"]').attr('readonly',false);
+                    $('#amountCK').text(defaultAmount.toLocaleString());
+                }
+            });
+
+            $('input[name="discount"]').on('change',function (e){
+                e.preventDefault();
+                let _this = $(e.currentTarget);
+                let id = _this.attr('data-id');
+                var selectedValue = $('input[name="discount"]:checked').val();
+                var amount = {{$data->amount}};
+                var sauVat = {{$sauVat}};
+                var tyle = selectedValue/100;
+                var chietkhau = sauVat*tyle;
+                var totalAmount = amount - chietkhau;
+                $('#amountCK').text(totalAmount.toLocaleString());
+                $('input[name="sub_total"]').val(totalAmount);
+                $('input[name="discount_amount"]').val(chietkhau);
+                $('input[name="discount_id"]').val(id);
+                // $('input[name="amount"]').val(totalAmount.toLocaleString());
+            })
+
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -143,7 +186,36 @@
                                    type="text"
                                    value="{{number_format($data->amount)}}"
                                    placeholder="">
+                            <input type="hidden" name="sub_total" value="{{$data->amount}}">
+                            <input type="hidden" name="discount_amount" value="">
+                            <input type="hidden" name="discount_id" value="">
                         </div>
+                        <div class="form-group">
+                            <label class="ckbox ckbox-primary">
+                                <input type="checkbox" name="discount_show" id="checker" value="1"
+                                       {{($data->discount()->exists()) ? 'checked' : ''}}
+                                ><span>Lựa chọn chiết khấu</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div id="showChietkhau">
+                                @foreach($discounts as $d)
+                                <label class="rdiobox rdiobox-success">
+                                    <input type="radio" name="discount"
+                                           value="{{$d->value}}"
+                                           data-id="{{$d->id}}"
+                                           {{($data->discount_id==$d->id) ? 'checked' : ''}}
+                                    >
+                                    <span>{{$d->name}}</span>
+                                </label>
+                                @endforeach
+
+                                <h3 class="priceSale">Giá trị đơn hàng:
+                                    <span id="amountCK">{{ ($data->discount_amount==0) ? number_format($data->amount) : number_format($data->sub_total)}}</span>
+                                </h3>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Cập nhật trạng thái đơn hàng</label>
 

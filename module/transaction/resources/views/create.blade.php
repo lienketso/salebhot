@@ -11,6 +11,31 @@
     <script type="text/javascript">
         $('.js-select-single').select2();
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var editChecked = $('#checker').prop('checked');
+            if(editChecked===true){
+                $('#showChietkhau').show();
+            }else{
+                $('#showChietkhau').hide();
+            }
+
+            let defaultAmount = $('input[name="amount"]').val();
+
+            $('#checker').on('click',function(e){
+                var isChecked = $('#checker').prop('checked');
+                if(isChecked===true){
+                    $('#showChietkhau').show();
+
+                }else{
+                    $('#showChietkhau').hide();
+                    $('input[name="discount_id"]').prop('checked',false);
+                }
+            });
+
+
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -119,14 +144,9 @@
                             <label>Chọn sản phẩm</label>
                             @foreach($products as  $d)
                                 <label class="ckbox ckbox-primary">
-                                    <input type="checkbox" value="{{$d->id}}" wfd-id="id{{$d->id}}" name="products[]"><span> {{$d->name}}</span>
+                                    <input type="checkbox" value="{{$d->id}}" data-price="{{$d->price}}" name="products[]"><span> {{$d->name}}</span>
                                 </label>
                             @endforeach
-                        </div>
-                        <div class="form-group">
-                            <label>Giá trị</label>
-                            <input class="form-control"  onkeyup="this.value=FormatNumber(this.value);" name="amount" value="{{old('amount',0)}}"
-                                   type="text" placeholder="Giá trị sản đơn hàng">
                         </div>
                         <div class="form-group">
                             <h4>Hãng</h4>
@@ -137,6 +157,36 @@
                                 </label>
                             @endforeach
                         </div>
+                        <div class="form-group">
+                            <label>Giá trị</label>
+                            <input class="form-control"
+                                   onkeyup="this.value=FormatNumber(this.value);"
+                                   name="amount" value="{{old('amount',number_format(480000))}}"
+                                   type="text" placeholder="Giá trị sản đơn hàng">
+                        </div>
+                        <div class="form-group">
+                            <label class="ckbox ckbox-primary">
+                                <input type="checkbox" name="discount_show" id="checker" value="1"
+                                ><span>Lựa chọn chiết khấu</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div id="showChietkhau">
+                                @foreach($discounts as $key=>$d)
+                                    <label class="rdiobox rdiobox-success">
+                                        <input type="radio" name="discount_id"
+                                               value="{{$d->id}}"
+                                               data-value="{{$d->value}}"
+                                               {{($key==0) ? 'checked' : ''}}
+                                        >
+                                        <span>{{$d->name}}</span>
+                                    </label>
+                                @endforeach
+
+
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <label>Cập nhật trạng thái đơn hàng</label>

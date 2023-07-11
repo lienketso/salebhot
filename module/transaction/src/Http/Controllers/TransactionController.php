@@ -6,10 +6,12 @@ namespace Transaction\Http\Controllers;
 
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
+use Discounts\Models\Discounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
 use PHPUnit\Exception;
@@ -77,27 +79,49 @@ class TransactionController extends BaseController
         $products = Product::orderBy('created_at','desc')->where('status','active')->get();
         $hangsx = Factory::orderBy('sort_order','asc')->where('status','active')->get();
         $company = Company::orderBy('name','asc')->where('status','active')->where('c_type','distributor')->get();
-        return view('wadmin-transaction::create',compact('products','hangsx','company'));
+        //chiết khấu
+        $discounts = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
+        return view('wadmin-transaction::create',compact('products','hangsx','company','discounts'));
     }
 
     public function postCreate(TransactionCreateRequest $request){
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
         try {
             $input = $request->except(['_token', 'continue_post']);
+
             $products = json_encode($request->products);
             $input['products'] = $products;
             $sale_admin = '@salebaohiemoto01';
-            if(!is_null($request->company_id)){
-                $companyInfo = Company::find($request->company_id);
-                $userInfo = Users::find($companyInfo->user_id);
-                $saleInfo = Users::find($userInfo->sale_admin);
-                $sale_admin = $saleInfo->telegram;
-                $input['company_code'] = $companyInfo->company_code;
-                $input['user_id'] = $companyInfo->user_id;
-                $input['sale_admin'] = $userInfo->sale_admin;
-                $input['director'] = $userInfo->parent;
-            }
+            $amount = str_replace(',','',$request->amount);
+            $amount = intval($amount);
 
+            $vatMoney = $amount * 0.1;
+            $tienSauthue = $amount - $vatMoney;
+
+            $commission = $tienSauthue * ($distributor_rate/100);
+
+            $companyInfo = Company::find($request->company_id);
+            $userInfo = Users::find($companyInfo->user_id);
+            $saleInfo = Users::find($userInfo->sale_admin);
+            $sale_admin = $saleInfo->telegram;
+            $input['company_code'] = $companyInfo->company_code;
+            $input['user_id'] = $companyInfo->user_id;
+            $input['sale_admin'] = $userInfo->sale_admin;
+            $input['director'] = $userInfo->parent;
+
+            if(!is_null($request->discount_show) && $request->discount_show==1){
+                $discount = Discounts::find($request->discount_id);
+                $discountAmount = $tienSauthue * ($discount->value/100);
+                $input['discount_amount'] = $discountAmount;
+                $input['sub_total'] = $amount - $discountAmount;
+                if($discount->value>=$distributor_rate){
+                    $commission = 0;
+                }else{
+                    $commission = $commission-$discountAmount;
+                }
+            }
+            $input['commission'] = $commission;
+            //thêm mới đơn hàng
             $data = $this->model->create($input);
             $totallamount = 0;
             if(!is_null($request->products)){
@@ -115,6 +139,21 @@ class TransactionController extends BaseController
             }
             $amountUp = ['amount'=>$totallamount];
             $updateAmount = $this->model->update($amountUp,$data->id);
+            //Cộng tiền vào ví nếu status active
+            if($request->order_status=='active'){
+                $nppWallet = $this->wallet->findWhere(['company_id' => $data->company_id])->first();
+                $nppWallet->balance = $nppWallet->balance + $commission;
+                $nppWallet->save();
+                $d = [
+                    'company_id' => $data->company_id,
+                    'wallet_id' => $nppWallet->id,
+                    'transaction_type' => 'plus',
+                    'transaction_id' => $data->id,
+                    'amount' => $commission,
+                    'description'=>'Cộng tiền hoa hồng vào ví NPP'
+                ];
+                $createWalletTran = $this->wallettrans->create($d);
+            }
             //trạng thái đơn hàng
             $transaction_status = TransactionStatus::updateOrCreate(['status'=>$request->order_status,'transaction_id'=>$data->id],
                 [
@@ -122,6 +161,15 @@ class TransactionController extends BaseController
                     'user_id'=>Auth::id(),
                     'status'=>$request->order_status,
                     'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
+                ]);
+            //tạo tài khoản guest khi chưa tồn tại
+            $company = Company::firstOrCreate(['phone'=>$data->phone],
+                ['name'=>'Guest',
+                    'contact_name'=>$data->name,
+                    'parent'=>$data->company_id,
+                    'c_type'=>'guest',
+                    'status'=>'pending',
+                    'password'=>Hash::make('baohiemoto.vn')
                 ]);
             //gửi nhóm telegram
 
@@ -174,11 +222,18 @@ class TransactionController extends BaseController
         foreach($productChecked as $check){
             $currentProduct[] = $check['product_id'];
         }
-        return view('wadmin-transaction::edit',compact('data','products','hangsx','company','currentProduct'));
+        $vat = $data->amount*0.1;
+        $sauVat = $data->amount-$vat;
+
+        //chiết khấu
+        $discounts = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
+
+        return view('wadmin-transaction::edit',compact('data','products','hangsx','company','currentProduct','discounts','sauVat'));
     }
 
     public function postEdit($id,TransactionEditRequest $request){
         $input = $request->except(['_token', 'continue_post']);
+
         $data = $this->model->find($id);
         $amount = str_replace(',','',$request->amount);
         $amount = intval($amount);
@@ -186,6 +241,16 @@ class TransactionController extends BaseController
         $vatMoney = $amount * 0.1;
         $tienSauthue = $amount - $vatMoney;
         $commission = $tienSauthue * ($distributor_rate/100);
+
+        if(!is_null($request->discount_show) && $request->discount_show==1){
+            $discountPecent = intval($request->discount);
+            $discountAmount = intval($request->discount_amount);
+            if($discountPecent>=$distributor_rate){
+                $commission = 0;
+            }else{
+                $commission = $commission - $discountAmount;
+            }
+        }
 
         try {
             if(!is_null($request->company_id)){
@@ -213,7 +278,8 @@ class TransactionController extends BaseController
                         'wallet_id' => $nppWallet->id,
                         'transaction_type' => 'plus',
                         'transaction_id' => $update->id,
-                        'amount' => $commission
+                        'amount' => $commission,
+                        'description'=>'Cộng tiền hoa hồng vào ví NPP'
                     ];
                     $createWalletTran = $this->wallettrans->create($d);
                 }
@@ -294,8 +360,9 @@ class TransactionController extends BaseController
         $saleLogin = \Illuminate\Support\Facades\Auth::user();
         $q = Transaction::query();
         $data = $q->where('sale_admin',$saleLogin->id)
-            ->where('order_status','pending')
-            ->orWhere('order_status','received')
+            ->where('order_status','!=','active')
+            ->where('order_status','!=','cancel')
+            ->where('order_status','!=','refunded')
             ->paginate(30);
         return view('wadmin-transaction::accept',compact('data'));
     }

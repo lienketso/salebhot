@@ -8,6 +8,7 @@ use Barryvdh\Debugbar\Controllers\BaseController;
 use Barryvdh\Debugbar\LaravelDebugbar;
 use Company\Models\Company;
 use Company\Repositories\CompanyRepository;
+use Discounts\Models\Discounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -62,10 +63,14 @@ class ProductController extends BaseController
         $data = $this->model->find($id);
         $category = $this->cat->orderBy('sort_order','asc')->findWhere(['status'=>'active','lang_code'=>$this->lang])->all();
         $listFactory = Factory::orderBy('sort_order','asc')->where('status','active')->get();
-       return view('frontend::customer.products.checkout',compact('data','category','listFactory'));
+        $discountList = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
+        $vat = $data->price*0.1;
+        $sauVat = $data->price-$vat;
+       return view('frontend::customer.products.checkout',compact('data','category','listFactory','discountList','sauVat'));
     }
 
     public function postCheckout($id,Request $request){
+        $input = $request->except(['_token']);
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
         $telegrame_bot_api = $this->setting->getSettingMeta('bot_api_telegram');
         $company_id = Auth::guard('customer')->id();
@@ -85,10 +90,21 @@ class ProductController extends BaseController
         $input['sale_admin'] = $userNPP->sale_admin;
         $input['director'] = $userNPP->parent;
         $input['distributor_rate'] = $distributor_rate;
-        $input['commission'] = $commission;
         $input['order_status'] = 'new';
         $product = json_encode($request->products);
         $input['products'] = $product;
+
+        if(!is_null($request->show_discount) && $request->show_discount==1){
+            $discount = Discounts::find($request->discount_id);
+            $discountAmount = $sauthue * ($discount->value/100);
+            if($discount->value>=$distributor_rate){
+                $commission = 0;
+            }else{
+                $commission = $commission-$discountAmount;
+            }
+        }
+        $input['commission'] = $commission;
+
         try {
             //create transaction
             $transaction = $this->tran->create($input);

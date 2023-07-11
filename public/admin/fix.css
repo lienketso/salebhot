@@ -340,6 +340,15 @@ ul.tree1 li span a{
     position: relative;
     top: 5px;
 }
+.priceSale span{
+    color: #c00;
+}
+.price-strong{
+    color: #6f42c1;
+}
+.priceSale{
+    font-size: 18px;
+}
 @media(max-width: 767px){
     .txt-field{
         padding-bottom: 10px;

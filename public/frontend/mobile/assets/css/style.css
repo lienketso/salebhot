@@ -4471,9 +4471,7 @@ textarea.form-control-lg {
   --bs-toast-padding-x: 0.75rem;
   --bs-toast-padding-y: 0.5rem;
   --bs-toast-spacing: 30px;
-  --bs-toast-max-width: 350px;
   --bs-toast-font-size: 0.875rem;
-  --bs-toast-color: ;
   --bs-toast-bg: rgba(var(--bs-body-bg-rgb), 0.85);
   --bs-toast-border-width: var(--bs-border-width);
   --bs-toast-border-color: var(--bs-border-color-translucent);
@@ -4482,7 +4480,6 @@ textarea.form-control-lg {
   --bs-toast-header-color: var(--bs-secondary-color);
   --bs-toast-header-bg: rgba(var(--bs-body-bg-rgb), 0.85);
   --bs-toast-header-border-color: var(--bs-border-color-translucent);
-  width: var(--bs-toast-max-width);
   max-width: 100%;
   font-size: var(--bs-toast-font-size);
   color: var(--bs-toast-color);
@@ -4493,9 +4490,9 @@ textarea.form-control-lg {
   box-shadow: var(--bs-toast-box-shadow);
   border-radius: var(--bs-toast-border-radius); }
   .toast.showing {
-    opacity: 0; }
+     }
   .toast:not(.show) {
-    display: none; }
+     }
 
 .toast-container {
   --bs-toast-zindex: 1090;
