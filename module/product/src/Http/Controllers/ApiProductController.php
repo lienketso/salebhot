@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Mockery\Exception;
 use Product\Models\Options;
 use Product\Models\OptionValue;
-use Product\Models\Sku;
+use Product\Models\Skus;
 use Product\Models\Variants;
 use Product\Repositories\ProductRepository;
 
@@ -107,7 +107,7 @@ class ApiProductController extends BaseController
                 'name'=>$sku_variant,
                 'barcode'=>$sku_barcode
             ];
-            $createSku = Sku::create($data_sku);
+            $createSku = Skus::create($data_sku);
 
             foreach($option_id as $key=>$val){
                 $data = [
@@ -133,7 +133,7 @@ class ApiProductController extends BaseController
     //edit sku
     public function getEditVariant(Request $request){
         $sku = $request->get('sku');
-        $itemSku = Sku::find($sku);
+        $itemSku = Skus::find($sku);
         $itemSku->price = $request->get('sku_price');
         $itemSku->name = $request->get('sku_variant');
         $itemSku->barcode = $request->get('sku_barcode');
@@ -144,7 +144,7 @@ class ApiProductController extends BaseController
     //remove sku
     public function getRemoveSku(Request $request){
         $id = $request->get('id');
-        $sku = Sku::find($id);
+        $sku = Skus::find($id);
         $variant = Variants::where('sku_id',$id);
         $variant->delete();
         if($sku){

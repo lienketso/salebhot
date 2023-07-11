@@ -8,12 +8,16 @@
         'wadmin::cat.edit.get',
         'wadmin::factory.create.get',
         'wadmin::factory.index.get',
-        'wadmin::factory.edit.get'
+        'wadmin::factory.edit.get',
+        'wadmin::seat.index.get',
+        'wadmin::seat.create.get',
+        'wadmin::seat.edit.get'
     ];
     $indexRoute = ['wadmin::product.index.get'];
     $createRoute = ['wadmin::product.create.get'];
     $catRoute = ['wadmin::cat.create.get','wadmin::cat.index.get','wadmin::cat.edit.get'];
     $FacRoute = ['wadmin::factory.create.get','wadmin::factory.index.get','wadmin::factory.edit.get'];
+    $seatRoute = ['wadmin::seat.create.get','wadmin::seat.index.get','wadmin::seat.edit.get'];
 @endphp
 @php
     use Illuminate\Support\Facades\Auth;
@@ -28,6 +32,7 @@
         <li class="{{in_array(Route::currentRouteName(), $indexRoute) ? 'active' : '' }}"><a href="{{route('wadmin::product.index.get')}}">Danh sách sản phẩm</a></li>
         <li class="{{in_array(Route::currentRouteName(), $createRoute) ? 'active' : '' }}"><a href="{{route('wadmin::product.create.get')}}">Thêm mới</a></li>
         <li class="{{in_array(Route::currentRouteName(), $catRoute) ? 'active' : '' }}"><a href="{{route('wadmin::cat.index.get')}}">Danh mục</a></li>
+        <li class="{{in_array(Route::currentRouteName(), $seatRoute) ? 'active' : '' }}"><a href="{{route('wadmin::seat.index.get')}}">Số chỗ</a></li>
         <li class="{{in_array(Route::currentRouteName(), $FacRoute) ? 'active' : '' }}"><a href="{{route('wadmin::factory.index.get')}}">Quản lý hãng BH</a></li>
     </ul>
 </li>

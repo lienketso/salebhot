@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Product\Models\Options;
 use Product\Models\OptionValue;
 use Product\Models\Product;
-use Product\Models\Sku;
+use Product\Models\Skus;
 
 class CreateVariantsTable extends Migration
 {

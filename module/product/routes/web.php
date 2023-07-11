@@ -7,8 +7,9 @@ $adminRoute = config('base.admin_route');
 $moduleRoute = 'product';
 $catRoute = 'cat';
 $facRoute = 'factory';
+$seatRoute = 'seat';
 
-Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$moduleRoute,$catRoute,$facRoute){
+Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$moduleRoute,$catRoute,$facRoute,$seatRoute){
     $router->group(['prefix'=>$moduleRoute],function(Router $router) use ($adminRoute,$moduleRoute){
         $router->get('index','ProductController@getIndex')
             ->name('wadmin::product.index.get')->middleware('permission:product_index');
@@ -60,5 +61,19 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         $router->get('change/{id}','FactoryController@changeStatus')
             ->name('wadmin::factory.change.get');
     });
-
+    //seats route
+    $router->group(['prefix'=>$seatRoute],function(Router $router) use ($adminRoute,$seatRoute){
+        $router->get('index','SeatsController@getIndex')
+            ->name('wadmin::seat.index.get')->middleware('permission:seat_index');
+        $router->get('create','SeatsController@getCreate')
+            ->name('wadmin::seat.create.get')->middleware('permission:seat_create');
+        $router->post('create','SeatsController@postCreate')
+            ->name('wadmin::seat.create.post')->middleware('permission:seat_create');
+        $router->get('edit/{id}','SeatsController@getEdit')
+            ->name('wadmin::seat.edit.get')->middleware('permission:seat_edit');
+        $router->post('edit/{id}','SeatsController@postEdit')
+            ->name('wadmin::seat.edit.post')->middleware('permission:seat_edit');
+        $router->get('remove/{id}','SeatsController@remove')
+            ->name('wadmin::seat.remove.get')->middleware('permission:seat_delete');
+    });
 });

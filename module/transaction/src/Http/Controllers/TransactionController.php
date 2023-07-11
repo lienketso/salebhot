@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Hash;
 use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
 use PHPUnit\Exception;
+use Product\Models\Catproduct;
 use Product\Models\Factory;
 use Product\Models\Product;
+use Product\Models\Seats;
 use Setting\Repositories\SettingRepositories;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Transaction\Http\Requests\TransactionCreateRequest;
@@ -224,31 +226,34 @@ class TransactionController extends BaseController
         }
         $vat = $data->amount*0.1;
         $sauVat = $data->amount-$vat;
-
+        //loại xe
+        $loaixe = Catproduct::where('lang_code','vn')->where('status','active')->orderBy('sort_order','asc')->get();
+        //số chỗ
+        $seats = Seats::orderBy('sort_order','asc')->get();
         //chiết khấu
         $discounts = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
 
-        return view('wadmin-transaction::edit',compact('data','products','hangsx','company','currentProduct','discounts','sauVat'));
+        return view('wadmin-transaction::edit',compact('data','products',
+            'hangsx','company','currentProduct','discounts','sauVat','loaixe','seats'));
     }
 
     public function postEdit($id,TransactionEditRequest $request){
         $input = $request->except(['_token', 'continue_post']);
 
         $data = $this->model->find($id);
-        $amount = str_replace(',','',$request->amount);
+        $amount = str_replace(',','',$request->price);
         $amount = intval($amount);
+
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
-        $vatMoney = $amount * 0.1;
-        $tienSauthue = $amount - $vatMoney;
-        $commission = $tienSauthue * ($distributor_rate/100);
+
+        $commission = $amount*($distributor_rate/100);
 
         if(!is_null($request->discount_show) && $request->discount_show==1){
-            $discountPecent = intval($request->discount);
-            $discountAmount = intval($request->discount_amount);
-            if($discountPecent>=$distributor_rate){
+            $discountPercent = intval($request->discount);
+            if($discountPercent>=$distributor_rate){
                 $commission = 0;
             }else{
-                $commission = $commission - $discountAmount;
+                $commission = $amount*($distributor_rate-$discountPercent)/100;
             }
         }
 

@@ -6,7 +6,7 @@ namespace Product\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sku extends Model
+class Skus extends Model
 {
     protected $table = 'skus';
     protected $fillable = ['product_id','name','barcode','price','stock'];

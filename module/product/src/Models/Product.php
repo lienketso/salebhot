@@ -117,7 +117,7 @@ public function optionValues(){
 }
 public function skus()
     {
-        return $this->hasMany(Sku::class,'product_id');
+        return $this->hasMany(Skus::class,'product_id');
     }
 
 public function variants()
