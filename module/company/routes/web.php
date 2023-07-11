@@ -28,5 +28,6 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         $router->post('fix-npp/{id}','CompanyController@postfix')->name('wadmin::company.fix.post');
         $router->get('accept','CompanyController@accept')->name('wadmin::company.accept.get');
         $router->get('create-wallet','CompanyController@createWallet')->name('wadmin::company.wallet.get');
+        $router->get('update-director','CompanyController@updateDirector')->name('wadmin::company.update-director.get');
     });
 });

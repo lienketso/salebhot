@@ -45,6 +45,16 @@ class CompanyController extends BaseController
         $this->log = $logsRepository;
     }
 
+    public function updateDirector(){
+        $company = Company::where('user_id','!=',0)->get();
+        foreach($company as $com){
+            $user = Users::where('id',$com->user_id)->first();
+            $com->sale_admin = $user->sale_admin;
+            $com->director_id = $user->parent;
+            $com->save();
+        }
+    }
+
     public function createWallet(){
         $company = $this->model->where('status','active')->orWhere('status','pending')->get();
         foreach($company as $com){
