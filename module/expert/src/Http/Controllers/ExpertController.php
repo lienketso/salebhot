@@ -61,7 +61,9 @@ class ExpertController extends BaseController
             })->paginate(1);
         }
         if(!is_null($name)){
-            $q->where('name','LIKE','%'.$name.'%');
+            $q->where('name','LIKE','%'.$name.'%')
+                ->orWhere('phone',$name)
+                ->orWhere('address','LIKE','%'.$name.'%');
         }
         if(!is_null($status)){
             $q->where('status',$status);
@@ -96,7 +98,9 @@ class ExpertController extends BaseController
             })->paginate(1);
         }
         if(!is_null($name)){
-            $q->where('name','LIKE','%'.$name.'%');
+            $q->where('name','LIKE','%'.$name.'%')
+                ->orWhere('phone',$name)
+                ->orWhere('address','LIKE','%'.$name.'%');
         }
         if(!is_null($status)){
             $q->where('status',$status);

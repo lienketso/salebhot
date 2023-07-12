@@ -89,7 +89,9 @@ class CompanyController extends BaseController
             $q->where('id',$id);
         }
         if(!is_null($name)){
-            $q->where('name','LIKE','%'.$name.'%');
+            $q->where('name','LIKE','%'.$name.'%')
+                ->orWhere('phone',$name)
+                ->orWhere('address','LIKE','%'.$name.'%');
         }
         if(!is_null($status)){
             $q->where('status',$status);
@@ -318,7 +320,9 @@ class CompanyController extends BaseController
         $company_code = $request->get('company_code');
         $q = Company::query();
         if(!is_null($name)){
-            $q->where('name','LIKE','%'.$name.'%');
+            $q->where('name','LIKE','%'.$name.'%')
+                ->orWhere('phone',$name)
+                ->orWhere('address','LIKE','%'.$name.'%');
         }
         if(!is_null($status)){
             $q->where('status',$status);
@@ -343,7 +347,9 @@ class CompanyController extends BaseController
         $q = Company::query();
 
         if(!is_null($name)){
-            $q->where('name','LIKE','%'.$name.'%');
+            $q->where('name','LIKE','%'.$name.'%')
+                ->orWhere('phone',$name)
+                ->orWhere('address','LIKE','%'.$name.'%');
         }
         if(!is_null($updated)){
             $q->whereDate('updated_at',$updated);

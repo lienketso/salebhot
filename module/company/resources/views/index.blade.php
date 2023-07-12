@@ -32,7 +32,7 @@
                 <div class="row">
                     <form method="get">
                         <div class="col-sm-2 txt-field">
-                            <input type="text" name="name" value="{{old('name',request('name'))}}" placeholder="Tên NPP" class="form-control">
+                            <input type="text" name="name" value="{{old('name',request('name'))}}" placeholder="Tên NPP / SĐT / Địa chỉ" class="form-control">
                         </div>
                         <div class="col-sm-2 txt-field">
                             <input type="text" name="company_code" value="{{old('company_code',request('company_code'))}}" placeholder="Mã NPP" class="form-control">
