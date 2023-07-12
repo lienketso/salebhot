@@ -99,13 +99,10 @@ class TransactionController extends BaseController
             $products = json_encode($request->products);
             $input['products'] = $products;
             $sale_admin = '@salebaohiemoto01';
-            $amount = str_replace(',','',$request->amount);
+            $amount = str_replace(',','',$request->price);
             $amount = intval($amount);
 
-            $vatMoney = $amount * 0.1;
-            $tienSauthue = $amount - $vatMoney;
-
-            $commission = $tienSauthue * ($distributor_rate/100);
+            $commission = $amount * ($distributor_rate/100);
 
             $companyInfo = Company::find($request->company_id);
             $userInfo = Users::find($companyInfo->user_id);
@@ -117,14 +114,12 @@ class TransactionController extends BaseController
             $input['director'] = $userInfo->parent;
 
             if(!is_null($request->discount_show) && $request->discount_show==1){
-                $discount = Discounts::find($request->discount_id);
-                $discountAmount = $tienSauthue * ($discount->value/100);
-                $input['discount_amount'] = $discountAmount;
-                $input['sub_total'] = $amount - $discountAmount;
-                if($discount->value>=$distributor_rate){
+                $discountPercent = intval($request->discount);
+                $percent = $distributor_rate-$discountPercent;
+                if($discountPercent>=$distributor_rate){
                     $commission = 0;
                 }else{
-                    $commission = $commission-$discountAmount;
+                    $commission = $amount*($percent/100);
                 }
             }
             $input['commission'] = $commission;
