@@ -1,4 +1,10 @@
 @extends('wadmin-dashboard::master')
+@section('css')
+    <link rel="stylesheet" href="{{asset('admin/themes/lib/select2/select2.css')}}">
+@endsection
+@section('js')
+    <script src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
+@endsection
 @section('js-init')
     <script type="text/javascript">
         $('.CVSelect').hide();
@@ -37,6 +43,9 @@
 
 
         });
+
+
+        $('.js-example-basic-single').select2();
     </script>
 @endsection
 @section('content')
@@ -105,6 +114,15 @@
                                    value="{{$data->address}}"
                                    type="text"
                                    placeholder="ex : Nam An Khánh, Hoài Đức">
+                        </div>
+                        <div class="form-group">
+                            <label>Vùng</label>
+                            <select name="city_id" class="form-control js-example-basic-single">
+                                <option value="">Tỉnh/Thành Phố</option>
+                                @foreach($cities as $c)
+                                    <option value="{{$c->matp}}" {{($data->city_id==$c->matp) ? 'selected' : ''}}>{{$c->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Số điện thoại</label>

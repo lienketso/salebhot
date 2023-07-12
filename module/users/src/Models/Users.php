@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Config;
+use Location\Models\City;
 use Transaction\Models\Transaction;
 
 class Users extends Authenticatable
@@ -16,7 +17,7 @@ class Users extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = ['email','username','password','full_name','phone','address',
-        'token','remember_token','status','thumbnail','category','parent','sale_admin','telegram'];
+        'token','remember_token','status','thumbnail','category','parent','sale_admin','telegram','city_id'];
 
     protected $hidden = ['password','token','remember_token'];
 
@@ -99,6 +100,10 @@ class Users extends Authenticatable
 
     public function saleAdmin(){
         return $this->belongsTo(Users::class,'sale_admin','id');
+    }
+
+    public function city(){
+        return $this->belongsTo(City::class,'city_id','matp');
     }
 
 }

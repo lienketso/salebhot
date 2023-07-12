@@ -49,6 +49,22 @@ class TransactionController extends BaseController
         $this->setting = $settingRepositories;
     }
 
+    public function updateTransaction(){
+        try {
+            $listTransaction = Transaction::where('user_id','!=',0)->get();
+            foreach($listTransaction as $d){
+                $user = Users::find($d->user_id);
+                $d->sale_admin = $user->sale_admin;
+                $d->director = $user->parent;
+                $d->save();
+            }
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+
+        dd('success');
+    }
+
     public function getIndex(Request $request){
         $id = $request->get('id');
         $name = $request->get('name');

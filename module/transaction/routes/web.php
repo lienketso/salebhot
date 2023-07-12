@@ -51,5 +51,9 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::transaction.refunded.get')->middleware('permission:transaction_refunded');
 
         $router->get('chanel-telegram','TransactionController@updatedActivity')->name('wadmin::telegrame.chanel.get');
+
+        $router->get('update-transaction-admin','TransactionController@updateTransaction')
+            ->name('wadmin::transaction.upadmin.get');
+
     });
 });

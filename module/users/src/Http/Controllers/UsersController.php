@@ -7,6 +7,7 @@ use Barryvdh\Debugbar\Controllers\BaseController;
 use Base\Supports\FlashMessage;
 use Category\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
+use Location\Models\City;
 use Product\Repositories\FactoryRepository;
 use Users\Http\Requests\UsersCreateRequest;
 use Users\Http\Requests\UsersEditRequest;
@@ -40,8 +41,8 @@ class UsersController extends BaseController
         else{
             $data = $this->users->orderBy('created_at','desc')->paginate(10);
         }
-
-        return view('wadmin-users::index',['data'=>$data]);
+        $cities = City::orderBy('name','asc')->get();
+        return view('wadmin-users::index',['data'=>$data,'cities'=>$cities]);
     }
     public function getCreate(RoleRepository $roleRepository){
         //lấy ra role
@@ -53,7 +54,8 @@ class UsersController extends BaseController
         $saleAdmin = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 9);
         })->get();
-        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
+        $cities = City::orderBy('name','asc')->get();
+        return view('wadmin-users::create',['listRole'=>$listRole,'category'=>$category,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin,'cities'=>$cities]);
     }
     public function postCreate(UsersCreateRequest $request){
         try{
@@ -84,7 +86,8 @@ class UsersController extends BaseController
         $saleAdmin = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 9);
         })->get();
-        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin]);
+        $cities = City::orderBy('name','asc')->get();
+        return view('wadmin-users::edit',['data'=>$data,'listRole'=>$listRole,'userGDV'=>$userGDV,'saleAdmin'=>$saleAdmin,'cities'=>$cities]);
     }
 
     function postEdit($id, UsersEditRequest $request){
