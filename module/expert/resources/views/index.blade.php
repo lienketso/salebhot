@@ -1,12 +1,15 @@
 @extends('wadmin-dashboard::master')
 @section('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="{{asset('admin/themes/lib/select2/select2.css')}}">
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
 @endsection
 @section('js-init')
-    <script>
+    <script type="text/javascript">
+        $('.js-example-basic-single').select2();
         Fancybox.bind('[data-fancybox="gallery"]', {
             //
         });
@@ -41,7 +44,12 @@
                             </select>
                         </div>
                         <div class="col-sm-2 txt-field">
-                            <input type="number" min="1" name="count" value="{{old('count',request('count'))}}" placeholder="Số lượng npp cần lấy ra" class="form-control">
+                            <select name="city" class="form-control js-example-basic-single">
+                                <option value="">Tỉnh/Thành Phố</option>
+                                @foreach($cities as $c)
+                                    <option value="{{$c->matp}}" {{(request('city')==$c->matp) ? 'selected' : ''}}>{{$c->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>

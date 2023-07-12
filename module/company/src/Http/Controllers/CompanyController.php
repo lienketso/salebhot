@@ -78,13 +78,13 @@ class CompanyController extends BaseController
 
     public function getIndex(Request $request){
         $id = $request->get('id');
+        $city = $request->get('city');
         $name = $request->get('name');
         $status = $request->get('status');
-        $count = $request->get('count');
         $company_code = $request->get('company_code');
         $export = $request->get('export');
         $q = Company::query();
-        $page = 20;
+
         if(!is_null($id)){
             $q->where('id',$id);
         }
@@ -97,14 +97,14 @@ class CompanyController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
-        if(!is_null($count)){
-            $page = $count;
+        if(!is_null($city)){
+            $q->where('city',$city);
         }
-
+        $cities = City::orderBy('name','asc')->get();
         $data = $q->where('lang_code',$this->langcode)->where('c_type','distributor')
-            ->orderBy('created_at','desc')->paginate($page);
+            ->orderBy('created_at','desc')->paginate(30);
         $users = Users::orderBy('id','desc')->where('status','active')->get();
-        return view('wadmin-company::index',['data'=>$data,'users'=>$users]);
+        return view('wadmin-company::index',['data'=>$data,'users'=>$users,'cities'=>$cities]);
     }
     public function getCreate(CatproductRepository $catproductRepository){
         $cities = City::orderBy('name','asc')->get();
@@ -313,6 +313,7 @@ class CompanyController extends BaseController
 
     public function status(Request $request){
         $name = $request->get('name');
+        $city = $request->get('city');
         $status = $request->get('status');
         $company_code = $request->get('company_code');
         $q = Company::query();
@@ -325,19 +326,21 @@ class CompanyController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
-
+        if(!is_null($city)){
+            $q->where('city',$city);
+        }
+        $cities = City::orderBy('name','asc')->get();
         $data = $q->where('status','pending')->where('c_type','distributor')->paginate(20);
-        return view('wadmin-company::status',compact('data'));
+        return view('wadmin-company::status',compact('data','cities'));
     }
 
     public function accept(Request $request){
         $name = $request->get('name');
+        $city = $request->get('city');
         $updated = $request->get('updated');
-        $count = $request->get('count');
         $company_code = $request->get('company_code');
         $export = $request->get('export');
         $q = Company::query();
-        $page = 20;
 
         if(!is_null($name)){
             $q->where('name','LIKE','%'.$name.'%');
@@ -348,21 +351,21 @@ class CompanyController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
-        if(!is_null($count)){
-            $page = $count;
+        if(!is_null($city)){
+            $q->where('city',$city);
         }
-
+        $cities = City::orderBy('name','asc')->get();
         $data = $q->where('lang_code',$this->langcode)
             ->where('c_type','distributor')
             ->where('status','active')
             ->orderBy('created_at','desc')
-            ->paginate($page);
+            ->paginate(30);
         if(!is_null($request->get('export'))){
             $exports = $q->where('lang_code',$this->langcode)
                 ->where('status','active')->orderBy('created_at','desc')->paginate(2000);
             return Excel::download(new ExcelCompany($exports), 'danh-sach-dai-ly.xlsx');
         }
-        return view('wadmin-company::accept',compact('data'));
+        return view('wadmin-company::accept',compact('data','cities'));
     }
 
 }

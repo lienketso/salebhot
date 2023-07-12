@@ -51,7 +51,7 @@ class ExpertController extends BaseController
         $id = $request->get('id');
         $name = $request->get('name');
         $status = $request->get('status');
-        $count = $request->get('count');
+        $city = $request->get('city');
         $company_code = $request->get('company_code');
         $q = Company::query();
         $page = 20;
@@ -69,16 +69,16 @@ class ExpertController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
-        if(!is_null($count)){
-            $page = $count;
+        if(!is_null($city)){
+            $q->where('city',$city);
         }
-
+        $cities = City::orderBy('name','asc')->get();
         $data = $q->where('lang_code',$this->langcode)
             ->where('c_type','distributor')
         ->where('user_id',$userLog->id)
         ->where('status','active')
-        ->orderBy('created_at','desc')->paginate($page);
-        return view('wadmin-expert::index',['data'=>$data]);
+        ->orderBy('created_at','desc')->paginate(30);
+        return view('wadmin-expert::index',['data'=>$data,'cities'=>$cities]);
     }
 
     public function getPending(Request $request){
@@ -86,10 +86,10 @@ class ExpertController extends BaseController
         $id = $request->get('id');
         $name = $request->get('name');
         $status = $request->get('status');
-        $count = $request->get('count');
+        $city = $request->get('city');
         $company_code = $request->get('company_code');
         $q = Company::query();
-        $page = 20;
+
         if($id){
             $data = $this->model->scopeQuery(function ($e) use($id){
                 return $e->orderBy('id','desc')->where('id',$id);
@@ -104,18 +104,18 @@ class ExpertController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
-        if(!is_null($count)){
-            $page = $count;
+        if(!is_null($city)){
+            $q->where('city',$city);
         }
-
+        $cities = City::orderBy('name','asc')->get();
         $data = $q->where('lang_code',$this->langcode)
             ->where('c_type','distributor')
             ->where('user_id',$userLog->id)
             ->where(function ($query){
                 $query->where('status','disable')->orWhere('status','pending');
             })
-            ->orderBy('created_at','desc')->paginate($page);
-        return view('wadmin-expert::pending',compact('data'));
+            ->orderBy('created_at','desc')->paginate(30);
+        return view('wadmin-expert::pending',compact('data','cities'));
     }
 
     public function getCreate(){
