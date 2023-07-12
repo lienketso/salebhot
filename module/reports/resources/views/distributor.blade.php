@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="pull-left">
                                     <h4 class="panel-title">Tổng hoa hồng đại lý tháng {{$thang}}</h4>
-                                    <h3>{{number_format(($totalAmountMonth - ($totalAmountMonth*0.1))*($commissionRate/100))}}</h3>
+                                    <h3>{{number_format(($totalCommissionMonth))}}</h3>
                                 </div>
                             </div>
                         </div>

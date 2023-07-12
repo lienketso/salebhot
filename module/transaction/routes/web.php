@@ -56,8 +56,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         //update nhanh
         $router->get('update-transaction-admin','TransactionController@updateTransaction')
             ->name('wadmin::transaction.upadmin.get');
-        $router->get('update-transaction-amount','TransactionController@updateAmountTran')
-            ->name('wadmin::transaction.upamount.get');
+//        $router->get('update-transaction-amount','TransactionController@updateAmountTran')
+//            ->name('wadmin::transaction.upamount.get');
 
     });
 });

@@ -43,7 +43,7 @@ class ReportsController extends BaseController
                     ->whereMonth('transaction.updated_at',$thang)
                     ->whereYear('transaction.updated_at',$year);
             })
-            ->selectRaw('SUM(transaction.amount) as total_amount')
+            ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
             ->groupBy('users.id')
             ->orderBy('total_amount', 'DESC')
@@ -58,7 +58,7 @@ class ReportsController extends BaseController
         $totalAmountMonth = Transaction::where('order_status','active')
             ->whereMonth('updated_at',$thang)
             ->whereYear('updated_at',$year)
-            ->sum('amount');
+            ->sum('sub_total');
 
         return view('wadmin-report::experts',compact(
             'chuyenvien','monthList',
@@ -94,7 +94,7 @@ class ReportsController extends BaseController
                     ->whereMonth('transaction.updated_at',$thang)
                     ->whereYear('transaction.updated_at',$year);
             })
-            ->selectRaw('SUM(transaction.amount) as total_amount')
+            ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
             ->selectRaw('SUM(transaction.commission) as total_commission')
             ->groupBy('company.id')
@@ -111,14 +111,19 @@ class ReportsController extends BaseController
         $totalAmountMonth = Transaction::where('order_status','active')
             ->whereMonth('updated_at',$thang)
             ->whereYear('updated_at',$year)
-            ->sum('amount');
+            ->sum('sub_total');
+        $totalCommissionMonth = Transaction::where('order_status','active')
+            ->whereMonth('updated_at',$thang)
+            ->whereYear('updated_at',$year)
+            ->sum('commission');
+
         $userChuyenvien = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 6);
         })->get();
         return view('wadmin-report::distributor',compact(
             'data','monthList',
             'thang','commissionRate',
-            'totalOrderMonth','totalAmountMonth','userChuyenvien'
+            'totalOrderMonth','totalAmountMonth','userChuyenvien','totalCommissionMonth'
         ));
     }
 
@@ -146,7 +151,7 @@ class ReportsController extends BaseController
                     ->whereMonth('transaction.updated_at',$thang)
                     ->whereYear('transaction.updated_at',$year);
             })
-            ->selectRaw('SUM(transaction.amount) as total_amount')
+            ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
             ->groupBy('users.id')
             ->orderBy('total_amount', 'DESC')
