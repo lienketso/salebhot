@@ -15,6 +15,7 @@ class TransactionEditRequest extends FormRequest
             'name'=> 'required',
             'phone'=>'required|numeric',
             'amount'=>'required',
+            'seat_id'=>'required'
         ];
     }
 
@@ -23,7 +24,8 @@ class TransactionEditRequest extends FormRequest
             'name.required'=>'Bạn chưa nhập họ tên',
             'phone.required'=>'Bạn chưa nhập số điện thoại',
             'phone.numeric'=>'Số điện thoại không đúng định dạng',
-            'amount.required'=>'Bạn chưa nhập số tiền đơn hàng'
+            'amount.required'=>'Bạn chưa nhập số tiền đơn hàng',
+            'seat_id.required'=>'Bạn chưa chọn số ghế'
         ];
     }
 }

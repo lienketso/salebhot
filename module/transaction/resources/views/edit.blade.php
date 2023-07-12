@@ -228,7 +228,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Số ghế ngồi</label>
+                            <label>Số ghế ngồi (*)</label>
                             <select id="seatID" name="seat_id" class="form-control" style="width: 100%" >
                                 <option value="">Chọn số ghế ngồi</option>
                                 @foreach($seats as $c)

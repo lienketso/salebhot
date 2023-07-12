@@ -17,7 +17,8 @@ class TransactionCreateRequest extends FormRequest
             'name'=> 'required',
             'phone'=>'required|numeric',
             'company_id'=>'required',
-            'amount'=>'required'
+            'amount'=>'required',
+            'seat_id'=>'required'
         ];
     }
 
@@ -27,7 +28,8 @@ class TransactionCreateRequest extends FormRequest
             'phone.required'=>'Bạn chưa nhập số điện thoại',
             'phone.numeric'=>'Số điện thoại không đúng định dạng',
             'company_id.required'=>'Bạn chưa chọn nhà phân phối',
-            'amount.required'=>'Bạn chưa nhập số tiền đơn hàng'
+            'amount.required'=>'Bạn chưa nhập số tiền đơn hàng',
+            'seat_id.required'=>'Bạn chưa chọn số ghế cho xe'
         ];
     }
 }

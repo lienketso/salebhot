@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
 use PHPUnit\Exception;
@@ -83,7 +84,11 @@ class TransactionController extends BaseController
         $company = Company::orderBy('name','asc')->where('status','active')->where('c_type','distributor')->get();
         //chiết khấu
         $discounts = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
-        return view('wadmin-transaction::create',compact('products','hangsx','company','discounts'));
+        //loại xe
+        $loaixe = Catproduct::where('lang_code','vn')->where('status','active')->orderBy('sort_order','asc')->get();
+        //số chỗ
+        $seats = Seats::orderBy('sort_order','asc')->get();
+        return view('wadmin-transaction::create',compact('products','hangsx','company','discounts','loaixe','seats'));
     }
 
     public function postCreate(TransactionCreateRequest $request){
