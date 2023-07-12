@@ -49,6 +49,7 @@ class TransactionController extends BaseController
         $this->setting = $settingRepositories;
     }
 
+    //update sale admin và director cho đơn hàng
     public function updateTransaction(){
         try {
             $listTransaction = Transaction::where('user_id','!=',0)->get();
@@ -64,6 +65,24 @@ class TransactionController extends BaseController
 
         dd('success');
     }
+
+    //update amount và sub_total cho đơn hàng
+    public function updateAmountTran(){
+        try {
+            $listTransaction = Transaction::where('amount',480000)->get();
+            foreach($listTransaction as $d){
+                $d->amount = 480700;
+                $d->sub_total = 480700;
+                $d->commission = 174800;
+                $d->save();
+            }
+            dd('success');
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+
+    }
+
 
     public function getIndex(Request $request){
         $id = $request->get('id');
