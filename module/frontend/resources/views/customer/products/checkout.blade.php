@@ -12,7 +12,7 @@
                 let mess = '';
                 let name = $('input[name="name"]').val();
                 let phone = $('input[name="phone"]').val();
-
+                let seat = $('#seatID').val();
                 if (name.length <= 0) {
                     mess += 'err';
                     $('input[name="name"]').addClass('err_alert');
@@ -33,6 +33,19 @@
                     $('input[name="phone"]').removeClass('err_alert');
                     $('#sp_phone').text('');
                 }
+                if(seat.length<=0){
+                    mess += 'err';
+                    $('#seatID').addClass('err_alert');
+                }else{
+                    $('#seatID').removeClass('err_alert');
+                }
+
+                // if ($('#checker').is(':checked')) {
+                //     mess += 'err';
+                //     let discount = $('input[name="discount"]:checked').val();
+                //
+                // }
+
                 if(mess.length <=0 ) {
                    $('#postBooking').submit();
                 }
@@ -53,23 +66,49 @@
                 }else{
                     $('#showDiscount').hide();
                     $('input[name="discount"]').prop('checked',false);
+                    $('input[name="discount_amount"]').val(0);
+                    $('input[name="discount_id"]').val(0);
+                    var reamount = $('input[name="amount"]').val();
+                    $('input[name="sub_total"]').val(reamount);
                 }
+            });
+            //số chỗ on change
+            $('#seatID').on('change',function (e){
+                e.preventDefault();
+                let _this = $(e.currentTarget);
+                var price = $(this).find('option:selected').data('price');
+                var vat = price*0.1;
+                $('input[name="amount"]').val(price);
+                $('#BHvalue').text(price.toLocaleString());
+                $('#BHvat').text(vat.toLocaleString());
+                var total = price+vat;
+                $('#BHtotal').text(total.toLocaleString());
+                $('input[name="amount"]').val(total);
+                $('input[name="vat"]').val(vat);
+                $('input[name="price"]').val(price);
+                $('input[name="sub_total"]').val(total);
+                $('#amountCK').text(total.toLocaleString());
+
             });
 
             $('input[name="discount"]').on('change',function (e){
                 e.preventDefault();
+                var vat = $('input[name="vat"]').val();
+                var price = $('input[name="price"]').val();
+
                 let _this = $(e.currentTarget);
                 let id = _this.attr('data-id');
                 var selectedValue = $('input[name="discount"]:checked').val();
 
-                var amount = {{$data->price}};
-                var sauVat = {{$sauVat}};
-                var tyle = selectedValue/100;
-                var chietkhau = sauVat*tyle;
-                var totalAmount = amount - chietkhau;
-                $('#amountCK').text(totalAmount.toLocaleString());
-                $('input[name="sub_total"]').val(totalAmount);
-                $('input[name="discount_amount"]').val(chietkhau);
+                var chietkhau = (100-selectedValue)/100;
+                var truthue = price*chietkhau;
+
+                let phaitra = parseInt(vat)+parseInt(truthue);
+                let discountAmount = price-(price*chietkhau);
+
+                $('#amountCK').text(phaitra.toLocaleString());
+                $('input[name="sub_total"]').val(phaitra);
+                $('input[name="discount_amount"]').val(discountAmount);
                 $('input[name="discount_id"]').val(id);
             })
 
@@ -113,7 +152,7 @@
                    <form method="post" action="" id="postBooking">
                        {{csrf_field()}}
                     <input type="hidden" name="products[]" value="{{$data->id}}">
-                    <input type="hidden" name="amount" value="{{$data->price}}">
+
                     <div class="mb-2 input-group input-group-icon">
                         <div class="form-item">
                             <label class="form-label title-head">Tên chủ xe (*)</label>
@@ -164,6 +203,19 @@
                     </div>
 
                        <div class="mb-2">
+                           <label class="form-label title-head">Số ghế ngồi (*)</label>
+                           <select id="seatID" name="seat_id" class="mb-2 dz-form-select form-select" style="width: 100%" >
+                               <option value="">Chọn số ghế ngồi</option>
+                               @foreach($seats as $c)
+                                   <option value="{{$c->id}}"
+                                           data-price="{{$c->price}}"
+                                       {{($c->id==$data->seat_id) ? 'selected' : ''}}
+                                   >{{$c->name}}</option>
+                               @endforeach
+                           </select>
+                       </div>
+
+                       <div class="mb-2">
                            <div class="bao-discount">
                                <label class="label-discount">Áp dụng chiết khấu ?
                                    <input type="checkbox" name="show_discount" value="1" id="checker">
@@ -174,9 +226,12 @@
 
                        <div class="mb-2">
                            <div class="showDiscount" id="showDiscount">
+                               <input type="hidden" name="amount" value="">
                                <input type="hidden" name="discount_amount" value="">
                                <input type="hidden" name="discount_id" value="">
-                               <input type="hidden" name="sub_total" value="{{$data->amount}}">
+                               <input type="hidden" name="sub_total" value="">
+                               <input type="hidden" name="vat" value="">
+                               <input type="hidden" name="price" value="">
                                 @foreach($discountList as $key=>$d)
                                    <label>
                                    <div class="toast style-1 fade mb-2 show">

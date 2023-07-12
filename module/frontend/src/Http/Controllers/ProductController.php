@@ -17,6 +17,7 @@ use Order\Models\OrderProduct;
 use Product\Models\Catproduct;
 use Product\Models\Factory;
 use Product\Models\Product;
+use Product\Models\Seats;
 use Product\Repositories\CatproductRepository;
 use Product\Repositories\ProductRepository;
 use Setting\Repositories\SettingRepositories;
@@ -66,7 +67,8 @@ class ProductController extends BaseController
         $discountList = Discounts::where('status','active')->orderBy('sort_order','asc')->get();
         $vat = $data->price*0.1;
         $sauVat = $data->price-$vat;
-       return view('frontend::customer.products.checkout',compact('data','category','listFactory','discountList','sauVat'));
+        $seats = Seats::orderBy('sort_order','asc')->get();
+       return view('frontend::customer.products.checkout',compact('data','category','listFactory','discountList','sauVat','seats'));
     }
 
     public function postCheckout($id,Request $request){
@@ -81,9 +83,11 @@ class ProductController extends BaseController
             'name' => 'required',
             'phone' => 'required|numeric',
         ]);
-        $vatMoney = $request->amount*0.1;
-        $sauthue = $request->amount - $vatMoney;
-        $commission = $sauthue * ($distributor_rate/100);
+        $amount = str_replace(',','',$request->price);
+        $amount = intval($amount);
+
+        $commission = $amount * ($distributor_rate/100);
+
         $input['company_id'] = $company_id;
         $input['company_code'] = $compnayInfo->company_code;
         $input['user_id'] = $compnayInfo->user_id;
@@ -95,12 +99,15 @@ class ProductController extends BaseController
         $input['products'] = $product;
 
         if(!is_null($request->show_discount) && $request->show_discount==1){
-            $discount = Discounts::find($request->discount_id);
-            $discountAmount = $sauthue * ($discount->value/100);
-            if($discount->value>=$distributor_rate){
+            $request->validate([
+                'discount' => 'required'
+            ]);
+            $discountPercent = intval($request->discount);
+            $percent = $distributor_rate-$discountPercent;
+            if($discountPercent>=$distributor_rate){
                 $commission = 0;
             }else{
-                $commission = $commission-$discountAmount;
+                $commission = $amount*($percent/100);
             }
         }
         $input['commission'] = $commission;

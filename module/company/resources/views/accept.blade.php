@@ -170,7 +170,7 @@
 
                     </tbody>
                 </table>
-                {{$data->links()}}
+                {{$data->withQueryString()->links()}}
             </div><!-- table-responsive -->
         </div>
     </div>
