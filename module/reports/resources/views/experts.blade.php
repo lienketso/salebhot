@@ -103,13 +103,26 @@
                     </thead>
                     <tbody>
                     @foreach($chuyenvien as $key=>$d)
+                        @php
+                            $or = \Transaction\Models\Transaction::query();
+                            $orders = $or->where('order_status','active')
+                            ->where('user_id',$d->id)
+                            ->whereMonth('updated_at',$thang)
+                            ->whereYear('updated_at',date('Y'))
+                            ->count();
+                            $amounts = $or->where('order_status','active')
+                            ->where('user_id',$d->id)
+                            ->whereMonth('updated_at',$thang)
+                            ->whereYear('updated_at',date('Y'))
+                            ->sum('sub_total');
+                        @endphp
                         <tr>
                             <td>{{$key+1}}</td>
                             <td>{{$d->full_name}} - {{$d->phone}}</td>
                             <td>{{($d->parents()->exists()) ? $d->parents->full_name : 'Chưa xác định'}} </td>
-                            <td><span class="bag-count">{{$d->totalOrder}}</span></td>
-                            <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
-                            <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}} </span></td>
+                            <td><span class="bag-count">{{$orders}}</span></td>
+                            <td><span class="bag-amount">{{number_format($amounts)}}</span></td>
+                            <td><span class="bag-commission">{{number_format($amounts*$commissionRate)}} </span></td>
                         </tr>
                     @endforeach
 

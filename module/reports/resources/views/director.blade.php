@@ -69,9 +69,21 @@
                         @php
                             $chuyenvien = \Users\Models\Users::where('parent',$d->id)->count();
                             $nhaphanphoi = \Company\Models\Company::where('director_id',$d->id)->count();
-                            $transaction = \Transaction\Models\Transaction::where('director',$d->id)->where('order_status','active')->count();
-                            $amount = \Transaction\Models\Transaction::where('director',$d->id)
-                            ->where('order_status','active')->sum('sub_total');
+                            $aq = \Transaction\Models\Transaction::query();
+                            if(!is_null(request('mon'))){
+                                $aq->whereMonth('updated_at',$thang);
+                                $aq->whereYear('updated_at',date('Y'));
+                            }
+                            $transaction = $aq->where('director',$d->id)
+                            ->where('order_status','active')
+                            ->whereMonth('updated_at',$thang)
+                            ->whereYear('updated_at',date('Y'))
+                            ->count();
+                            $amount = $aq->where('director',$d->id)
+                            ->where('order_status','active')
+                            ->whereMonth('updated_at',$thang)
+                            ->whereYear('updated_at',date('Y'))
+                            ->sum('sub_total');
                         @endphp
                         <tr>
                             <td>
