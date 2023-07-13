@@ -17,7 +17,7 @@ class Transaction extends Model
     protected $table = 'transaction';
     protected $fillable = ['user_id','company_id','company_code','category',
         'name','phone','email','license_plate','expiry','products','factory','amount','message','status','order_status','sale_admin',
-        'distributor_rate','director','commission','discount_id','discount_amount','sub_total','seat_id'
+        'distributor_rate','director','commission','discount_id','discount_amount','sub_total','seat_id','price','vat'
     ];
 
     public function setAmountAttribute($value){
@@ -28,6 +28,12 @@ class Transaction extends Model
     }
     public function setDiscountAmountAttribute($value){
         $this->attributes['discount_amount'] = str_replace(',','',$value);
+    }
+    public function setPriceAttribute($value){
+        $this->attributes['price'] = str_replace(',','',$value);
+    }
+    public function setVatttribute($value){
+        $this->attributes['vat'] = str_replace(',','',$value);
     }
     public function setExpiryAttribute($value)
     {

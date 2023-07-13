@@ -44,6 +44,7 @@ class ReportsController extends BaseController
                     ->whereYear('transaction.updated_at',$year);
             })
             ->selectRaw('SUM(transaction.sub_total) as total_amount')
+            ->selectRaw('SUM(transaction.price) as total_price')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
             ->groupBy('users.id')
             ->orderBy('total_amount', 'DESC')
@@ -51,18 +52,22 @@ class ReportsController extends BaseController
                 $query->where('role_id', 6);
             })->paginate(30);
 
-        $totalOrderMonth = Transaction::where('order_status','active')
+        $totalOrderMonth = Transaction::where('order_status','active')->where('user_id','!=','')
             ->whereMonth('updated_at',$thang)
             ->whereYear('updated_at',$year)
             ->count();
-        $totalAmountMonth = Transaction::where('order_status','active')
+        $totalAmountMonth = Transaction::where('order_status','active')->where('user_id','!=','')
             ->whereMonth('updated_at',$thang)
             ->whereYear('updated_at',$year)
             ->sum('sub_total');
+        $totalPriceMonth = Transaction::where('order_status','active')->where('user_id','!=','')
+            ->whereMonth('updated_at',$thang)
+            ->whereYear('updated_at',$year)
+            ->sum('price');
 
         return view('wadmin-report::experts',compact(
             'chuyenvien','monthList',
-            'commissionRate','thang','totalOrderMonth','totalAmountMonth'
+            'commissionRate','thang','totalOrderMonth','totalAmountMonth','totalPriceMonth'
         ));
     }
 
@@ -155,6 +160,7 @@ class ReportsController extends BaseController
             })
             ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
+            ->selectRaw('SUM(transaction.price) as totalPrice')
             ->groupBy('users.id')
             ->orderBy('total_amount', 'DESC')
             ->whereHas('roles', function ($query) {

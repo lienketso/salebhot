@@ -82,6 +82,21 @@ class TransactionController extends BaseController
         }
 
     }
+    //update price and vat transaction
+    public function updatePriceAndVat(){
+        try {
+            $listTransaction = Transaction::where('amount',480700)->get();
+            foreach($listTransaction as $d){
+                $d->price = 437000;
+                $d->vat = 43700;
+                $d->save();
+            }
+            dd('success');
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+
+    }
 
 
     public function getIndex(Request $request){

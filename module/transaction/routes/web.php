@@ -58,6 +58,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::transaction.upadmin.get');
 //        $router->get('update-transaction-amount','TransactionController@updateAmountTran')
 //            ->name('wadmin::transaction.upamount.get');
+        $router->get('update-price-admin','TransactionController@updatePriceAndVat')
+            ->name('wadmin::transaction.update-price.get');
 
     });
 });
