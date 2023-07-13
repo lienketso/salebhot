@@ -75,7 +75,8 @@
             "Wallets\\": "module/wallets/src",
             "Logs\\": "module/logs/src",
             "Discounts\\": "module/discounts/src",
-            "Director\\": "module/director/src"
+            "Director\\": "module/director/src",
+            "Sales\\": "module/sales/src"
         },
         "classmap": [
             "database/seeds",

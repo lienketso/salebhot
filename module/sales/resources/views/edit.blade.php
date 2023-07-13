@@ -22,14 +22,25 @@
         $("#select6").select2({ tags: true, maximumSelectionLength: 3 });
         $('.js-example-basic-single').select2();
     </script>
+    <script type="text/javascript">
+        function downloadSVG() {
+            const png = document.getElementById('svgID').innerHTML;
+            const blob = new Blob([png.toString()]);
+            const element = document.createElement("a");
+            element.download = "QR-{!! $data->slug !!}.png";
+            element.href = window.URL.createObjectURL(blob);
+            element.click();
+            element.remove();
+        }
+    </script>
 @endsection
 
 @section('content')
 
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="{{route('wadmin::company.index.get')}}">Quản lý nhà phân phối</a></li>
-        <li class="active">Thêm nhà phân phối</li>
+        <li><a href="{{route('wadmin::company.index.get')}}">Nhà phân phối</a></li>
+        <li class="active">Sửa nhà phân phối</li>
     </ol>
 
     <div class="row">
@@ -45,50 +56,37 @@
         <form method="post" enctype="multipart/form-data">
             {{csrf_field()}}
             <input type="hidden" name="director_id" value="{{($userLog->parents()->exists()) ? $userLog->parents->id : 0}}">
-            <input type="hidden" name="sale_admin" value="{{($userCoNppIt) ? $userCoNppIt->id : 0}}">
+            <input type="hidden" name="sale_admin" value="{{($userLog->saleAdmin()->exists()) ? $userLog->saleAdmin->id : 0}}">
             <div class="col-sm-8">
                 <div class="panel">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Thêm nhà phân phối</h4>
-                        <p>Bạn cần nhập đầy đủ các thông tin để thêm nhà phân phối mới</p>
+                        <h4 class="panel-title">Sửa nhà phân phối</h4>
+                        <p><strong>{{$data->name}} | <span style="color: green">{{$data->company_code}}</span></strong> </p>
                     </div>
-
                     <div class="panel-body">
-                         <div class="form-group">
-                            <label>Mã NPP (*)</label>
-                            <select id="" class="form-control js-example-basic-single" name="company_code" style="width: 100%"
-                                    data-placeholder="Chọn mã NPP" aria-hidden="true">
-                                <option value="">Tìm mã nhà phân phối</option>
-                                @foreach($currentCompany as $c)
-                                    <option value="{{$c->company_code}}" >{{$c->name}} | {{$c->company_code}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label>Tên cửa hàng / công ty (*)</label>
                             <input class="form-control"
                                    name="name"
                                    type="text"
-                                   value="{{old('name')}}"
-                                   placeholder="Tên NPP">
+                                   value="{{$data->name}}"
+                                   placeholder="Tên cửa hàng / công ty ">
                         </div>
                         <div class="form-group">
                             <label>Tên liên hệ (*)</label>
                             <input class="form-control"
                                    name="contact_name"
                                    type="text"
-                                   value="{{old('name')}}"
+                                   value="{{$data->contact_name}}"
                                    placeholder="VD : Nguyễn Văn A">
                         </div>
-
                         <div class="form-group">
                             <label>Tỉnh / Thành phố (*)</label>
                             <select id="" class="form-control js-example-basic-single" name="city" style="width: 100%"
                                     data-placeholder="Chọn tỉnh thành" aria-hidden="true">
                                 <option value="">Chọn tỉnh / Thành phố</option>
                                 @foreach($cities as $c)
-                                    <option value="{{$c->matp}}" >{{$c->name}}</option>
+                                    <option value="{{$c->matp}}" {{($data->city==$c->matp) ? 'selected' : ''}} >{{$c->name}}</option>
                                 @endforeach
 
                             </select>
@@ -98,7 +96,7 @@
                             <input class="form-control"
                                    name="address"
                                    type="text"
-                                   value="{{old('address')}}"
+                                   value="{{$data->address}}"
                                    placeholder="Địa chỉ chi tiết">
                         </div>
                         <div class="form-group">
@@ -106,15 +104,15 @@
                             <input class="form-control"
                                    name="email"
                                    type="text"
-                                   value="{{old('email')}}"
-                                   placeholder="Địa chỉ email ( Nếu có )">
+                                   value="{{$data->email}}"
+                                   placeholder="Địa chỉ email">
                         </div>
                         <div class="form-group">
-                            <label>Số điện thoại (*)</label>
+                            <label>Số điện thoại</label>
                             <input class="form-control"
                                    name="phone"
                                    type="text"
-                                   value="{{old('phone')}}"
+                                   value="{{$data->phone}}"
                                    placeholder="Số điện thoại">
                         </div>
                         <div class="form-group">
@@ -122,7 +120,7 @@
                             <input class="form-control"
                                    name="bank_number"
                                    type="text"
-                                   value="{{old('bank_number')}}"
+                                   value="{{$data->bank_number}}"
                                    placeholder="Số tài khoản ngân hàng">
                         </div>
                         <div class="form-group">
@@ -130,16 +128,14 @@
                             <input class="form-control"
                                    name="bank_name"
                                    type="text"
-                                   value="{{old('bank_name')}}"
+                                   value="{{$data->bank_name}}"
                                    placeholder="VD : Ngân hàng Agribank">
                         </div>
 
-
                         <div class="form-group">
-                            <label>Chi tiết về nhà phân phối</label>
-                            <textarea id="editor1" name="content" class="form-control makeMeRichTextarea" rows="3" placeholder="Nội dung bài viết">{{old('content')}}</textarea>
+                            <label>Nội dung về công ty</label>
+                            <textarea id="editor1" name="content" class="form-control makeMeRichTextarea" rows="3" placeholder="Nội dung bài viết">{{$data->content}}</textarea>
                         </div>
-
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>
@@ -151,7 +147,12 @@
             </div><!-- col-sm-6 -->
 
             <!-- ####################################################### -->
-
+            @php
+                    use Illuminate\Support\Facades\Auth;
+                    $userLog = Auth::user();
+                    $roles = $userLog->load('roles.perms');
+                    $permissions = $roles->roles->first();
+            @endphp
             <div class="col-sm-4">
                 <div class="panel">
                     <div class="panel-heading">
@@ -159,40 +160,59 @@
                         <p>Thông tin các tùy chọn thêm </p>
                     </div>
                     <div class="panel-body">
+
                         <div class="form-group">
                             <label>Chuyên viên chăm sóc</label>
-                            <select id="" name="user_id" class="form-control" style="width: 100%" >
-                                @if($userLog)
-                                <option value="{{$userLog->id}}">{{$userLog->full_name}}</option>
+                            <select id="" name="user_id" class="form-control js-example-basic-single" style="width: 100%" >
+                                <option value="{{$data->user->id}}">{{$data->user->full_name}} - {{$data->user->phone}}</option>
+                                @if($permissions->id==1)
+                                    @foreach($users as $u)
+                                    <option value="{{$u->id}}">{{$u->full_name}} - {{$u->phone}}</option>
+                                    @endforeach
                                 @endif
                             </select>
                         </div>
-
-
                         <div class="form-group mb-3">
                             <label>Ảnh NPP 01</label>
                             <div class="custom-file">
-                                <input type="file" name="thumbnail" value="{{old('thumbnail')}}" class="custom-file-input" id="inputGroupFile01" >
-                                <label class="custom-file-label" for="inputGroupFile01">{{old('thumbnail')}}</label>
+                                <input type="file" name="thumbnail" value="" class="custom-file-input" id="inputGroupFile01" >
+                                <div class="thumbnail_w" style="padding-top: 10px">
+                                    <img src="{{($data->thumbnail!='') ? upload_url($data->thumbnail) : public_url('admin/themes/images/no-image.png')}}" width="100">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group mb-3">
                             <label>Ảnh NPP 02</label>
                             <div class="custom-file">
-                                <input type="file" name="cccd_mt" value="{{old('cccd_mt')}}" class="custom-file-input" id="inputGroupFile02" >
-                                <label class="custom-file-label" for="inputGroupFile01">{{old('cccd_mt')}}</label>
+                                <input type="file" name="cccd_mt" value="" class="custom-file-input" id="inputGroupFile02" >
+                                <div class="thumbnail_w" style="padding-top: 10px">
+                                    <img src="{{($data->cccd_mt!='') ? upload_url($data->cccd_mt) : public_url('admin/themes/images/no-image.png')}}" width="100">
+                                </div>
                             </div>
                         </div>
-
                         <div class="form-group mb-3">
                             <label>Ảnh NPP 03</label>
                             <div class="custom-file">
-                                <input type="file" name="cccd_ms" value="{{old('cccd_ms')}}" class="custom-file-input" id="inputGroupFile03" >
-                                <label class="custom-file-label" for="inputGroupFile01">{{old('cccd_ms')}}</label>
+                                <input type="file" name="cccd_ms" value="" class="custom-file-input" id="inputGroupFile03" >
+                                <div class="thumbnail_w" style="padding-top: 10px">
+                                    <img src="{{($data->cccd_ms!='') ? upload_url($data->cccd_ms) : public_url('admin/themes/images/no-image.png')}}" width="100">
+                                </div>
                             </div>
                         </div>
 
-
+                        <div class="form-group" >
+                            <label style="padding-top: 20px">QR Code NPP</label>
+                            <div class="qr-code" id="svgID" style="position: relative">
+                                <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+                        ->size(500)->errorCorrection('H')
+                        ->generate($settingModel->getSettingMeta('link_qr_code').'?npp='.$data->company_code)) !!} ">
+                            </div>
+                            <div style="padding-top: 20px">
+                                <a href="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+                        ->size(500)->errorCorrection('H')
+                        ->generate($settingModel->getSettingMeta('link_qr_code').'?npp='.$data->company_code)) !!}" download="qrcode.png">download QR code</a>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <button class="btn btn-primary">Lưu lại</button>

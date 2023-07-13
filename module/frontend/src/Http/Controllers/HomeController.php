@@ -113,7 +113,7 @@ class HomeController extends BaseController
                 $input['user_id'] = $nhapp->user_id;
                 $input['company_id'] = $nhapp->id;
                 $input['company_code'] = $request->npp;
-                $input['sale_admin'] = $userNPP->sale_admin;
+                $input['sale_admin'] = $nhapp->sale_admin;
                 $input['director'] = $userNPP->parent;
 
             $input['order_status'] = 'new';

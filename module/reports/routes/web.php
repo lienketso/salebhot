@@ -16,6 +16,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::reports.director.get')->middleware('permission:report_director');
         $router->get('total-distributor','ReportsController@totalDistributor')
             ->name('wadmin::reports.total.distributor')->middleware('permission:report_total_distributor');
+        $router->get('total-distributor-sale','ReportsController@totalSaleDistributor')
+            ->name('wadmin::reports.total.sale-distributor')->middleware('permission:report_total_sale_distributor');
 
     });
 });

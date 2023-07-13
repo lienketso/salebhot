@@ -128,7 +128,15 @@ class ExpertController extends BaseController
         $userLog = Auth::user();
         $currentCompany = $this->model->orderBy('name','asc')
         ->where('status','disable')->where('user_id',0)->get();
-        return view('wadmin-expert::create',['cities'=>$cities,'users'=>$users,'currentCompany'=>$currentCompany,'userLog'=>$userLog]);
+
+        $userCoNppIt = Users::whereHas('roles', function ($query) {
+            $query->where('role_id', 9);
+        })->withCount('getDistributor')->orderBy('get_distributor_count','asc')->first();
+
+
+        return view('wadmin-expert::create',['cities'=>$cities,'users'=>$users,
+            'currentCompany'=>$currentCompany,'userLog'=>$userLog,'userCoNppIt'=>$userCoNppIt
+        ]);
     }
     public function postCreate(ExpertCreateRequest $request){
         try{

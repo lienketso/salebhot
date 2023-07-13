@@ -76,6 +76,10 @@ class Users extends Authenticatable
         return $this->hasMany(Company::class,'user_id','id');
     }
 
+    public function getDistributor(){
+        return $this->hasMany(Company::class,'sale_admin','id');
+    }
+
     public function getCompanyCV(){
         return $this->getCompany()->where(function ($q){
             $q->where('status','disable')->orWhere('status','pending');
@@ -100,6 +104,10 @@ class Users extends Authenticatable
 
     public function saleAdmin(){
         return $this->belongsTo(Users::class,'sale_admin','id');
+    }
+
+    public function chuyenvien(){
+        return $this->belongsTo(Users::class,'id','sale_admin');
     }
 
     public function city(){

@@ -209,6 +209,8 @@ class ReportsController extends BaseController
         $users = Users::select('users.*')
             ->leftJoin('company', function ($join) use($thang,$year){
                 $join->on('users.id','=','company.user_id')
+                    ->whereMonth('company.updated_at',$thang)
+                    ->whereYear('company.updated_at',$year)
                     ->where('company.status','!=','disable');
             })
             ->selectRaw('COUNT(company.id) AS countCompany')
@@ -217,7 +219,6 @@ class ReportsController extends BaseController
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 6);
             })->get();
-//        dd($users);
 
         return view('wadmin-report::totaldistributor',compact(
             'monthList',
@@ -229,6 +230,35 @@ class ReportsController extends BaseController
             'users',
             'userRequest'
         ));
+    }
+
+    public function totalSaleDistributor(Request $request){
+        $mon = $request->mon;
+        $thang = date('m');
+        $year = date('Y');
+        if(!is_null($mon)){
+            $thang = $mon;
+        }
+        $monthList = collect([]);
+        for ($month = 1; $month <= 12; $month++) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthList->push([
+                'value' => $date->format('m'),
+                'label' => $date->format('F'),
+            ]);
+        }
+        $users = Users::select('users.*')
+            ->leftJoin('company', function ($join) use($thang,$year){
+                $join->on('users.id','=','company.sale_admin')
+                    ->where('company.status','!=','disable');
+            })
+            ->selectRaw('COUNT(company.id) AS countCompany')
+            ->groupBy('users.id')
+            ->orderBy('countCompany', 'DESC')
+            ->whereHas('roles', function ($query) {
+                $query->where('role_id', 9);
+            })->get();
+        return view('wadmin-report::sales',compact('users','thang','year','monthList'));
     }
 
 }
