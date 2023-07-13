@@ -97,7 +97,9 @@ class Users extends Authenticatable
             $q->where('status','pending');
         });
     }
-
+    public function giamdocvung(){
+        return $this->belongsTo(Users::class,'id','parent');
+    }
     public function parents(){
         return $this->belongsTo(Users::class,'parent','id');
     }

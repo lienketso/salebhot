@@ -57,6 +57,8 @@
                     <thead>
                     <tr>
                         <th>Giám đốc vùng</th>
+                        <th>SL NPP</th>
+                        <th>SL Chuyên viên</th>
                         <th>Đơn hàng</th>
                         <th>Doanh số</th>
                         <th>Hoa hồng</th>
@@ -64,10 +66,16 @@
                     </thead>
                     <tbody>
                     @foreach($data as $d)
+                        @php
+                            $chuyenvien = \Users\Models\Users::where('parent',$d->id)->count();
+                            $nhaphanphoi = \Company\Models\Company::where('director_id',$d->id)->count();
+                        @endphp
                         <tr>
                             <td>
                                 <p>{{$d->full_name}} - {{$d->phone}}</p>
                             </td>
+                            <td><span class="bag-count">{{$nhaphanphoi}}</span></td>
+                            <td><span class="bag-count">{{ $chuyenvien}}</span></td>
                             <td><span class="bag-count">{{$d->totalOrder}}</span></td>
                             <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
                             <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}}</span> </td>

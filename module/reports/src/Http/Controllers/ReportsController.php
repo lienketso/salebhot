@@ -158,6 +158,7 @@ class ReportsController extends BaseController
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 7);
             })->paginate(30);
+//        dd($data);
 
         $commission = Commission::where('role_id',7)->first();
         $commissionRate = ($commission->commission_rate / 100);
