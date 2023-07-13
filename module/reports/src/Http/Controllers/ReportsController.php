@@ -144,12 +144,14 @@ class ReportsController extends BaseController
                 'label' => $date->format('F'),
             ]);
         }
-        $data = Users::select('users.*')
+        if(!is_null($request->mon)){
+            $q->whereMonth('transaction.updated_at',$thang);
+            $q->whereYear('transaction.updated_at',$year);
+        }
+        $data = $q->select('users.*')
             ->leftJoin('transaction', function ($join) use($thang,$year){
                 $join->on('users.id','=','transaction.director')
-                    ->where('transaction.order_status','active')
-                    ->whereMonth('transaction.updated_at',$thang)
-                    ->whereYear('transaction.updated_at',$year);
+                    ->where('transaction.order_status','active');
             })
             ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')

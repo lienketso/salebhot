@@ -69,6 +69,9 @@
                         @php
                             $chuyenvien = \Users\Models\Users::where('parent',$d->id)->count();
                             $nhaphanphoi = \Company\Models\Company::where('director_id',$d->id)->count();
+                            $transaction = \Transaction\Models\Transaction::where('director',$d->id)->count();
+                            $amount = \Transaction\Models\Transaction::where('director',$d->id)
+                            ->where('order_status','active')->sum('sub_total');
                         @endphp
                         <tr>
                             <td>
@@ -76,9 +79,9 @@
                             </td>
                             <td><span class="bag-count">{{$nhaphanphoi}}</span></td>
                             <td><span class="bag-count">{{ $chuyenvien}}</span></td>
-                            <td><span class="bag-count">{{$d->totalOrder}}</span></td>
-                            <td><span class="bag-amount">{{number_format($d->total_amount)}}</span></td>
-                            <td><span class="bag-commission">{{number_format($d->total_amount*$commissionRate)}}</span> </td>
+                            <td><span class="bag-count">{{$transaction}}</span></td>
+                            <td><span class="bag-amount">{{number_format($amount)}}</span></td>
+                            <td><span class="bag-commission">{{number_format($amount*$commissionRate)}}</span> </td>
                         </tr>
                     @endforeach
 
