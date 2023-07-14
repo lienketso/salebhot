@@ -30,6 +30,7 @@
                 ->where('order_status','new')->limit(5);
             @endphp
             <ul class="headermenu">
+                @if ($permissions->contains('name','sales_module'))
                 <li>
                     <div id="noticePanel" class="btn-group">
                         <button class="btn btn-notice alert-notice" data-toggle="dropdown" aria-expanded="false">
@@ -72,6 +73,7 @@
                         </div>
                     </div>
                 </li>
+                    @endif
             </ul>
         </div><!-- header-right -->
     </div><!-- headerbar -->
