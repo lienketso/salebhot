@@ -78,7 +78,7 @@ class ProductController extends BaseController
         $company_id = Auth::guard('customer')->id();
         $compnayInfo = $this->com->find($company_id);
         $userNPP = Users::where('id', $compnayInfo->user_id)->first();
-        $sale = Users::where('id', $userNPP->sale_admin)->first();
+        $sale = Users::where('id', $compnayInfo->sale_admin)->first();
         $request->validate([
             'name' => 'required',
             'phone' => 'required|numeric',
@@ -91,7 +91,7 @@ class ProductController extends BaseController
         $input['company_id'] = $company_id;
         $input['company_code'] = $compnayInfo->company_code;
         $input['user_id'] = $compnayInfo->user_id;
-        $input['sale_admin'] = $userNPP->sale_admin;
+        $input['sale_admin'] = $compnayInfo->sale_admin;
         $input['director'] = $userNPP->parent;
         $input['distributor_rate'] = $distributor_rate;
         $input['order_status'] = 'new';

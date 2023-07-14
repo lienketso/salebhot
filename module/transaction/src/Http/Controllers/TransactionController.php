@@ -160,7 +160,7 @@ class TransactionController extends BaseController
             $sale_admin = $saleInfo->telegram;
             $input['company_code'] = $companyInfo->company_code;
             $input['user_id'] = $companyInfo->user_id;
-            $input['sale_admin'] = $userInfo->sale_admin;
+            $input['sale_admin'] = $companyInfo->sale_admin;
             $input['director'] = $userInfo->parent;
 
             if(!is_null($request->discount_show) && $request->discount_show==1){

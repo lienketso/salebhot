@@ -6,6 +6,7 @@ use Acl\Repositories\RoleRepository;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Base\Supports\FlashMessage;
 use Category\Repositories\CategoryRepository;
+use Company\Models\Company;
 use Illuminate\Http\Request;
 use Location\Models\City;
 use Product\Repositories\FactoryRepository;
@@ -24,6 +25,11 @@ class UsersController extends BaseController
         $this->users = $repository;
         $this->cat = $categoryRepository;
         $this->langcode = session('lang');
+    }
+
+
+    public function chiadaily(){
+        Company::assignUsers();
     }
 
     public function getIndex(Request $request){

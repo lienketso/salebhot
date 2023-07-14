@@ -116,4 +116,9 @@ class Users extends Authenticatable
         return $this->belongsTo(City::class,'city_id','matp');
     }
 
+    public function distributor()
+    {
+        return $this->belongsTo(Company::class,'sale_admin','id');
+    }
+
 }

@@ -27,6 +27,9 @@ class Company extends Model
     public function user(){
         return $this->belongsTo(Users::class,'user_id','id');
     }
+    public function sales(){
+        return $this->belongsTo(Users::class,'sale_admin','id');
+    }
     //relation to perm
     public function category()
     {
@@ -65,6 +68,31 @@ class Company extends Model
 
     public function getWallet(){
         return $this->hasMany(Wallets::class,'company_id','id');
+    }
+
+    public static function assignUsers()
+    {
+        $users = Users::where('status','active')->whereHas('roles', function ($query) {
+            $query->where('role_id', 9);
+        })->get();
+        $distributors = Company::where('status','!=','disable')
+            ->where('c_type','distributor')
+            ->get();
+
+        $totalUsers = $users->count();
+        $totalDistributors = $distributors->count();
+
+        $distributorIndex = 0;
+        for ($i = 0; $i < $totalDistributors; $i++) {
+            $com = $distributors[$i];
+
+            $com->sales()->associate($users[$distributorIndex])->save();
+
+            $distributorIndex++;
+            if ($distributorIndex === $totalUsers) {
+                $distributorIndex = 0;
+            }
+        }
     }
 
 }
