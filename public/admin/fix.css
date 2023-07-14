@@ -296,8 +296,20 @@ ul.tree1 li span a{
     padding-bottom: 20px;
 }
 .pull-right{
-    position: relative;
-    left: -5px;
+
+}
+.alert-notice span{
+    font-size: 16px;
+    color: #fff;
+}
+.alert-notice span.nhaychu{
+    animation: blink 0.8s linear infinite;
+    color: #ff564e;
+}
+@keyframes blink{
+    0%{opacity: 0;}
+    50%{opacity: .5;}
+    100%{opacity: 1;}
 }
 .dz-timeline{
     list-style: none;

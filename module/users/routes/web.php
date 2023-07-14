@@ -25,7 +25,7 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
        $router->post('profile/{id}','UsersController@postProfile')
            ->name('wadmin::users.profile.post')->middleware('permission:users_edit');
        //chia đều nhà phân phối
-       $router->get('chia-nha-pp','UsersController@chiadaily')
-           ->name('wadmin::users.chia.get');
+//       $router->get('chia-nha-pp','UsersController@chiadaily')
+//           ->name('wadmin::users.chia.get');
    });
 });
