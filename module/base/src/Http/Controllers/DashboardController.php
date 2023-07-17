@@ -28,7 +28,7 @@ class DashboardController extends BaseController
         $settingHome = $settingRepositories;
 
         $newTransaction = Transaction::orderBy('created_at','desc')->limit(10)->get();
-        $newCompany = Company::where('status','!=','disable')->orderBy('updated_at','desc')->limit(10)->get();
+        $newCompany = Company::where('status','!=','disable')->where('c_type','distributor')->orderBy('updated_at','desc')->limit(10)->get();
 
         return view('wadmin-dashboard::dashboard',['newTransaction'=>$newTransaction,'newCompany'=>$newCompany,'settingHome'=>$settingHome]);
     }
