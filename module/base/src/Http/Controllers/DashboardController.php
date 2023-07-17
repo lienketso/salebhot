@@ -6,6 +6,7 @@ namespace Base\Http\Controllers;
 
 use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
+use Company\Models\Company;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +14,7 @@ use League\Flysystem\Exception;
 use Post\Repositories\PostRepository;
 use Setting\Models\Setting;
 use Setting\Repositories\SettingRepositories;
+use Transaction\Models\Transaction;
 use Zalo\Zalo;
 use Zalo\ZaloEndPoint;
 
@@ -20,13 +22,15 @@ class DashboardController extends BaseController
 {
 
     function getIndex(PostRepository $postRepository, SettingRepositories $settingRepositories){
-        $postview = $postRepository->orderBy('count_view','desc')->where('post_type','blog')
-            ->where(['lang_code'=>session('lang')])->limit(8)->get();
+
         $productview = $postRepository->orderBy('count_view','desc')->where('post_type','product')
             ->where(['lang_code'=>session('lang')])->limit(8)->get();
         $settingHome = $settingRepositories;
 
-        return view('wadmin-dashboard::dashboard',['postview'=>$postview,'productview'=>$productview,'settingHome'=>$settingHome]);
+        $newTransaction = Transaction::orderBy('created_at','desc')->limit(10)->get();
+        $newCompany = Company::where('status','!=','disable')->orderBy('updated_at','desc')->limit(10)->get();
+
+        return view('wadmin-dashboard::dashboard',['newTransaction'=>$newTransaction,'newCompany'=>$newCompany,'settingHome'=>$settingHome]);
     }
 
     public function postIndex(Request $request, SettingRepositories $settingRepositories){

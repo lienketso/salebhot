@@ -160,10 +160,10 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-unstyled mb20">
-                                @foreach($postview  as $d)
+                                @foreach($newTransaction  as $d)
                                 <li>
-                                    <a href="#" target="_blank">{{$d->name}}</a>
-                                    <small>{{format_date($d->created_at)}} <a href="">{{$d->count_view}} Lượt xem</a></small>
+                                    <a href="#" target="_blank">DH:{{$d->id}} / {{$d->name}}</a>
+                                    <small>{{format_date($d->created_at)}} <a href="">{{getTranStatus($d->order_status)}} </a></small>
                                 </li>
                                 @endforeach
 
@@ -179,16 +179,16 @@
                         </div>
                         <div class="panel-body">
                             <ul class="media-list user-list">
-                                @foreach($productview as $d)
+                                @foreach($newCompany as $d)
                                 <li class="media">
                                     <div class="media-left">
-                                        <a href="{{route('frontend::blog.detail.get',$d->slug)}}" target="_blank">
+                                        <a href="#">
                                             <img class="media-object img-circle" src="{{($d->thumbnail!='') ? upload_url($d->thumbnail) : public_url('admin/themes/images/no-image.png')}}">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading nomargin"><a href="{{route('frontend::blog.detail.get',$d->slug)}}" target="_blank">{{$d->name}}</a></h4>
-                                        <small class="date">{{$d->count_view}} Lượt xem</small>
+                                        <h4 class="media-heading nomargin"><a href="#" target="_blank">{{$d->name}}</a></h4>
+                                        <small class="date">{{format_date($d->updated_at)}} </small>
                                     </div>
                                 </li>
                                 @endforeach
