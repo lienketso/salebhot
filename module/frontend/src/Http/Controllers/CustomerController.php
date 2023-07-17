@@ -47,7 +47,7 @@ class CustomerController extends BaseController
         })->count();
         //đơn hàng đợi duyệt
         $totalPending = $this->tran->scopeQuery(function ($query) use($authLogin,$month,$year){
-            return $query->where('order_status','pending')
+            return $query->where('order_status','!=','active')->where('order_status','!=','cancel')
                 ->where('company_id',$authLogin);
         })->count();
         //đơn hàng hủy
