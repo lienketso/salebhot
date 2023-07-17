@@ -535,7 +535,7 @@ class TransactionController extends BaseController
     public function refundOrder($id){
         $data = $this->model->find($id);
         $vat = $data->amount*0.1;
-        $amount = ($data->amount-$vat) * ($data->distributor_rate/100);
+        $amount = $data->commission;
         try {
             $data->order_status = 'refunded';
             $data->save();

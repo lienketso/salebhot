@@ -96,6 +96,24 @@ class SalesController extends BaseController
         return view('wadmin-director::experts',compact('data','cities'));
     }
 
+    public function success(Request $request){
+        $saleLogin = Auth::id();
+        $q = Transaction::query();
+        $name = $request->get('name');
+        $company_code = $request->get('company_code');
+
+        if(!is_null($name)){
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($company_code)){
+            $q->where('company_code',$company_code);
+        }
+
+        $data = $q->where('order_status','active')
+            ->where('sale_admin',$saleLogin)
+            ->orderBy('updated_at','desc')->paginate(30);
+        return view('wadmin-sales::success',compact('data'));
+    }
 
 
     public function revenue(Request $request){
@@ -108,7 +126,7 @@ class SalesController extends BaseController
         }
 
         $query->where('order_status','active');
-        $query->where('director',$login->id);
+        $query->where('sale_admin',$login->id);
         $query->whereYear('updated_at',date('Y'));
         $query->whereMonth('updated_at',$thang);
         //tổng số đơn hàng
@@ -117,11 +135,6 @@ class SalesController extends BaseController
         $totalRevenue = $query->sum('sub_total');
         //Hoa hồng nhận được
         $role = $login->roles->first();
-        $commission = Commission::where('role_id',$role->id)->first();
-        $totalCommission = 0;
-        if(!is_null($commission)){
-            $totalCommission = ($commission->commission_rate/100) * $totalRevenue;
-        }
 
         $year = date('Y'); // Năm cần lấy
         // Lấy danh sách tháng trong năm
@@ -134,7 +147,7 @@ class SalesController extends BaseController
             ]);
         }
 
-        return view('wadmin-director::revenue',compact('totalTransaction','totalRevenue','totalCommission','thang','monthList'));
+        return view('wadmin-sales::revenue',compact('totalTransaction','totalRevenue','thang','monthList'));
     }
 
 }

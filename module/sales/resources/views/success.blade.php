@@ -56,13 +56,11 @@
 
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::transaction.success.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::sales.success.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
                 </div>
-
-
 
             </div>
         </div>
@@ -91,7 +89,7 @@
                         <th>Khách hàng</th>
                         <th width="">Nhà PP / CV</th>
                         <th>Nội dung</th>
-                        <th>Tiền đơn hàng </th>
+                        <th>Refund</th>
                         <th class="">Ngày tạo đơn</th>
                         <th class="" width="">Trạng thái</th>
                         <th width="130"></th>

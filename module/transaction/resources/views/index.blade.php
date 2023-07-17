@@ -119,7 +119,7 @@
             <div class="action-block">
 
                     <div class="btn-group mr5">
-                        <button type="button" class="btn btn-primary">Duyệt đơn hàng nhanh</button>
+                        <button type="button" class="btn btn-primary">Đổi trạng thái đơn hàng nhanh</button>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
@@ -127,7 +127,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a class="accept-action" data-status="received">Đã tiếp nhận đơn hàng</a></li>
                             <li><a class="accept-action" data-status="pending">Đơn hàng đang xử lý</a></li>
-                            <li><a class="accept-action" data-status="active">Đơn hàng hoàn thành</a></li>
+{{--                            <li><a class="accept-action" data-status="active">Đơn hàng hoàn thành</a></li>--}}
                             <li class="divider"></li>
                             <li><a class="accept-action" data-status="cancel">Đơn hàng đã hủy</a></li>
                         </ul>

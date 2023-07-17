@@ -40,7 +40,7 @@
 
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::director.revenue.get')}}" class="btn btn-default"><i class="fa fa-refresh"></i> Làm lại</a>
+                            <a href="{{route('wadmin::sales.revenue.get')}}" class="btn btn-default"><i class="fa fa-refresh"></i> Làm lại</a>
                         </div>
 
                     </form>
@@ -58,11 +58,11 @@
                             <li><a><i class="fa fa-refresh"></i></a></li>
                         </ul>
                         <h4 class="panel-title text-success">Thống kê doanh thu và hoa hồng</h4>
-                        <p class="nomargin">Thống kê doanh số và hoa hồng tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
+                        <p class="nomargin">Thống kê doanh số và đơn hàng tháng <strong>{{$thang}}</strong> năm <strong>{{date('Y')}}</strong></p>
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-4">
+                            <div class="col-xs-6 col-sm-6">
                                 <div class="bg-revenua panel-success-full">
                                     <div class="pull-left">
                                         <div class="icon fa fa-shopping-cart"></div>
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-6 col-sm-4">
+                            <div class="col-xs-6 col-sm-6">
                                 <div class="bg-revenua panel-warning-full">
                                     <div class="pull-left">
                                         <div class="icon fa fa-usd"></div>
@@ -84,17 +84,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-6 col-sm-4">
-                                <div class="bg-revenua panel-info-full">
-                                    <div class="pull-left">
-                                        <div class="icon fa fa-smile-o"></div>
-                                    </div>
-                                    <div class="pull-left">
-                                        <h4 class="panel-title">Hoa hồng nhận được tháng {{$thang}}</h4>
-                                        <h3>{{number_format($totalCommission)}}</h3>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div><!-- row -->
 
                         <div class="mb20"></div>

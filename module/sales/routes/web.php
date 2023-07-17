@@ -12,7 +12,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
             ->name('wadmin::sales.index.get')->middleware('permission:sales_index');
         $router->get('experts','SalesController@getExpert')
             ->name('wadmin::sales.expert.get')->middleware('permission:sales_expert');
-
+        $router->get('success','SalesController@success')
+            ->name('wadmin::sales.success.get')->middleware('permission:sales_success');
         //revenue
         $router->get('revenue','SalesController@revenue')
             ->name('wadmin::sales.revenue.get')->middleware('permission:sales_revenue');
