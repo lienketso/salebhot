@@ -8,9 +8,12 @@ use Users\Models\Users;
 class WalletTransaction extends Model
 {
     protected $table = 'wallet_transaction';
-    protected $fillable = ['user_id','company_id','wallet_id','amount','transaction_type','status','transaction_id','description'];
+    protected $fillable = ['user_id','company_id','wallet_id','amount','transaction_type','status','transaction_id','description','admin_id'];
 
     public function company(){
+        return $this->belongsTo(Company::class,'company_id','id');
+    }
+    public function getDistributor(){
         return $this->belongsTo(Company::class,'company_id','id');
     }
 
@@ -20,6 +23,9 @@ class WalletTransaction extends Model
 
     public function users(){
         return $this->belongsTo(Users::class,'user_id','id');
+    }
+    public function admins(){
+        return $this->belongsTo(Users::class,'admin_id','id');
     }
 
     public function wallet(){

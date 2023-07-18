@@ -13,7 +13,7 @@
 @endphp
 @if ($permissions->contains('name','discounts_index'))
     <li class="nav-parent {{in_array(Route::currentRouteName(), $listRoute) ? 'nav-active active' : '' }}">
-        <a href="" ><i class="fa fa-subscript"></i> <span>Quản lý chiết khấu</span></a>
+        <a href="" ><i class="fa fa-subscript"></i> <span>Chiết khấu</span></a>
         <ul class="children">
             <li class="{{in_array(Route::currentRouteName(), $indexRoute) ? 'active' : '' }}"><a href="{{route('wadmin::discounts.index.get')}}">Danh sách chiết khấu</a></li>
             <li class="{{in_array(Route::currentRouteName(), $createRoute) ? 'active' : '' }}"><a href="{{route('wadmin::discounts.create.get')}}">Thêm mới</a></li>

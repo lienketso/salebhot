@@ -2,7 +2,7 @@
     $listRoute = [
         'wadmin::wallet.index.get','wadmin::wallet.history.get',
         'wadmin::wallet.withdraw.get','wadmin::wallet.accept.get',
-        'wadmin::wallet.list-refund.get','wadmin::wallet.refund.get'
+        'wadmin::wallet.list-refund.get','wadmin::wallet.refund.get',
     ];
     $indexRoute = [
          'wadmin::wallet.index.get'
@@ -34,12 +34,8 @@
         <a href="" ><i class="fa fa-credit-card"></i> <span>Wallet</span></a>
         <ul class="children">
             <li class="{{in_array(Route::currentRouteName(), $indexRoute) ? 'active' : '' }}"><a href="{{route('wadmin::wallet.index.get')}}">Quản lý ví</a></li>
-
             <li class="{{in_array(Route::currentRouteName(), $withdrawRoute) ? 'active' : '' }}">
-                <a href="{{route('wadmin::wallet.withdraw.get')}}">Yêu cầu rút tiền <span class="badge pull-right">{{$countWithdraw}}</span></a>
-            </li>
-            <li class="{{in_array(Route::currentRouteName(), $withdrawDoneRoute) ? 'active' : '' }}">
-                <a href="{{route('wadmin::wallet.accept.get')}}">Yêu cầu đã duyệt</a>
+                <a href="{{route('wadmin::wallet.withdraw.get')}}">Admin Xác nhận đi tiền <span class="badge pull-right">{{$countWithdraw}}</span></a>
             </li>
             <li class="{{in_array(Route::currentRouteName(), $withdrawRefunded) ? 'active' : '' }}">
                 <a href="{{route('wadmin::wallet.list-refund.get')}}">Đã hoàn tiền</a>

@@ -76,7 +76,8 @@
             "Logs\\": "module/logs/src",
             "Discounts\\": "module/discounts/src",
             "Director\\": "module/director/src",
-            "Sales\\": "module/sales/src"
+            "Sales\\": "module/sales/src",
+            "Accountant\\": "module/accountant/src"
         },
         "classmap": [
             "database/seeds",

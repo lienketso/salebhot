@@ -7,7 +7,7 @@
             let _this = $(e.currentTarget);
             let url = _this.attr('data-url');
             $.confirm({
-                title: 'Xác nhận yêu cầu rút tiền',
+                title: 'Xác nhận gửi admin duyệt',
                 content: 'Bạn có chắc chắn muốn xác nhận yêu cầu',
                 autoClose: 'cancelAction|10000',
                 escapeKey: 'cancelAction',
@@ -60,14 +60,14 @@
                         var stuId = studentIdArr.join(",");
                         var ids = stuId;
                         $.ajax({
-                            url: "{{route('wadmin::withdraw-admin-confirm-all.post')}}",
+                            url: "{{route('wadmin::accountant.request-all.post')}}",
                             type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             data: {ids,status},
                             success: function(data) {
-                                alert('Xác nhận thành công !')
+                                alert('Cập nhật thành công !')
                                 window.location.reload();
                             },
                             error: function(data) {
@@ -78,19 +78,17 @@
                 }
             });
         });
-
-
     </script>
 @endsection
 @section('content')
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="">Yêu cầu chuyển tiền cho nhà phân phối</a></li>
+        <li><a href="">Gửi yêu cầu admin duyệt chuyển tiền </a></li>
     </ol>
     <div class="panel">
         <div class="panel-heading">
-            <h4 class="panel-title">Yêu cầu chuyển tiền cho nhà phân phối </h4>
-            <p>Danh sách yêu cầu chuyển tiền cho nhà phân phối từ kế toán</p>
+            <h4 class="panel-title">Gửi yêu cầu admin duyệt chuyển tiền </h4>
+            <p>Gửi yêu cầu admin duyệt chuyển tiền cho đại lý</p>
         </div>
 
         <div class="search_page">
@@ -105,7 +103,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::wallet.withdraw.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::accountant-check.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
@@ -126,17 +124,22 @@
                 @if (session('delete'))
                     <div class="alert alert-danger">{{session('delete')}}</div>
                 @endif
-                    @php
-                        $Login = \Illuminate\Support\Facades\Auth::user();
-                        $userroles = $Login->roles->first();
-                    @endphp
+
                     <div class="action-block">
 
                         <div class="btn-group mr5">
-                            <button type="button" class="btn btn-primary accept-action" data-status="confirm"><i class="fa fa-mail-forward"></i> Xác nhận nhanh</button>
+                            <button type="button" class="btn btn-primary">Gửi xác nhận nhanh</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a class="accept-action" data-status="sent">Gửi admin xác nhận</a></li>
+                            </ul>
                         </div><!-- btn-group -->
 
                     </div>
+
                 <table class="table nomargin">
                     <thead>
                     <tr>
@@ -148,11 +151,11 @@
                         </th>
                         <th>STT</th>
                         <th>Nhà phân phối</th>
-                        <th>Số dư cuối</th>
-                        <th>Số tiền muốn rút</th>
-                        <th>Ngày yêu cầu</th>
-                        <th>Người yêu cầu</th>
-                        <th>Xác nhận </th>
+                        <th>Mã </th>
+                        <th>Số tài khoản </th>
+                        <th>Ngân hàng </th>
+                        <th>Số dư ví</th>
+                        <th>Gửi admin duyệt</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -164,21 +167,21 @@
                                 </label>
                             </td>
                             <td>{{$key+1}}</td>
-                            <td>{{$d->company->name}}</td>
-                            <td> <span class="bag-amount"> {{number_format($d->wallet->balance)}} đ</span></td>
-                            <td>
-                                <span class="bag-danger"> - {{number_format($d->amount)}} đ</span>
-                            </td>
-                            <td>{{format_date($d->created_at)}} lúc {{format_hour($d->created_At)}}</td>
-                            <td>{{$d->users->full_name}} / {{$d->users->phone}}</td>
-                            <td>
-                            @if($userroles->id==1)
+                            <td>{{$d->getDistributor->name}} / <strong>{{$d->getDistributor->contact_name}}</strong></td>
+                            <td>{{$d->getDistributor->company_code}}</td>
+                            <td>{{$d->getDistributor->bank_number}}</td>
+                            <td>{{$d->getDistributor->bank_name}}</td>
+                            <td> <span class="bag-amount"> {{number_format($d->balance)}} đ</span></td>
+                            <td class="order-status">
+                                @if($d->send_admin=='unsent')
                                 <a href="javascript:void(0);"
                                    class="btn btn-success accept-withdraw tooltips"
                                    data-toggle="tooltip"
-                                   data-original-title="Click để duyệt yêu đi tiền cho nhà phân phối"
-                                   data-url="{{route('wadmin::wallet.admin-confirm.get',$d->id)}}"
-                                ><i class="fa fa-bank"></i> Duyệt yêu cầu</a>
+                                   data-original-title="Click để gửi admin duyệt yêu cầu chuyển tiền cho đại lý"
+                                   data-url="{{route('wadmin::accountant-withdraw.post',$d->id)}}"
+                                ><i class="fa fa-paper-plane-o"></i> Gửi admin duyệt</a>
+                                @else
+                                    <span class="order-new"><i class="fa fa-check-circle-o"></i> Đã gửi admin</span>
                                 @endif
                             </td>
 
@@ -187,7 +190,7 @@
 
                     </tbody>
                 </table>
-                {{$data->links()}}
+                {{$data->withQueryString()->links()}}
             </div><!-- table-responsive -->
         </div>
     </div>

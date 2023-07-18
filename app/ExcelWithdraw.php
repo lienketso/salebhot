@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -11,9 +12,10 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-class ExcelWithdraw implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithEvents, WithStyles
+class ExcelWithdraw implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithEvents, WithStyles, WithColumnFormatting
 {
     public function __construct($data)
     {
@@ -38,15 +40,15 @@ class ExcelWithdraw implements FromCollection, WithHeadings, WithMapping, Should
     {
 
         return [
-            format_date($item->created_at),
-            $item->company->company_code,
-            $item->company->name,
-            $item->company->contact_name,
-            $item->company->phone,
-            $item->company->address,
-            $item->company->bank_number,
-            $item->company->bank_name,
-            number_format($item->amount),
+            date_now(),
+            $item->getDistributor->company_code,
+            $item->getDistributor->name,
+            $item->getDistributor->contact_name,
+            $item->getDistributor->phone,
+            $item->getDistributor->address,
+            $item->getDistributor->bank_number,
+            $item->getDistributor->bank_name,
+            number_format($item->balance),
         ];
     }
 
@@ -83,6 +85,13 @@ class ExcelWithdraw implements FromCollection, WithHeadings, WithMapping, Should
             'rotation' => 0,
             'color' => ['rgb' => 'F5DEB3'],
         ]);
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'G' => NumberFormat::FORMAT_NUMBER,
+        ];
     }
 
 }

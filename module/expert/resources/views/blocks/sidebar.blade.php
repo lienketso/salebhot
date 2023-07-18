@@ -22,7 +22,7 @@
 @endphp
 @if ($permissions->contains('name','expert_index'))
 <li class="nav-parent {{in_array(Route::currentRouteName(), $listRoute) ? 'nav-active active' : '' }}">
-    <a href="" ><i class="fa fa-smile-o"></i> <span>Dành cho chuyên viên</span></a>
+    <a href="" ><i class="fa fa-smile-o"></i> <span>Chuyên viên</span></a>
     <ul class="children">
         <li class="{{in_array(Route::currentRouteName(), $indexRoute) ? 'active' : '' }}"><a href="{{route('wadmin::expert.index.get')}}">NPP đã được duyệt</a></li>
         <li class="{{in_array(Route::currentRouteName(), $pendingRoute) ? 'active' : '' }}">

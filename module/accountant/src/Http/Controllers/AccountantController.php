@@ -1,5 +1,5 @@
 <?php
-namespace Wallets\Http\Controllers;
+namespace Accountant\Http\Controllers;
 use App\ExcelWithdraw;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Barryvdh\Debugbar\LaravelDebugbar;
@@ -12,7 +12,7 @@ use Wallets\Models\WalletTransaction;
 use Wallets\Repositories\WalletRepository;
 use Wallets\Repositories\WalletTransactionRepository;
 
-class WalletController extends BaseController
+class AccountantController extends BaseController
 {
     protected $model;
     protected $log;
@@ -24,8 +24,65 @@ class WalletController extends BaseController
         $this->wa = $walletTransactionRepository;
     }
 
-    public function getIndex(Request $request){
+    public function requestAdmin($id,WalletTransactionRepository $walletTransactionRepository){
+        try {
+            $data = Wallets::where('id',$id)->first();
+            $data->send_admin = 'sent';
+            $data->save();
+            //create transaction wallet
+            $trans = [
+              'user_id'=>Auth::id(),
+              'company_id'=>$data->company_id,
+              'wallet_id'=>$data->id,
+              'transaction_type'=>'minus',
+              'amount'=>$data->balance,
+              'description'=>'Gửi yêu cầu chuyển tiền cho đại lý đến admin'
+            ];
+            $transactionWallet = $walletTransactionRepository->create($trans);
+            //log
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'accept',
+                'action_id'=>$data->id,
+                'module'=>'Wallets',
+                'description'=>'Xác nhận yêu cầu rút tiền đại lý '.$data->getDistributor->name
+            ];
+            $logs = $this->log->create($logdata);
+            return redirect()->route('wadmin::accountant-check.get')
+                ->with('create','Gửi yêu cầu đến admin thành công cho đại lý: '.$data->getDistributor->name);
+        }catch (\Exception $e){
+            return redirect()->route('wadmin::accountant-check.get')
+                ->with('delete',$e->getMessage());
+        }
 
+    }
+    // gửi nhiều nhà phân phối
+    public function requestAll(Request $request){
+        $ids = $request->ids;
+        $status = $request->status;
+        try {
+            $data = Wallets::whereIn('id',explode(",",$ids))->get();
+            foreach($data as $d){
+                $d->send_admin = 'sent';
+                $d->save();
+                //tạo giao dịch
+                $trans = [
+                    'user_id'=>Auth::id(),
+                    'company_id'=>$d->company_id,
+                    'wallet_id'=>$d->id,
+                    'transaction_type'=>'minus',
+                    'amount'=>$d->balance,
+                    'description'=>'Gửi yêu cầu chuyển tiền cho đại lý đến admin'
+                ];
+                $transactionWallet = $this->wa->create($trans);
+            }
+            return redirect()->back()->with('create','Gửi nhiều yêu cầu thành công !');
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+    }
+
+    public function accountantCheck(Request $request){
         $q = Wallets::query();
         if(!is_null($request->name)){
             $q->whereHas('getDistributor',function ($query) use($request){
@@ -37,57 +94,52 @@ class WalletController extends BaseController
                 return $query->where('company_code',$request->company_code);
             });
         }
-        $data = $q->orderBy('balance','desc')->paginate(30);
-        return view('wadmin-wallets::index',compact('data'));
-    }
-
-    public function history(){
-        $q = WalletTransaction::query();
-        $data = $q->orderBy('created_at','desc')->paginate(30);
-        return view('wadmin-wallets::history',compact('data'));
-    }
-
-    //Yêu cầu rút tiền
-    public function withdraw(Request $request){
-        $q = WalletTransaction::query();
-        if(!is_null($request->id)){
-            $q->where('id',$request->id);
-        }
-        $data = $q->orderBy('created_at','desc')
-            ->where('status','pending')
-            ->where('transaction_type','minus')->paginate(30);
+        $data = $q->where('balance','>',0)->orderBy('balance','desc')->paginate(50);
         if(!is_null($request->get('export'))){
-            $exports = $q->with('company')->where('status','pending')
-                ->where('transaction_type','minus')
-                ->orderBy('created_at','desc')->paginate(5000);
+            $exports = $q->with('getDistributor')->where('balance','>',0)
+                ->orderBy('balance','desc')->paginate(6000);
             return Excel::download(new ExcelWithdraw($exports), 'danh-sach-chuyen-khoan.xlsx');
         }
-        return view('wadmin-wallets::withdraw.index',compact('data'));
+        return view('wadmin-accountant::accountant',compact('data'));
     }
 
+    public function getConfirmBank(){
+        $q = WalletTransaction::query();
+        $data = $q->where('status','confirm')->orderBy('updated_at','desc')->paginate(50);
+        return view('wadmin-accountant::confirm',compact('data'));
+    }
 
-    public function bankConfirm($id){
-        try{
-            $data = WalletTransaction::find($id);
-            $data->status = 'confirm';
-            $data->admin_id = Auth::id();
+    public function postConfirmBank($id){
+        try {
+            $data = $this->wa->find($id);
+            $data->status = 'transferred';
             $data->save();
-            return redirect()->back()->with('create','Duyệt yêu cầu thành công !');
+            //Trừ tiền trong ví
+            $walletInfor = $this->model->find($data->wallet_id);
+            $oldBalance = $walletInfor->balance;
+            $walletInfor->balance = $oldBalance - $data->amount;
+            $walletInfor->send_admin = 'unsent';
+            $walletInfor->save();
+            return redirect()->back()->with('create','Xác nhận thành công');
         }catch (\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
-    //Duyệt nhiều nhà phân phối
-    public function bankConfirmAll(Request $request){
+    //xác nhận đã chuyển tiền nhanh
+    public function postTransferredAll(Request $request){
         $ids = $request->ids;
         $status = $request->status;
         try {
             $data = WalletTransaction::whereIn('id',explode(",",$ids))->get();
             foreach($data as $d){
-                $d->status = 'confirm';
-                $d->admin_id = Auth::id();
+                $d->status = 'transferred';
                 $d->save();
+                $walletInfor = $this->model->find($d->wallet_id);
+                $oldBalance = $walletInfor->balance;
+                $walletInfor->balance = $oldBalance - $d->amount;
+                $walletInfor->send_admin = 'unsent';
+                $walletInfor->save();
             }
             return response()->json($data);
         }catch (\Exception $e){
@@ -95,14 +147,13 @@ class WalletController extends BaseController
         }
     }
 
-    public function withdrawDone(){
+    //danh sách đã hoàn thành chuyển tiền
+    public function getTransferred(){
         $q = WalletTransaction::query();
-        $data = $q->orderBy('created_at','desc')
-            ->where('status','!=','pending')
-            ->where('transaction_type','minus')
-            ->paginate(30);
-        return view('wadmin-wallets::withdraw.accept',compact('data'));
+        $data = $q->where('status','transferred')->orderBy('updated_at','desc')->paginate(50);
+        return view('wadmin-accountant::transferred',compact('data'));
     }
+
 
     public function getRefund($id){
         $q = WalletTransaction::query();

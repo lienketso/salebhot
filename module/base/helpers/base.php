@@ -182,6 +182,14 @@ if(!function_exists('show_date_input')){
     }
 }
 
+if(!function_exists('date_now')){
+    function date_now(){
+        $date = Carbon::now();
+        return $date;
+    }
+}
+
+
 if (! function_exists('getProduct')) {
     function getProduct($id)
     {
