@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-4">
                         <div class="top-area">
-                            <h3 class="quantity">{{number_format(($totalRevenue-$totalRevenue*0.1) *($commissionRate/100))}}</h3>
+                            <h3 class="quantity">{{number_format($totalCommission)}}</h3>
                             <p class="mb-0">Tổng hoa hồng tháng {{$thang}}</p>
                         </div>
                         <div class="icon-box-2 ms-auto">

@@ -39,7 +39,7 @@ class CustomerController extends BaseController
         $totalRevenue = $this->tran->scopeQuery(function ($e) use ($authLogin,$month,$year){
             return $e->where('order_status','active')
                 ->where('company_id',$authLogin);
-        })->sum('amount');
+        })->sum('sub_total');
         //đơn hàng hoàn thành
         $totalSuccess = $this->tran->scopeQuery(function ($query) use($authLogin,$month,$year){
             return $query->where('order_status','active')
@@ -139,17 +139,23 @@ class CustomerController extends BaseController
                 ->where('order_status','active')
                 ->whereMonth('created_at',$thang)
                 ->whereYear('created_at',$year);
-        })->sum('amount');
+        })->sum('sub_total');
 
+        $totalCommission = $this->tran->scopeQuery(function ($e) use ($thang,$year,$authId){
+            return $e->where('company_id',$authId)
+                ->where('order_status','active')
+                ->whereMonth('created_at',$thang)
+                ->whereYear('created_at',$year);
+        })->sum('commission');
 
         $totalTransaction = $this->tran->scopeQuery(function ($e) use ($authId,$thang,$year){
-            return $e->where('company_id',$authId)
+            return $e->where('company_id',$authId)->where('order_status','active')
                 ->whereMonth('created_at',$thang)
                 ->whereYear('created_at',$year);
         })->count();
 
         return view('frontend::customer.revenue',compact(
-            'thang','year','totalRevenue','commissionRate','totalTransaction','monthList'
+            'thang','year','totalRevenue','commissionRate','totalTransaction','monthList','totalCommission'
         ));
     }
 
