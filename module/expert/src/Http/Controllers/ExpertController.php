@@ -127,7 +127,7 @@ class ExpertController extends BaseController
         $users = Users::orderBy('id','desc')->where('status','active')->get();
         $userLog = Auth::user();
         $currentCompany = $this->model->orderBy('name','asc')
-        ->where('status','disable')->where('user_id',0)->get();
+        ->where('status','disable')->where('c_type','distributor')->where('user_id',0)->get();
 
         $userCoNppIt = Users::whereHas('roles', function ($query) {
             $query->where('role_id', 9);

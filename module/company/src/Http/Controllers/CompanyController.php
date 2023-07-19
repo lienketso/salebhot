@@ -375,8 +375,40 @@ class CompanyController extends BaseController
         return view('wadmin-company::accept',compact('data','cities'));
     }
 
-    public function changeCode(){
-        return view('wadmin-compnay::change');
+    public function updateCode(){
+        $activeCompany = $this->model->orderBy('name','asc')
+            ->where('status','active')
+            ->where('c_type','distributor')
+            ->where('user_id','>',0)->get();
+
+        $currentCompany = Company::orderBy('name','asc')
+            ->where('status','disable')
+            ->where('user_id',0)
+            ->where('c_type','distributor')->get();
+
+        return view('wadmin-company::change',compact('currentCompany','activeCompany'));
+    }
+
+    public function postUpdateCode(Request $request){
+        $validated = $request->validate([
+            'old_company_code' => 'required',
+            'company_code' => 'required',
+        ]);
+        $old = $request->old_company_code;
+        $new = $request->company_code;
+        try {
+            $oldCompany = Company::where('company_code',$old)->first();
+            $oldCompany->company_code = $new;
+            $oldCompany->save();
+            //update company_code for new
+            $newCompany = Company::where('company_code',$new)->first();
+            $newCompany->company_code = $this->generateUniqueCode();
+            $newCompany->save();
+            return redirect()->route('wadmin::company.index.get',['id'=>$oldCompany->id])->with('create','Cập nhật mã nhà phân phối thành công');
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+
     }
 
 }

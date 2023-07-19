@@ -28,6 +28,12 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         $router->post('fix-npp/{id}','CompanyController@postfix')->name('wadmin::company.fix.post');
         $router->get('accept','CompanyController@accept')->name('wadmin::company.accept.get');
         $router->get('create-wallet','CompanyController@createWallet')->name('wadmin::company.wallet.get');
+        //route câập nhật sale admin cho đại lý
         $router->get('update-director','CompanyController@updateDirector')->name('wadmin::company.update-director.get');
+        $router->get('update-company-code','CompanyController@updateCode')
+            ->name('wadmin::company.update-code.get')->middleware('permission:company_update_code');
+        $router->post('update-company-code','CompanyController@postUpdateCode')
+            ->name('wadmin::company.update-code.post')->middleware('permission:company_update_code');
+        //route sửa mã nhà phân phối
     });
 });
