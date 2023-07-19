@@ -98,7 +98,14 @@
                 <div class="row">
                     <form method="get">
                         <div class="col-sm-2 txt-field">
-                            <input type="text" name="company_code" value="{{old('company_code',request('company_code'))}}" placeholder="Mã NPP" class="form-control">
+                            <input type="text" name="company_code" value="{{old('company_code',request('company_code'))}}"
+                                   placeholder="Mã NPP / Tên / Số điện thoại"
+                                   class="form-control">
+                        </div>
+                        <div class="col-sm-2 txt-field">
+                            <input type="date" name="updated_at" value="{{old('updated_at',request('updated_at'))}}"
+                                   placeholder="Ngày duyệt"
+                                   class="form-control">
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
@@ -180,7 +187,7 @@
                                     <a href="{{route('wadmin::accountant-transferred.get',$d->id)}}"
                                        class="btn btn-info refund-withdraw tooltips"
                                        data-toggle="tooltip"
-                                       data-original-title="Click xác nhận đã chuyển tiền cho đại lý và trừ tiền trong ví đại lý"
+                                       data-original-title="Click xác nhận đã chuyển tiền cho đại lý"
                                     ><i class="fa fa-check-circle"></i> Xác nhận </a>
                             </td>
 

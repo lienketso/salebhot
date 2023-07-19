@@ -53,6 +53,16 @@ class WalletController extends BaseController
         if(!is_null($request->id)){
             $q->where('id',$request->id);
         }
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($e) use ($code){
+                return $e->where('company_code',$code)->orWhere('name',$code)->orWhere('phone',$code);
+            });
+        }
+        if(!is_null($request->updated_at)){
+            $updated_at = $request->updated_at;
+            $q->whereDate('updated_at',$updated_at);
+        }
         $data = $q->orderBy('created_at','desc')
             ->where('status','pending')
             ->where('transaction_type','minus')->paginate(30);
@@ -166,6 +176,80 @@ class WalletController extends BaseController
         return view('wadmin-wallets::withdraw.refund-list',compact('data'));
     }
 
+    //Admin xác nhận kế toán đã chuyển khoản lần 2
+    public function successBank(Request $request){
+        $q = WalletTransaction::query();
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($e) use ($code){
+                return $e->where('company_code',$code)->orWhere('name',$code)->orWhere('phone',$code);
+            });
+        }
+        if(!is_null($request->updated_at)){
+            $updated_at = $request->updated_at;
+            $q->whereDate('updated_at',$updated_at);
+        }
+        $data = $q->where('status','transferred')
+            ->orderBy('updated_at','desc')
+            ->paginate(50);
+        return view('wadmin-wallets::withdraw.success',compact('data'));
+    }
+    public function postSuccessBank($id){
+        try {
+            $data = WalletTransaction::find($id);
+            $data->status = 'completed';
+            $data->save();
+            //Trừ tiền trong ví
+            $walletInfor = $this->model->find($data->wallet_id);
+            $oldBalance = $walletInfor->balance;
+            $walletInfor->balance = $oldBalance - $data->amount;
+            $walletInfor->send_admin = 'unsent';
+            $walletInfor->save();
+            return redirect()->back()->with('create','Xác nhận thành công chuyển tiền thành công cho đại lý');
+        }catch (\Exception $e){
+            return redirect()->back()->with('delete',$e->getMessage());
+        }
+
+    }
+    //Xác nhận nhanh
+    public function successAll(Request $request){
+        $ids = $request->ids;
+        $status = $request->status;
+        try {
+            $data = WalletTransaction::whereIn('id',explode(",",$ids))->get();
+            foreach($data as $d){
+                $d->status = 'completed';
+                $d->save();
+                //Trừ tiền trong ví
+                $walletInfor = $this->model->find($d->wallet_id);
+                $oldBalance = $walletInfor->balance;
+                $walletInfor->balance = $oldBalance - $d->amount;
+                $walletInfor->send_admin = 'unsent';
+                $walletInfor->save();
+            }
+            return response()->json($data);
+        }catch (\Exception $e){
+            return response()->json($e->getMessage());
+        }
+    }
+    //Danh sách chuyển tiền thành công
+    public function listCompleted(Request $request){
+        $q = WalletTransaction::query();
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($e) use ($code){
+               return $e->where('company_code',$code)->orWhere('name',$code)->orWhere('phone',$code);
+            });
+        }
+        if(!is_null($request->updated_at)){
+            $updated_at = $request->updated_at;
+            $q->whereDate('updated_at',$updated_at);
+        }
+        $data = $q->where('status','completed')
+            ->orderBy('updated_at','desc')
+            ->paginate(50);
+        return view('wadmin-wallets::withdraw.completed',compact('data'));
+    }
 
 
 }

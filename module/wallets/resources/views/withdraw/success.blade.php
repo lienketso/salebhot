@@ -7,7 +7,7 @@
             let _this = $(e.currentTarget);
             let url = _this.attr('data-url');
             $.confirm({
-                title: 'Xác nhận yêu cầu rút tiền',
+                title: 'Xác nhận kế toán đã chuyển tuyền thành công',
                 content: 'Bạn có chắc chắn muốn xác nhận yêu cầu',
                 autoClose: 'cancelAction|10000',
                 escapeKey: 'cancelAction',
@@ -60,7 +60,7 @@
                         var stuId = studentIdArr.join(",");
                         var ids = stuId;
                         $.ajax({
-                            url: "{{route('wadmin::withdraw-admin-confirm-all.post')}}",
+                            url: "{{route('wadmin::admin-completed-all.post')}}",
                             type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -85,12 +85,12 @@
 @section('content')
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="">Yêu cầu chuyển tiền cho nhà phân phối</a></li>
+        <li><a href="">Xác nhận chuyển tiền từ kế toán </a></li>
     </ol>
     <div class="panel">
         <div class="panel-heading">
-            <h4 class="panel-title">Yêu cầu chuyển tiền cho nhà phân phối </h4>
-            <p>Danh sách yêu cầu chuyển tiền cho nhà phân phối từ kế toán</p>
+            <h4 class="panel-title">Xác nhận chuyển tiền từ kế toán  </h4>
+            <p>Danh sách xác nhận kế toán đã chuyển tiền thành công đến nhà phân phối hay chưa ?</p>
         </div>
 
         <div class="search_page">
@@ -109,7 +109,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::wallet.withdraw.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::admin-confirm-success.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
@@ -130,17 +130,18 @@
                 @if (session('delete'))
                     <div class="alert alert-danger">{{session('delete')}}</div>
                 @endif
-                    @php
-                        $Login = \Illuminate\Support\Facades\Auth::user();
-                        $userroles = $Login->roles->first();
-                    @endphp
-                    <div class="action-block">
+                @php
+                    $Login = \Illuminate\Support\Facades\Auth::user();
+                    $userroles = $Login->roles->first();
+                @endphp
+                <div class="action-block">
 
-                        <div class="btn-group mr5">
-                            <button type="button" class="btn btn-primary accept-action" data-status="confirm"><i class="fa fa-mail-forward"></i> Xác nhận nhanh</button>
-                        </div><!-- btn-group -->
+                    <div class="btn-group mr5">
+                        <button type="button" class="btn btn-primary accept-action" data-status="completed">
+                            <i class="fa fa-mail-forward"></i> Xác nhận nhanh</button>
+                    </div><!-- btn-group -->
 
-                    </div>
+                </div>
                 <table class="table nomargin">
                     <thead>
                     <tr>
@@ -153,7 +154,7 @@
                         <th>STT</th>
                         <th>Nhà phân phối</th>
                         <th>Số dư cuối</th>
-                        <th>Số tiền muốn rút</th>
+                        <th>Số tiền chuyển</th>
                         <th>Ngày yêu cầu</th>
                         <th>Người yêu cầu</th>
                         <th>Xác nhận </th>
@@ -168,21 +169,21 @@
                                 </label>
                             </td>
                             <td>{{$key+1}}</td>
-                            <td>{{$d->company->name}}</td>
+                            <td>{{$d->company->name}} / {{$d->company->phone}}</td>
                             <td> <span class="bag-amount"> {{number_format($d->wallet->balance)}} đ</span></td>
                             <td>
                                 <span class="bag-danger"> - {{number_format($d->amount)}} đ</span>
                             </td>
-                            <td>{{format_date($d->created_at)}} lúc {{format_hour($d->created_At)}}</td>
+                            <td>{{format_date($d->updated_at)}} lúc {{format_hour($d->updated_at)}}</td>
                             <td>{{$d->users->full_name}} / {{$d->users->phone}}</td>
                             <td>
-                            @if($userroles->id==1)
-                                <a href="javascript:void(0);"
-                                   class="btn btn-success accept-withdraw tooltips"
-                                   data-toggle="tooltip"
-                                   data-original-title="Click để duyệt yêu cầu đi tiền cho nhà phân phối"
-                                   data-url="{{route('wadmin::wallet.admin-confirm.get',$d->id)}}"
-                                ><i class="fa fa-bank"></i> Duyệt yêu cầu</a>
+                                @if($userroles->id==1)
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-success accept-withdraw tooltips"
+                                       data-toggle="tooltip"
+                                       data-original-title="Click để xác nhận kế toán đã chuyển tiền thành công, trừ tiền trong ví nhà phân phối"
+                                       data-url="{{route('wadmin::admin-confirm-completed.get',$d->id)}}"
+                                    ><i class="fa fa-bank"></i> Xác nhận</a>
                                 @endif
                             </td>
 

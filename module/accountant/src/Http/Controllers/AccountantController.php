@@ -103,8 +103,18 @@ class AccountantController extends BaseController
         return view('wadmin-accountant::accountant',compact('data'));
     }
 
-    public function getConfirmBank(){
+    public function getConfirmBank(Request $request){
         $q = WalletTransaction::query();
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($e) use ($code){
+                return $e->where('company_code',$code)->orWhere('name',$code)->orWhere('phone',$code);
+            });
+        }
+        if(!is_null($request->updated_at)){
+            $updated_at = $request->updated_at;
+            $q->whereDate('updated_at',$updated_at);
+        }
         $data = $q->where('status','confirm')->orderBy('updated_at','desc')->paginate(50);
         return view('wadmin-accountant::confirm',compact('data'));
     }
@@ -114,12 +124,6 @@ class AccountantController extends BaseController
             $data = $this->wa->find($id);
             $data->status = 'transferred';
             $data->save();
-            //Trừ tiền trong ví
-            $walletInfor = $this->model->find($data->wallet_id);
-            $oldBalance = $walletInfor->balance;
-            $walletInfor->balance = $oldBalance - $data->amount;
-            $walletInfor->send_admin = 'unsent';
-            $walletInfor->save();
             return redirect()->back()->with('create','Xác nhận thành công');
         }catch (\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
@@ -135,11 +139,6 @@ class AccountantController extends BaseController
             foreach($data as $d){
                 $d->status = 'transferred';
                 $d->save();
-                $walletInfor = $this->model->find($d->wallet_id);
-                $oldBalance = $walletInfor->balance;
-                $walletInfor->balance = $oldBalance - $d->amount;
-                $walletInfor->send_admin = 'unsent';
-                $walletInfor->save();
             }
             return response()->json($data);
         }catch (\Exception $e){
@@ -148,9 +147,21 @@ class AccountantController extends BaseController
     }
 
     //danh sách đã hoàn thành chuyển tiền
-    public function getTransferred(){
+    public function getTransferred(Request $request){
         $q = WalletTransaction::query();
-        $data = $q->where('status','transferred')->orderBy('updated_at','desc')->paginate(50);
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($e) use ($code){
+                return $e->where('company_code',$code)->orWhere('name',$code)->orWhere('phone',$code);
+            });
+        }
+        if(!is_null($request->updated_at)){
+            $updated_at = $request->updated_at;
+            $q->whereDate('updated_at',$updated_at);
+        }
+        $data = $q->where('status','completed')
+            ->orderBy('updated_at','desc')
+            ->paginate(50);
         return view('wadmin-accountant::transferred',compact('data'));
     }
 

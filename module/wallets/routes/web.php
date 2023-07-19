@@ -21,6 +21,17 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         //Admin duyệt nhanh nhà  chuyển tiền nhà phân phối
         $router->post('withdraw-admin-confirm-all','WalletController@bankConfirmAll')
             ->name('wadmin::withdraw-admin-confirm-all.post')->middleware('permission:wallets_confirm');
+        //admin duyệt xác nhận kế toán chuyển tiền thành công
+        $router->get('admin-confirm-success','WalletController@successBank')
+            ->name('wadmin::admin-confirm-success.get')->middleware('permission:wallets_bank_success');
+        $router->get('admin-confirm-success-get/{id}','WalletController@postSuccessBank')
+            ->name('wadmin::admin-confirm-completed.get')->middleware('permission:wallets_bank_success');
+        $router->post('admin-completed-all','WalletController@successAll')
+            ->name('wadmin::admin-completed-all.post')->middleware('permission:wallets_bank_success');
+        //end
+        //Danh sách chuyển tiền hoàn thành
+        $router->get('list-completed-bank','WalletController@listCompleted')
+            ->name('wadmin::list-completed-bank.get')->middleware('permission:wallets_bank_success');
 
         $router->get('withdraw-post/{id}','WalletController@withdrawAccept')
             ->name('wadmin::wallet.withdraw.post')->middleware('permission:wallets_withdraw');

@@ -48,8 +48,7 @@
                 <div class="row">
                     <form method="get">
                         <div class="col-sm-2 txt-field">
-                            <input type="text" name="company_code"
-                                   value="{{old('company_code',request('company_code'))}}"
+                            <input type="text" name="company_code" value="{{old('company_code',request('company_code'))}}"
                                    placeholder="Mã NPP / Tên / Số điện thoại"
                                    class="form-control">
                         </div>
@@ -60,7 +59,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::wallet.withdraw.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::list-completed-bank.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
