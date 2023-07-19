@@ -47,10 +47,11 @@ class CompanyController extends BaseController
 
     public function updateDirector(){
         $company = Company::where('user_id','!=',0)->get();
+
         foreach($company as $com){
             $user = Users::where('id',$com->user_id)->first();
             $com->sale_admin = $user->sale_admin;
-            $com->director_id = $user->parent;
+//            $com->director_id = $user->parent;
             $com->save();
         }
     }
@@ -372,6 +373,10 @@ class CompanyController extends BaseController
             return Excel::download(new ExcelCompany($exports), 'danh-sach-dai-ly.xlsx');
         }
         return view('wadmin-company::accept',compact('data','cities'));
+    }
+
+    public function changeCode(){
+        return view('wadmin-compnay::change');
     }
 
 }
