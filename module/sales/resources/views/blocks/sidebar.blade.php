@@ -3,12 +3,14 @@
         'wadmin::sales.index.get',
         'wadmin::sales.revenue.get',
         'wadmin::sales.success.get',
-        'wadmin::transaction.accept.get'
+        'wadmin::transaction.accept.get',
+        'wadmin::sales.leader.get'
     ];
     $indexRoute = ['wadmin::sales.index.get'];
     $successRoute = ['wadmin::sales.success.get',];
     $acceptRoute = ['wadmin::transaction.accept.get'];
     $revenueRoute = ['wadmin::sales.revenue.get'];
+    $leaderRoute = ['wadmin::sales.leader.get'];
 
 @endphp
 @php
@@ -34,6 +36,8 @@
         <li class="{{in_array(Route::currentRouteName(), $successRoute) ? 'active' : '' }}">
             <a href="{{route('wadmin::sales.success.get')}}">Đơn hàng thành công</a></li>
         <li class="{{in_array(Route::currentRouteName(), $revenueRoute) ? 'active' : '' }}"><a href="{{route('wadmin::sales.revenue.get')}}">Doanh thu</a></li>
+        <li class="{{in_array(Route::currentRouteName(), $leaderRoute) ? 'active' : '' }}">
+            <a href="{{route('wadmin::sales.leader.get')}}">Đơn hàng nhóm (Leader)</a></li>
     </ul>
 </li>
 @endif

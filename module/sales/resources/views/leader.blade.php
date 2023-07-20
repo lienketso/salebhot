@@ -54,12 +54,12 @@
 @section('content')
     <ol class="breadcrumb breadcrumb-quirk">
         <li><a href="{{route('wadmin::dashboard.index.get')}}"><i class="fa fa-home mr5"></i> Dashboard</a></li>
-        <li><a href="">Danh sách đơn hàng</a></li>
+        <li><a href="">Danh sách đơn hàng trong nhóm</a></li>
     </ol>
     <div class="panel">
         <div class="panel-heading">
-            <h4 class="panel-title">Danh sách đơn hàng</h4>
-            <p>Danh sách đơn hàng bạn cần duyệt</p>
+            <h4 class="panel-title">Danh sách đơn hàng trong nhóm</h4>
+            <p>Danh sách đơn hàng trong nhóm bạn cần duyệt</p>
         </div>
 
         <div class="search_page">
@@ -90,7 +90,7 @@
                         </div>
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::transaction.accept.get')}}" class="btn btn-default">Làm lại</a>
+                            <a href="{{route('wadmin::sales.leader.get')}}" class="btn btn-default">Làm lại</a>
                         </div>
 
                     </form>
@@ -111,7 +111,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a class="accept-action" data-status="received">Đã tiếp nhận đơn hàng</a></li>
                         <li><a class="accept-action" data-status="pending">Đơn hàng đang xử lý</a></li>
-{{--                        <li><a class="accept-action" data-status="active">Đơn hàng hoàn thành</a></li>--}}
+                        {{--                        <li><a class="accept-action" data-status="active">Đơn hàng hoàn thành</a></li>--}}
                         <li class="divider"></li>
                         <li><a class="accept-action" data-status="cancel">Đơn hàng đã hủy</a></li>
                     </ul>

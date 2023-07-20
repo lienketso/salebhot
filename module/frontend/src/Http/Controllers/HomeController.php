@@ -115,6 +115,7 @@ class HomeController extends BaseController
                 $input['company_code'] = $request->npp;
                 $input['sale_admin'] = $nhapp->sale_admin;
                 $input['director'] = $userNPP->parent;
+                $input['sale_leader'] = $userNPP->sale_leader;
 
             $input['order_status'] = 'new';
             //create transaction

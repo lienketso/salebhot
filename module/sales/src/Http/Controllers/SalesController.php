@@ -150,4 +150,37 @@ class SalesController extends BaseController
         return view('wadmin-sales::revenue',compact('totalTransaction','totalRevenue','thang','monthList'));
     }
 
+    public function saleLeader(Request $request){
+        $saleLogin = Auth::id();
+        $q = Transaction::query();
+        if(!is_null($request->name)){
+            $name = $request->name;
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($query) use ($code){
+                return $query->where('company_code',$code)->orWhere('phone',$code)->orWhere('name','LIKE','%'.$code.'%');
+            });
+        }
+        if(!is_null($request->user)){
+            $user = $request->user;
+            $q->whereHas('userTran',function ($query) use ($user){
+                return $query->where('full_name','LIKE','%'.$user.'%')->orWhere('phone',$user);
+            });
+        }
+        if(!is_null($request->status)){
+            $status = $request->status;
+            $q->where('order_status',$status);
+        }
+
+        $data = $q->where('sale_leader',$saleLogin)
+            ->where('order_status','!=','active')
+            ->where('order_status','!=','cancel')
+            ->where('order_status','!=','refunded')
+            ->orderBy('created_at','desc')
+            ->paginate(50);
+        return view('wadmin-sales::leader',compact('data'));
+    }
+
 }

@@ -48,7 +48,24 @@ class UsersController extends BaseController
             $data = $this->users->orderBy('created_at','desc')->paginate(10);
         }
         $cities = City::orderBy('name','asc')->get();
-        return view('wadmin-users::index',['data'=>$data,'cities'=>$cities]);
+        $userSale = $this->users->where('is_leader',1)->whereHas('roles',function($query){
+            return $query->where('role_id',9);
+        })->get();
+
+        return view('wadmin-users::index',['data'=>$data,'cities'=>$cities,'userSale'=>$userSale]);
+    }
+    //change sale leader
+    public function changeLeader(Request $request){
+        try {
+            $saleid = $request->sale;
+            $saleleader = $request->saleleader;
+            $data = $this->users->find($saleid);
+            $data->sale_leader = $saleleader;
+            $data->save();
+            return response()->json($data);
+        }catch (\Exception $e){
+            return response()->json($e->getMessage());
+        }
     }
     public function getCreate(RoleRepository $roleRepository){
         //lấy ra role

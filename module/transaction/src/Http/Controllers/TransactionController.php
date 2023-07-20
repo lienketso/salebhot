@@ -162,6 +162,7 @@ class TransactionController extends BaseController
             $input['user_id'] = $companyInfo->user_id;
             $input['sale_admin'] = $companyInfo->sale_admin;
             $input['director'] = $userInfo->parent;
+            $input['sale_leader'] = $userInfo->sale_leader;
 
             if(!is_null($request->discount_show) && $request->discount_show==1){
                 $discountPercent = intval($request->discount);
@@ -411,9 +412,29 @@ class TransactionController extends BaseController
         return redirect()->back();
     }
 
-    public function accept(){
+    public function accept(Request $request){
         $saleLogin = \Illuminate\Support\Facades\Auth::user();
         $q = Transaction::query();
+        if(!is_null($request->name)){
+            $name = $request->name;
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($query) use ($code){
+                return $query->where('company_code',$code)->orWhere('phone',$code)->orWhere('name','LIKE','%'.$code.'%');
+            });
+        }
+        if(!is_null($request->user)){
+            $user = $request->user;
+            $q->whereHas('userTran',function ($query) use ($user){
+                return $query->where('full_name','LIKE','%'.$user.'%')->orWhere('phone',$user);
+            });
+        }
+        if(!is_null($request->status)){
+            $status = $request->status;
+            $q->where('order_status',$status);
+        }
         $data = $q->where('sale_admin',$saleLogin->id)
             ->where('order_status','!=','active')
             ->where('order_status','!=','cancel')

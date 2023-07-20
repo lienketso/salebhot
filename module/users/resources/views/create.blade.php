@@ -183,6 +183,17 @@
                                 </div>
                             </div>
                             <div class="form-group" id="Telegram">
+                                <div class="form-group">
+                                    <label>Là trưởng nhóm ?</label>
+                                    <label class="rdiobox rdiobox-danger">
+                                        <input type="radio" name="is_leader" value="0" {{(old('is_leader')==0) ? 'checked' : ''}}>
+                                        <span>Sale</span>
+                                    </label>
+                                    <label class="rdiobox rdiobox-danger">
+                                        <input type="radio" name="is_leader" value="1" {{(old('is_leader')==1) ? 'checked' : ''}}>
+                                        <span>Trưởng nhóm</span>
+                                    </label>
+                                </div>
                                 <label>ID nhóm Telegram</label>
                                 <input class="form-control"
                                        name="telegram"

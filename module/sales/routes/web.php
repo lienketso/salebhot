@@ -17,5 +17,8 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         //revenue
         $router->get('revenue','SalesController@revenue')
             ->name('wadmin::sales.revenue.get')->middleware('permission:sales_revenue');
+        //sale leader
+        $router->get('list-transaction-leader','SalesController@saleLeader')
+            ->name('wadmin::sales.leader.get')->middleware('permission:sales_index');
     });
 });
