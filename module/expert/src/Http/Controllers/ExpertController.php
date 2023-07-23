@@ -138,6 +138,12 @@ class ExpertController extends BaseController
             'currentCompany'=>$currentCompany,'userLog'=>$userLog,'userCoNppIt'=>$userCoNppIt
         ]);
     }
+    public function onchangeCompany(Request $request){
+        $code = $request->code;
+        $currentCompany = $this->model->orderBy('name','asc')->where('company_code','LIKE','%'.$code.'%')
+            ->where('status','disable')->where('c_type','distributor')->where('user_id',0)->get();
+        return $currentCompany;
+    }
     public function postCreate(ExpertCreateRequest $request){
         try{
             $input = $request->except(['_token','continue_post']);

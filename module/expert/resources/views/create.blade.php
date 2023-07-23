@@ -17,6 +17,14 @@
             filebrowserUploadUrl: '{{route('ckeditor.upload',['_token' => csrf_token() ])}}', //route dashboard/upload
             filebrowserUploadMethod: 'form'
         });
+        $(document).ready(function() {
+            $('input[name="company_code"]').on('keyup',function (e){
+                e.preventDefault();
+                let _this = $(e.currentTarget);
+                let value = _this.val();
+                alert(value);
+            });
+        });
     </script>
     <script type="text/javascript">
         $("#select6").select2({ tags: true, maximumSelectionLength: 3 });
