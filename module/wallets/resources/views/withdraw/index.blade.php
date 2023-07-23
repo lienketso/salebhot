@@ -174,7 +174,7 @@
                                 <span class="bag-danger"> - {{number_format($d->amount)}} đ</span>
                             </td>
                             <td>{{format_date($d->created_at)}} lúc {{format_hour($d->created_At)}}</td>
-                            <td>{{$d->users->full_name}} / {{$d->users->phone}}</td>
+                            <td>{{ ($d->users()->exists()) ? $d->users->full_name : 'Chưa xác định' }}</td>
                             <td>
                             @if($userroles->id==1)
                                 <a href="javascript:void(0);"
