@@ -148,16 +148,27 @@ class TransactionController extends BaseController
 
             $products = json_encode($request->products);
             $input['products'] = $products;
-            $sale_admin = '@salebaohiemoto01';
+
             $amount = str_replace(',','',$request->price);
             $amount = intval($amount);
 
             $commission = $amount * ($distributor_rate/100);
 
             $companyInfo = Company::find($request->company_id);
+
             $userInfo = Users::find($companyInfo->user_id);
             $saleInfo = Users::find($userInfo->sale_admin);
-            $sale_admin = $saleInfo->telegram;
+
+            $sale_admin = '@salebaohiemoto01';
+            if($userInfo->sale_leader==0){
+                $leaderInfor = Users::find($userInfo->sale_leader);
+                if(!is_null($leaderInfor)){
+                    $sale_admin = $leaderInfor->telegram;
+                }
+            }else{
+                $sale_admin = $saleInfo->telegram;
+            }
+
             $input['company_code'] = $companyInfo->company_code;
             $input['user_id'] = $companyInfo->user_id;
             $input['sale_admin'] = $companyInfo->sale_admin;

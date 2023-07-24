@@ -6,7 +6,7 @@
 
 @section('js')
     <script type="text/javascript" src="{{asset('admin/libs/ckeditor/ckeditor.js')}}"></script>
-    <script type="text/javascript" src="{{asset('admin/libs/ckfinder/ckfinder_v1.js')}}"></script>
+    <script type="text/javascript" src="{{asset('admin/libs/ckfinder/ckfinder.js')}}"></script>
     <script src="{{asset('admin/themes/lib/select2/select2.js')}}"></script>
 @endsection
 @section('js-init')
@@ -17,14 +17,36 @@
             filebrowserUploadUrl: '{{route('ckeditor.upload',['_token' => csrf_token() ])}}', //route dashboard/upload
             filebrowserUploadMethod: 'form'
         });
-        $(document).ready(function() {
-            $('input[name="company_code"]').on('keyup',function (e){
-                e.preventDefault();
-                let _this = $(e.currentTarget);
-                let value = _this.val();
-                alert(value);
-            });
-        });
+
+            // $(document).on('keyup', '.select2-search__field', function (e) {
+            //     e.preventDefault();
+            //     let _this = $(e.currentTarget);
+            //     let code = _this.val();
+            //     let url = _this.attr('data-url');
+            //     if(code.length>0){
+            //         $.ajax({
+            //             type: "GET",
+            //             url: url,
+            //             dataType: "json",
+            //             data: {code},
+            //             success: function (response) {
+            //
+            //                 var options = '';
+            //                 // Iterate through the response data and create option elements
+            //                 $.each(response, function(index, result) {
+            //                     options += '<option value="' + result.company_code + '">' + result.company_code + '</option>';
+            //                 });
+            //                 console.log(options);
+            //             },
+            //             error: function (data, status) {
+            //                 console.log(data);
+            //             }
+            //         });
+            //     }else{
+            //         return false;
+            //     }
+            // });
+
     </script>
     <script type="text/javascript">
         $("#select6").select2({ tags: true, maximumSelectionLength: 3 });
@@ -64,7 +86,8 @@
                     <div class="panel-body">
                          <div class="form-group">
                             <label>Mã NPP (*)</label>
-                            <select id="" class="form-control js-example-basic-single" name="company_code" style="width: 100%"
+                            <select id="" class="form-control js-example-basic-single"
+                                    name="company_code" style="width: 100%"
                                     data-placeholder="Chọn mã NPP" aria-hidden="true">
                                 <option value="">Tìm mã nhà phân phối</option>
                                 @foreach($currentCompany as $c)

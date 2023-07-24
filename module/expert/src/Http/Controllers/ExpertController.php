@@ -139,10 +139,16 @@ class ExpertController extends BaseController
         ]);
     }
     public function onchangeCompany(Request $request){
-        $code = $request->code;
-        $currentCompany = $this->model->orderBy('name','asc')->where('company_code','LIKE','%'.$code.'%')
-            ->where('status','disable')->where('c_type','distributor')->where('user_id',0)->get();
-        return $currentCompany;
+        try{
+            $code = $request->code;
+            $currentCompany = $this->model->orderBy('name','asc')->where('company_code','LIKE','%'.$code.'%')
+                ->where('status','disable')->where('c_type','distributor')->where('user_id',0)->get();
+
+            return response()->json($currentCompany);
+        }catch (\Exception $e){
+            return response()->json($e->getMessage());
+        }
+
     }
     public function postCreate(ExpertCreateRequest $request){
         try{

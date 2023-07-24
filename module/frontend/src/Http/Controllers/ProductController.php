@@ -75,10 +75,21 @@ class ProductController extends BaseController
         $input = $request->except(['_token']);
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
         $telegrame_bot_api = $this->setting->getSettingMeta('bot_api_telegram');
+        $chanelTelegram = '@salebaohiemoto01';
         $company_id = Auth::guard('customer')->id();
         $compnayInfo = $this->com->find($company_id);
         $userNPP = Users::where('id', $compnayInfo->user_id)->first();
         $sale = Users::where('id', $compnayInfo->sale_admin)->first();
+        if($userNPP->sale_leader==0){
+            $leaderInfor = Users::find($userNPP->sale_leader);
+            if(!is_null($leaderInfor)){
+                $chanelTelegram = $leaderInfor->telegram;
+            }
+        }else{
+            if (!is_null($sale)) {
+                $chanelTelegram = $sale->telegram;
+            }
+        }
         $request->validate([
             'name' => 'required',
             'phone' => 'required|numeric',
@@ -154,14 +165,10 @@ class ProductController extends BaseController
             $text .= "<a target='_blank' href='" . \route('wadmin::transaction.edit.get', $transaction->id) . "'>Xem đơn hàng </a>";
 
             $apiToken = $telegrame_bot_api;
-            if($sale->telegram!=''){
-                $chat_id = $sale->telegram;
-            }else{
-                $chat_id = '@salebaohiemoto01';
-            }
+
 
             $data = [
-                'chat_id' => $chat_id,
+                'chat_id' => $chanelTelegram,
                 'parse_mode' => 'HTML',
                 'text' => $text
             ];
