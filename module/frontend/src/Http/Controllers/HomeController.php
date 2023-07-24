@@ -106,7 +106,7 @@ class HomeController extends BaseController
         try {
                 $nhapp = Company::where('company_code', $request->npp)->first();
                 $userNPP = Users::where('id', $nhapp->user_id)->first();
-                $sale = Users::where('id', $userNPP->sale_admin)->first();
+                $sale = Users::where('id', $nhapp->sale_admin)->first();
 
                 if($sale->sale_leader==0){
                     $leaderInfor = Users::find($sale->sale_leader);
@@ -128,7 +128,7 @@ class HomeController extends BaseController
                 $input['company_code'] = $request->npp;
                 $input['sale_admin'] = $nhapp->sale_admin;
                 $input['director'] = $userNPP->parent;
-                $input['sale_leader'] = $userNPP->sale_leader;
+                $input['sale_leader'] = $sale->sale_leader;
 
             $input['order_status'] = 'new';
             //create transaction

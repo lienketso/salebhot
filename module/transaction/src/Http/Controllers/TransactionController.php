@@ -157,7 +157,7 @@ class TransactionController extends BaseController
             $companyInfo = Company::find($request->company_id);
 
             $userInfo = Users::find($companyInfo->user_id);
-            $saleInfo = Users::find($userInfo->sale_admin);
+            $saleInfo = Users::find($companyInfo->sale_admin);
 
 
             if($saleInfo->sale_leader==0){
@@ -175,7 +175,7 @@ class TransactionController extends BaseController
             $input['user_id'] = $companyInfo->user_id;
             $input['sale_admin'] = $companyInfo->sale_admin;
             $input['director'] = $userInfo->parent;
-            $input['sale_leader'] = $userInfo->sale_leader;
+            $input['sale_leader'] = $saleInfo->sale_leader;
 
             if(!is_null($request->discount_show) && $request->discount_show==1){
                 $discountPercent = intval($request->discount);
