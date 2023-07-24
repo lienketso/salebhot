@@ -160,8 +160,8 @@ class TransactionController extends BaseController
             $saleInfo = Users::find($userInfo->sale_admin);
 
 
-            if($userInfo->sale_leader==0){
-                $leaderInfor = Users::find($userInfo->sale_leader);
+            if($saleInfo->sale_leader==0){
+                $leaderInfor = Users::find($saleInfo->sale_leader);
                 if(!is_null($leaderInfor)){
                     $sale_admin = $leaderInfor->telegram;
                 }else{

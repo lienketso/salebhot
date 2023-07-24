@@ -108,8 +108,8 @@ class HomeController extends BaseController
                 $userNPP = Users::where('id', $nhapp->user_id)->first();
                 $sale = Users::where('id', $userNPP->sale_admin)->first();
 
-                if($userNPP->sale_leader==0){
-                    $leaderInfor = Users::find($userNPP->sale_leader);
+                if($sale->sale_leader==0){
+                    $leaderInfor = Users::find($sale->sale_leader);
                     if(!is_null($leaderInfor)){
                         $chanelTelegram = $leaderInfor->telegram;
                     }else{
