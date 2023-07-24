@@ -102,7 +102,7 @@ class HomeController extends BaseController
             'products'=>json_encode($request->products),
             'distributor_rate'=>$distributor_rate
         ];
-        $chanelTelegram = '@salebaohiemoto01';
+
         try {
                 $nhapp = Company::where('company_code', $request->npp)->first();
                 $userNPP = Users::where('id', $nhapp->user_id)->first();
@@ -112,10 +112,14 @@ class HomeController extends BaseController
                     $leaderInfor = Users::find($userNPP->sale_leader);
                     if(!is_null($leaderInfor)){
                         $chanelTelegram = $leaderInfor->telegram;
+                    }else{
+                        $chanelTelegram = '@salebaohiemoto01';
                     }
                 }else{
                     if (!is_null($sale)) {
                         $chanelTelegram = $sale->telegram;
+                    }else{
+                        $chanelTelegram = '@salebaohiemoto01';
                     }
                 }
 

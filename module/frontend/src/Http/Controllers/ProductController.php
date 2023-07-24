@@ -75,7 +75,7 @@ class ProductController extends BaseController
         $input = $request->except(['_token']);
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
         $telegrame_bot_api = $this->setting->getSettingMeta('bot_api_telegram');
-        $chanelTelegram = '@salebaohiemoto01';
+
         $company_id = Auth::guard('customer')->id();
         $compnayInfo = $this->com->find($company_id);
         $userNPP = Users::where('id', $compnayInfo->user_id)->first();
@@ -84,10 +84,14 @@ class ProductController extends BaseController
             $leaderInfor = Users::find($userNPP->sale_leader);
             if(!is_null($leaderInfor)){
                 $chanelTelegram = $leaderInfor->telegram;
+            }else{
+                $chanelTelegram = '@salebaohiemoto01';
             }
         }else{
             if (!is_null($sale)) {
                 $chanelTelegram = $sale->telegram;
+            }else{
+                $chanelTelegram = '@salebaohiemoto01';
             }
         }
         $request->validate([
