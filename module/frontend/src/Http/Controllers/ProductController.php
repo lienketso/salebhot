@@ -108,7 +108,7 @@ class ProductController extends BaseController
         $input['user_id'] = $compnayInfo->user_id;
         $input['sale_admin'] = $compnayInfo->sale_admin;
         $input['director'] = $userNPP->parent;
-        $input['sale_leader'] = $compnayInfo->sale_leader;
+        $input['sale_leader'] = $sale->sale_leader;
         $input['distributor_rate'] = $distributor_rate;
         $input['order_status'] = 'new';
         $product = json_encode($request->products);
