@@ -80,7 +80,7 @@ class ProductController extends BaseController
         $compnayInfo = $this->com->find($company_id);
         $userNPP = Users::where('id', $compnayInfo->user_id)->first();
         $sale = Users::where('id', $compnayInfo->sale_admin)->first();
-        if($sale->sale_leader==0){
+        if($sale->is_leader==0){
             $leaderInfor = Users::find($sale->sale_leader);
             if(!is_null($leaderInfor)){
                 $chanelTelegram = $leaderInfor->telegram;
