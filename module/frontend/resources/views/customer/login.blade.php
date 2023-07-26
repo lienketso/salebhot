@@ -107,7 +107,7 @@
                         <a href="#" class="btn-link">Quên mật khẩu ?</a>
                     </div>
                     <div class="text-center">
-                        <a href="#" class="saprate text-soft px-1">Chưa có tài khoản ? <b class="text-primary">Đăng ký</b></a>
+{{--                        <a href="#" class="saprate text-soft px-1">Chưa có tài khoản ? <b class="text-primary">Đăng ký</b></a>--}}
                     </div>
                     </form>
                 </div>
