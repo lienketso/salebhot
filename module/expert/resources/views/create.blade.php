@@ -75,7 +75,7 @@
         <form method="post" enctype="multipart/form-data">
             {{csrf_field()}}
             <input type="hidden" name="director_id" value="{{($userLog->parents()->exists()) ? $userLog->parents->id : 0}}">
-            <input type="hidden" name="sale_admin" value="{{ $userLog->sale_admin}}">
+            <input type="hidden" name="sale_admin" value="{{ $userCoNppIt->id}}">
             <div class="col-sm-8">
                 <div class="panel">
                     <div class="panel-heading">
