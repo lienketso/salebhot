@@ -102,7 +102,9 @@ class CustomerController extends BaseController
         }
 
         $orderPending = $this->tran->scopeQuery(function ($e) use ($authId){
-            return $e->where('order_status','pending')->where('company_id',$authId);
+            return $e->where('order_status','!=','active')
+                ->where('order_status','!=','cancel')
+                ->where('company_id',$authId);
         })->paginate(20);
 
         $orderCancel = $this->tran->scopeQuery(function ($e) use ($authId){
