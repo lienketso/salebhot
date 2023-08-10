@@ -123,8 +123,8 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$d->full_name}} - {{$d->phone}}</td>
-                                <td><span class="bag-count">{{$d->getCompanyActive->count()}}</span></td>
-                                <td><span class="bag-amount">{{$d->getCompanyPending->count()}}</span></td>
+                                <td><span class="bag-count">{{$d->activeTotal}}</span></td>
+                                <td><span class="bag-amount">{{$d->pendingTotal}}</span></td>
                                 <td><span class="bag-commission">{{$d->countCompany}} </span></td>
                             </tr>
                         @endforeach

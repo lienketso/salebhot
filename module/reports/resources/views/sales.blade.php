@@ -47,7 +47,7 @@
 
                         <div class="col-sm-2 txt-field">
                             <button type="submit" class="btn btn-info">Tìm kiếm</button>
-                            <a href="{{route('wadmin::reports.total.distributor')}}" class="btn btn-default"><i class="fa fa-refresh"></i> Làm lại</a>
+                            <a href="{{route('wadmin::reports.total.sale-distributor')}}" class="btn btn-default"><i class="fa fa-refresh"></i> Làm lại</a>
                         </div>
 
                     </form>

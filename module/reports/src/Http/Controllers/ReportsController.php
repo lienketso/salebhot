@@ -37,7 +37,7 @@ class ReportsController extends BaseController
         $commissionRate = ($commission->commission_rate / 100);
 
         $chuyenvien = Users::select('users.*')
-            ->leftJoin('transaction', function ($join) use($thang,$year){
+            ->leftJoin('transaction', function ($join) use($thang,$year,$u){
                 $join->on('users.id','=','transaction.user_id')
                     ->where('transaction.order_status','active')
                     ->whereMonth('transaction.updated_at',$thang)
@@ -89,11 +89,9 @@ class ReportsController extends BaseController
             ]);
         }
         $commissionRate = intval($settingRepositories->getSettingMeta('commission_rate'));
-        if(!is_null($user_id)){
-            $q->where('company.user_id',$user_id);
-        }
+
         $data = $q->select('company.*')
-            ->leftJoin('transaction', function ($join) use($thang,$year){
+            ->leftJoin('transaction', function ($join) use($thang,$year,$user_id){
                 $join->on('company.id','=','transaction.company_id')
                     ->where('transaction.order_status','active')
                     ->whereMonth('transaction.updated_at',$thang)
@@ -104,6 +102,11 @@ class ReportsController extends BaseController
             ->selectRaw('SUM(transaction.commission) as total_commission')
             ->groupBy('company.id')
             ->orderBy('total_amount', 'DESC')
+            ->when($user_id,function ($query,$user_id){
+                if(!is_null($user_id)){
+                    return $query->where('company.user_id',$user_id);
+                }
+            })
             ->where('company.status','active')
             ->where('company.c_type','distributor')
             ->paginate(30);
@@ -149,14 +152,16 @@ class ReportsController extends BaseController
                 'label' => $date->format('F'),
             ]);
         }
-        if(!is_null($request->mon)){
-            $q->whereMonth('transaction.updated_at',$thang);
-            $q->whereYear('transaction.updated_at',$year);
-        }
+//        if(!is_null($request->mon)){
+//            $q->whereMonth('transaction.updated_at',$thang);
+//            $q->whereYear('transaction.updated_at',$year);
+//        }
         $data = $q->select('users.*')
             ->leftJoin('transaction', function ($join) use($thang,$year){
                 $join->on('users.id','=','transaction.director')
-                    ->where('transaction.order_status','active');
+                    ->where('transaction.order_status','active')
+                    ->whereMonth('transaction.updated_at',$thang)
+                    ->whereYear('transaction.updated_at',$year);
             })
             ->selectRaw('SUM(transaction.sub_total) as total_amount')
             ->selectRaw('COUNT(transaction.id) as totalOrder')
@@ -216,14 +221,24 @@ class ReportsController extends BaseController
 //        })->get();
 
         $users = Users::select('users.*')
-            ->leftJoin('company', function ($join) use($thang,$year){
+            ->leftJoin('company', function ($join) use($thang,$year,$mon){
                 $join->on('users.id','=','company.user_id')
-                    ->whereMonth('company.updated_at',$thang)
-                    ->whereYear('company.updated_at',$year)
+                    ->when($thang,function ($e,$thang) use($year,$mon){
+                        if(!is_null($mon)){
+                            return $e->whereMonth('company.updated_at',$thang)->whereYear('company.updated_at',$year);
+                        }
+                    })
                     ->where('company.status','!=','disable');
             })
+            ->selectRaw('SUM(CASE company.status WHEN "active" THEN 1 ELSE 0 END) AS activeTotal')
+            ->selectRaw('SUM(CASE company.status WHEN "pending" THEN 1 ELSE 0 END) AS pendingTotal')
             ->selectRaw('COUNT(company.id) AS countCompany')
             ->groupBy('users.id')
+            ->when($u,function ($que,$u){
+                if(!is_null($u)){
+                    return $que->where('users.id',$u);
+                }
+            })
             ->orderBy('countCompany', 'DESC')
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 6);
@@ -243,6 +258,7 @@ class ReportsController extends BaseController
 
     public function totalSaleDistributor(Request $request){
         $mon = $request->mon;
+        $u = $request->u;
         $thang = date('m');
         $year = date('Y');
         if(!is_null($mon)){
@@ -257,12 +273,22 @@ class ReportsController extends BaseController
             ]);
         }
         $users = Users::select('users.*')
-            ->leftJoin('company', function ($join) use($thang,$year){
+            ->leftJoin('company', function ($join) use($thang,$year,$u){
                 $join->on('users.id','=','company.sale_admin')
+                    ->when($thang,function ($m,$thang) use($year){
+                        if(!is_null($thang)){
+                            return $m->whereMonth('company.updated_at',$thang)->whereYear('company.updated_at',$year);
+                        }
+                    })
                     ->where('company.status','!=','disable');
             })
             ->selectRaw('COUNT(company.id) AS countCompany')
             ->groupBy('users.id')
+            ->when($u, function ($query,$u){
+                if(!is_null($u)){
+                    return $query->where('users.id',$u);
+                }
+            })
             ->orderBy('countCompany', 'DESC')
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', 9);
