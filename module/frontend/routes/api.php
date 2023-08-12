@@ -11,3 +11,7 @@ Route::get('update-profile','CustomerController@updateProfile')->name('ajax.upda
 Route::post('user-update-avatar','CustomerController@updateAvatar')->name('ajax.update-avatar.get');
 Route::post('user-request-money','CustomerController@requestMoney')->name('ajax.request-money.post');
 
+//app api
+
+Route::post('post-booking-app','ApiController@postBookingApi')->name('api.post-booking');
+

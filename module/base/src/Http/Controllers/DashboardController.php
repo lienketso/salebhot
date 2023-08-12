@@ -84,8 +84,15 @@ class DashboardController extends BaseController
 
     public function sendZns(){
         $phone = '0979823452';
-        $templateId = '263590';
-        $params = ['customer_name' => 'Nguyen Thanh An', 'Bill_cost' => '2042DD','product_name'=>'Bảo hiểm trách nhiệm dân sự','date'=>'09/06/2023'];
+        $templateId = '263030';
+        $params = [
+            'note'=>'Đã tiếp nhận',
+            'Number_a' => '2042DD',
+            "oder_name"=>'oder_name',
+            'Product'=>'Bảo hiểm trách nhiệm dân sự',
+            'customer_name' => 'Nguyen Thanh An',
+            'oder_number'=>'order number',
+            ];
 
         $response = new ZaloZNS();
         $data = $response->sendZaloMessage($templateId,$phone,$params);

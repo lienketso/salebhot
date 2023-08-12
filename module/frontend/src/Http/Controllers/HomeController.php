@@ -6,6 +6,7 @@ namespace Frontend\Http\Controllers;
 
 use App\Mail\SendError;
 use App\Mail\SendMail;
+use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Category\Repositories\CategoryRepository;
 use Company\Models\Company;
@@ -178,11 +179,19 @@ class HomeController extends BaseController
             ];
             $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
 
-//            Telegram::sendMessage([
-//                'chat_id' => 1049968534,
-//                'parse_mode' => 'HTML',
-//                'text' => $text
-//            ]);
+            //send zalo zns
+//            $nguoinhan = $nhapp->phone;
+//            $templateId = '263030';
+//            $params = [
+//                'note'=>'Đang xử lý',
+//                'Number_a' => '#BHOTO'.$transaction->id,
+//                "oder_name"=>$transaction->name,
+//                'Product'=>'Bảo hiểm trách nhiệm dân sự',
+//                'customer_name' => $nhapp->name,
+//                'oder_number'=>$transaction->phone,
+//            ];
+//            $sendZalo = new ZaloZNS();
+//            $data = $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
 
             //create guest account
             $company = Company::firstOrCreate(['phone'=>$transaction->phone],

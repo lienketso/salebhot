@@ -4,6 +4,7 @@ namespace App;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Setting\Models\Setting;
 
 class ZaloZNS
 {
@@ -17,12 +18,12 @@ class ZaloZNS
      */
 
     public function sendZaloMessage($templateId, $recipient, $params){
-
-        $accessToken = '8Puq2OyjtG4YbpW1ZolG2IIOFGIIUgGGICCX6gO9oLj8wN0rgYJwUMtfOYIs1jfDLz9s8xOymrnv-6uHiI25Pa7IC1YRQfHGJgmU0QP3zardbt0DkaJ5KqYCBHBeFuD0ECKTFPCDdcrCnnTvfo6lEMxJ0cgJDOWCROStVxPOdnzWl0LFftoSEdcd1KBNGBWhTwalLffCYnn4XHblX5kn05MYFLY97g8rISCIOB8VWZjCpMTieoJj4dxiVNkt1DWbMDrfTwzdnIPyZs1vaqs59JFt8Kxn49n3F-CB7DOEaNSgmZmwmmE2GXtl4JIzBPiwNVLmG9KrrHHeGLUOYzmvZJlV0W';
+        $setting = Setting::where('setting_key','zalo_access_token')->first();
+        $accessZaloToken = $setting->setting_value;
         $client = new Client([
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
-                'access_token' => "${accessToken}",
+                'access_token' => "${accessZaloToken}",
             ]
         ]);
         try {
@@ -33,7 +34,6 @@ class ZaloZNS
                     'params' => json_encode($params),
                 ],
             ]);
-
             return json_decode($response->getBody(), true);
         } catch (GuzzleException $e) {
             return $e->getMessage();
