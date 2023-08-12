@@ -16,9 +16,8 @@ class ApiController extends BaseController
     }
 
     public function postBookingApi(Request $request){
-        $inputs = $request->all();
-        $input = json_decode($inputs,true);
-        $data = $this->transaction->create($input);
+        $inputs = json_decode($request->all(),true);
+        $data = $this->transaction->create($inputs);
         return response()->json($data);
     }
 }
