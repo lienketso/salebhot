@@ -232,6 +232,16 @@
                                        class="form-control" placeholder="">
                             </div>
                         </div>
+                        <div class="form-group mb-3">
+                            <label class="rdiobox">
+                                <input type="radio" name="turn_zalo" value="on" {{ ($setting->getSettingMeta('turn_zalo')=='on') ? 'checked' : ''}} >
+                                <span>Cho phép gửi tin nhắn ZNS</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input type="radio" name="turn_zalo" value="off" {{ ($setting->getSettingMeta('turn_zalo')=='off') ? 'checked' : ''}}>
+                                <span>Khóa gửi tin nhắn ZNS</span>
+                            </label>
+                        </div>
 
                         <div class="form-group mb-3">
                             <label>BOT_API_KEY_Telegram ( token to access the HTTP API)</label>

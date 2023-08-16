@@ -180,18 +180,33 @@ class HomeController extends BaseController
             $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
 
             //send zalo zns
-//            $nguoinhan = $nhapp->phone;
-//            $templateId = '263030';
-//            $params = [
-//                'note'=>'Đang xử lý',
-//                'Number_a' => '#BHOTO'.$transaction->id,
-//                "oder_name"=>$transaction->name,
-//                'Product'=>'Bảo hiểm trách nhiệm dân sự',
-//                'customer_name' => $nhapp->name,
-//                'oder_number'=>$transaction->phone,
-//            ];
-//            $sendZalo = new ZaloZNS();
-//            $data = $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
+            $turnZalo = $settingRepositories->getSettingMeta('turn_zalo');
+            if($turnZalo=='on')  {
+                //Gửi tin nhắn zalo zns đến nhà phân phối
+                $nguoinhan = $nhapp->phone;
+                $templateId = '263030';
+                $params = [
+                    'note'=>'Đang xử lý',
+                    'Number_a' => '#BHOTO'.$transaction->id,
+                    "oder_name"=>$transaction->name,
+                    'Product'=>'Bảo hiểm trách nhiệm dân sự',
+                    'customer_name' => $nhapp->name,
+                    'oder_number'=>$transaction->phone,
+                ];
+                $sendZalo = new ZaloZNS();
+                $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
+                //Gửi tin nhắn đến người mua hàng
+                $customePhone = $transaction->phone;
+                $customerTemplateId = '263029';
+                $customerParams = [
+                    "order_code"=>'#BHOTO'.$transaction->id,
+                    "cost"=>$transaction->license_plate,
+                    "order_Product"=>"Bảo hiểm trách nhiệm dân sự",
+                    "customer_name"=>$transaction->name,
+                ];
+                $sendZalo->sendZaloMessage($customerTemplateId,$customePhone,$customerParams);
+            }
+
 
             //create guest account
             $company = Company::firstOrCreate(['phone'=>$transaction->phone],

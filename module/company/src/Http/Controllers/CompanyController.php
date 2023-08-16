@@ -6,6 +6,7 @@ namespace Company\Http\Controllers;
 
 use App\ExcelCompany;
 use App\Exports;
+use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Http\Requests\CompanyCreateRequest;
 use Company\Http\Requests\CompanyEditRequest;
@@ -267,6 +268,24 @@ class CompanyController extends BaseController
         $data = $this->model->find($id);
         $data->status = 'active';
         $data->save();
+
+        //Gửi tin nhắn zns đến nhà phân phối khi duyệt npp thành công
+        $turnZalo = $this->setting->getSettingMeta('turn_zalo');
+        if($turnZalo=='on'){
+            $sendZns = new ZaloZNS();
+            $nguoinhan = $data->phone;
+            $templateId = '267876';
+            $params = [
+                "ma_npp"=>$data->company_code,
+                "note"=> "baohiemoto.vn",
+                "so_dien_thoai"=>$data->phone,
+                "customer_name"=>$data->contact_name,
+                "ten_npp"=> $data->name,
+            ];
+            $sendZns->sendZaloMessage($templateId,$nguoinhan,$params);
+        }
+        //end gửi tin nhắn zns
+
         if(!$data->getWallet()->exists()){
             $datas = ['company_id'=>$data->id];
             $createWallet = $this->wallet->create($datas);
@@ -280,7 +299,8 @@ class CompanyController extends BaseController
             'description'=>'Duyệt tài khoản đại lý '.$dh
         ];
         $logs = $this->log->create($logdata);
-        return redirect()->back()->with('edit','Bạn vừa duyệt nhà phân phối thành công');
+
+        return redirect()->back()->with('edit','Bạn vừa duyệt nhà phân phối thành công,1 tin nhắn Zalo zns thông báo được gửi tới nhà phân phối');
     }
 
     public function fix(Request $request,$id){

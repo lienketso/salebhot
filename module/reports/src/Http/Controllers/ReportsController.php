@@ -37,7 +37,7 @@ class ReportsController extends BaseController
         $commissionRate = ($commission->commission_rate / 100);
 
         $chuyenvien = Users::select('users.*')
-            ->leftJoin('transaction', function ($join) use($thang,$year,$u){
+            ->leftJoin('transaction', function ($join) use($thang,$year){
                 $join->on('users.id','=','transaction.user_id')
                     ->where('transaction.order_status','active')
                     ->whereMonth('transaction.updated_at',$thang)

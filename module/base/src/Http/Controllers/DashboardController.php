@@ -8,6 +8,7 @@ use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use League\Flysystem\Exception;
@@ -79,7 +80,7 @@ class DashboardController extends BaseController
         Mail::send('wadmin-dashboard::temps.mail', array('name'=>$input["name"],'email'=>$input["email"], 'content'=>$input['comment']), function($message){
             $message->to('thanhan1507@gmail.com', 'Visitor')->subject('Visitor Feedback!');
         });
-        return 'Send successful'; die;
+        return 'Send successful';
     }
 
     public function sendZns(){
@@ -88,21 +89,14 @@ class DashboardController extends BaseController
         $params = [
             'note'=>'Đã tiếp nhận',
             'Number_a' => '2042DD',
-            "oder_name"=>'oder_name',
+            "oder_name"=>'Nguyễn Thành An',
             'Product'=>'Bảo hiểm trách nhiệm dân sự',
-            'customer_name' => 'Nguyen Thanh An',
-            'oder_number'=>'order number',
+            'customer_name' => 'Nhà phân phối Wiseman',
+            'oder_number'=>'0985548328',
             ];
 
-        $response = new ZaloZNS();
-        $data = $response->sendZaloMessage($templateId,$phone,$params);
-
-        if ($data) {
-            return response()->json($data);
-        } else {
-            return $data ? 'Tin nhắn đã được gửi đi.' : 'Gửi tin nhắn thất bại.';
-        }
-
+        $zaloZns = new ZaloZNS();
+        $zaloZns->sendZaloMessage($templateId,$phone,$params);
 
     }
 
@@ -128,7 +122,8 @@ class DashboardController extends BaseController
 
         $data = json_decode($response->getBody(), true);
         Setting::updateOrCreate(['setting_key'=>'zalo_refresh_token'],['setting_value'=>$data['refresh_token']]);
-        return $data;
+
+        return $data['access_token'];
 
     }
 
