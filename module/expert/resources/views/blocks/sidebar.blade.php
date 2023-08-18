@@ -4,12 +4,14 @@
         'wadmin::expert.pending.get',
         'wadmin::expert.create.get',
         'wadmin::expert.edit.get',
-        'wadmin::expert.revenue.get'
+        'wadmin::expert.revenue.get',
+        'wadmin::expert.get-order.get'
     ];
     $indexRoute = ['wadmin::expert.index.get'];
     $pendingRoute = ['wadmin::expert.pending.get'];
     $createRoute = ['wadmin::expert.create.get'];
     $revenueRoute = ['wadmin::expert.revenue.get'];
+    $orderRoute = ['wadmin::expert.get-order.get'];
 
 @endphp
 @php
@@ -29,6 +31,7 @@
             <a href="{{route('wadmin::expert.pending.get')}}"><span class="badge pull-right">{{$countDisable}}</span> NPP chưa duyệt </a></li>
         <li class="{{in_array(Route::currentRouteName(), $createRoute) ? 'active' : '' }}"><a href="{{route('wadmin::expert.create.get')}}">Thêm mới NPP</a></li>
         <li class="{{in_array(Route::currentRouteName(), $revenueRoute) ? 'active' : '' }}"><a href="{{route('wadmin::expert.revenue.get')}}">Doanh số</a></li>
+        <li class="{{in_array(Route::currentRouteName(), $orderRoute) ? 'active' : '' }}"><a href="{{route('wadmin::expert.get-order.get')}}">Đơn hàng từ NPP</a></li>
     </ul>
 </li>
 @endif

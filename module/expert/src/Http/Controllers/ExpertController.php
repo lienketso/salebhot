@@ -369,4 +369,33 @@ class ExpertController extends BaseController
         return view('wadmin-expert::revenue',compact('totalTransaction','totalRevenue','totalCommission','thang','monthList'));
     }
 
+    public function orderExpert(Request $request){
+        $saleLogin = Auth::id();
+        $q = Transaction::query();
+        if(!is_null($request->name)){
+            $name = $request->name;
+            $q->where('name','LIKE','%'.$name.'%')->orWhere('phone',$name);
+        }
+        if(!is_null($request->company_code)){
+            $code = $request->company_code;
+            $q->whereHas('company',function ($query) use ($code){
+                return $query->where('company_code',$code)->orWhere('phone',$code)->orWhere('name','LIKE','%'.$code.'%');
+            });
+        }
+        if(!is_null($request->status)){
+            $status = $request->status;
+            $q->where('order_status',$status);
+        }
+
+        $countActive = Transaction::where('order_status','active')->where('user_id',$saleLogin)->count();
+        $countReceived = Transaction::where('order_status','received')->where('user_id',$saleLogin)->count();
+        $countPending = Transaction::where('order_status','disable')->where('user_id',$saleLogin)->count();
+        $countCancel = Transaction::where('order_status','cancel')->where('user_id',$saleLogin)->count();
+
+        $data = $q->where('user_id',$saleLogin)
+            ->orderBy('created_at','desc')
+            ->paginate(50);
+        return view('wadmin-expert::order',compact('data','countActive','countReceived','countPending','countCancel'));
+    }
+
 }
