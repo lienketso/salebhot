@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 //        $this->call(UsersSeeder::class);
-        for($i=0;$i<=1000;$i++) {
+        for($i=0;$i<=50;$i++) {
             DB::table('company')->insert([
                 'name' => 'Chưa cập nhật',
                 'company_code' => $this->generateUniqueCode(),

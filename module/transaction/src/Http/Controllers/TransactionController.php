@@ -4,6 +4,7 @@
 namespace Transaction\Http\Controllers;
 
 
+use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
 use Discounts\Models\Discounts;
@@ -307,7 +308,6 @@ class TransactionController extends BaseController
         $data = $this->model->find($id);
         $amount = str_replace(',','',$request->price);
         $amount = intval($amount);
-
         $distributor_rate = intval($this->setting->getSettingMeta('commission_rate'));
 
         $commission = $amount*($distributor_rate/100);
@@ -351,7 +351,26 @@ class TransactionController extends BaseController
                         'description'=>'Cộng tiền hoa hồng vào ví NPP'
                     ];
                     $createWalletTran = $this->wallettrans->create($d);
+
+                    //gửi zns trạng thái đơn hàng thành công
+                    $turnZalo = $this->setting->getSettingMeta('turn_zalo');
+                    if($turnZalo=='on')  {
+                        //Gửi tin nhắn zalo zns đến nhà phân phối
+                        $nguoinhan = $data->company->phone;
+                        $templateId = '264015';
+                        $params = [
+                            "order_code"=>"#DH00".$update->id,
+                            "cost"=>number_format($update->sub_total,1,'.',''),
+                            "payment_status"=>"Đã hoàn thành",
+                            "hoa_hong"=>number_format($update->commission,1,'.',''),
+                            "customer_name"=>$data->company->name,
+                        ];
+                        $sendZalo = new ZaloZNS();
+                        $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
+                    }
+
                 }
+
             }
             //logs
             $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
