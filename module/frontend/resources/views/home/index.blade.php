@@ -3,7 +3,6 @@
 <div class="wrapper">
     <div class="row">
         <div class="c-order tab-sm-100 col-md-6">
-
             <!-- side -->
             <div class="left">
                 <article class="side-text">
