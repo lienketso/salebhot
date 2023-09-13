@@ -7,14 +7,17 @@ use ZaloZns\Http\Requests\ZaloZnsCreateRequest;
 use ZaloZns\Http\Requests\ZaloZnsEditRequest;
 use ZaloZns\Models\ZaloParam;
 use ZaloZns\Models\ZaloTemplate;
+use ZaloZns\Repositories\ZaloParamRepository;
 use ZaloZns\Repositories\ZaloTemplateRepository;
 
 class ZaloZnsController extends BaseController
 {
     protected $zalo;
-    public function __construct(ZaloTemplateRepository $zaloTemplateRepository)
+    protected $zparam;
+    public function __construct(ZaloTemplateRepository $zaloTemplateRepository, ZaloParamRepository $zaloParamRepository)
     {
         $this->zalo = $zaloTemplateRepository;
+        $this->zparam = $zaloParamRepository;
     }
 
     public function getIndex(){
@@ -84,7 +87,37 @@ class ZaloZnsController extends BaseController
 
     public function getParamEdit($id){
         $data = ZaloParam::find($id);
-        return view('wadmin::zalozns.param.edit',compact('data'));
+        return view('wadmin-zalozns::param.edit',compact('data'));
     }
+
+    public function postParamEdit($id, Request $request){
+        $data = ZaloParam::find($id);
+        $input = $request->except(['_token']);
+        $validated = $request->validate([
+            'param_key' => 'required',
+            'param_value' => 'required',
+        ]);
+        try {
+            $data->param_key=$input['param_key'];
+            $data->param_value=$input['param_value'];
+            $data->sort_order=$input['sort_order'];
+            $data->title=$input['title'];
+            $data->type=$input['type'];
+            $data->save();
+            return redirect()->route('wadmin::zalozns.param.index',$data->template_id)->with(['create'=>'Sửa tham số thành công']);
+        }catch (\Exception $exception){
+            return redirect()->back()->with(['errors'=>$exception->getMessage()]);
+        }
+    }
+
+    public function paramDelete($id){
+        try{
+            $this->zparam->delete($id);
+            return redirect()->back()->with('delete','Bạn vừa xóa dữ liệu !');
+        }catch (\Exception $e){
+            return redirect()->back()->withErrors(config('messages.error'));
+        }
+    }
+
 
 }

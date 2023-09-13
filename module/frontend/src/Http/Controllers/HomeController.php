@@ -32,6 +32,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use Transaction\Http\Requests\TransactionCreateRequest;
 use Transaction\Repositories\TransactionRepository;
 use Users\Models\Users;
+use ZaloZns\Repositories\ZaloTemplateRepository;
 
 class HomeController extends BaseController
 {
@@ -42,9 +43,10 @@ class HomeController extends BaseController
     protected $po;
     protected $post;
     protected $tran;
+    protected $zs;
     public function __construct(CategoryRepository $categoryRepository,CatproductRepository $catproductRepository,
                                 GalleryRepository $galleryRepository, ProductRepository $productRepository,
-                                PostRepository $postRepository, TransactionRepository $transactionRepository)
+                                PostRepository $postRepository, TransactionRepository $transactionRepository, ZaloTemplateRepository $zaloTemplateRepository)
     {
         $this->lang = session('lang');
         $this->catnews = $categoryRepository;
@@ -53,6 +55,7 @@ class HomeController extends BaseController
         $this->po = $productRepository;
         $this->post = $postRepository;
         $this->tran = $transactionRepository;
+        $this->zs = $zaloTemplateRepository;
     }
 
     private $langActive = ['vn','en','ch'];
@@ -179,6 +182,16 @@ class HomeController extends BaseController
             ];
             $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
 
+            //create guest account
+            $company = Company::firstOrCreate(['phone'=>$transaction->phone],
+                ['name'=>'Guest',
+                    'contact_name'=>$transaction->name,
+                    'parent'=>$transaction->company_id,
+                    'c_type'=>'guest',
+                    'status'=>'pending',
+                    'password'=>Hash::make('baohiemoto.vn')
+                ]);
+
             //send zalo zns
             $turnZalo = $settingRepositories->getSettingMeta('turn_zalo');
             if($turnZalo=='on')  {
@@ -206,17 +219,6 @@ class HomeController extends BaseController
                 ];
                 $sendZalo->sendZaloMessage($customerTemplateId,$customePhone,$customerParams);
             }
-
-
-            //create guest account
-            $company = Company::firstOrCreate(['phone'=>$transaction->phone],
-                ['name'=>'Guest',
-                    'contact_name'=>$transaction->name,
-                    'parent'=>$transaction->company_id,
-                    'c_type'=>'guest',
-                    'status'=>'pending',
-                    'password'=>Hash::make('baohiemoto.vn')
-                ]);
 
         }catch (\Exception $e){
             Mail::to('thanhan1507@gmail.com')

@@ -24,5 +24,9 @@ Route::group(['prefix'=>$adminRoute],function(Router $router) use($adminRoute,$m
         $router->get('param/{id}','ZaloZnsController@getParamIndex')->name('wadmin::zalozns.param.index');
         $router->get('param-create/{id}','ZaloZnsController@getParamCreate')->name('wadmin::zalozns.param.create');
         $router->post('param-create/{id}','ZaloZnsController@postParamCreate')->name('wadmin::zalozns.param.create.post');
+        $router->get('param-edit/{id}','ZaloZnsController@getParamEdit')->name('wadmin::zalozns.param.edit.get');
+        $router->post('param-edit/{id}','ZaloZnsController@postParamEdit')->name('wadmin::zalozns.param.edit.post');
+        $router->get('delete-param/{id}','ZaloZnsController@paramDelete')
+            ->name('wadmin::zaloparam.delete.get');
     });
 });

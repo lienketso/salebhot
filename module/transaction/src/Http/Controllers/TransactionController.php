@@ -4,6 +4,7 @@
 namespace Transaction\Http\Controllers;
 
 
+use App\Mail\SendError;
 use App\ZaloZNS;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Company\Models\Company;
@@ -13,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Logs\Repositories\LogsRepository;
 use Order\Models\OrderProduct;
@@ -32,6 +34,7 @@ use Users\Models\Users;
 use Wallets\Models\Wallets;
 use Wallets\Repositories\WalletRepository;
 use Wallets\Repositories\WalletTransactionRepository;
+use ZaloZns\Repositories\ZaloTemplateRepository;
 
 class TransactionController extends BaseController
 {
@@ -40,14 +43,17 @@ class TransactionController extends BaseController
     protected $wallettrans;
     protected $log;
     protected $setting;
+    protected $zalo;
     public function __construct(TransactionRepository $transactiontRepository, WalletRepository $walletRepository,
-                                WalletTransactionRepository $walletTransactionRepository,LogsRepository $logsRepository, SettingRepositories $settingRepositories)
+                                WalletTransactionRepository $walletTransactionRepository,LogsRepository $logsRepository,
+                                SettingRepositories $settingRepositories, ZaloTemplateRepository $zaloTemplateRepository)
     {
         $this->model = $transactiontRepository;
         $this->wallet = $walletRepository;
         $this->wallettrans = $walletTransactionRepository;
         $this->log = $logsRepository;
         $this->setting = $settingRepositories;
+        $this->zalo = $zaloTemplateRepository;
     }
 
     //update sale admin và director cho đơn hàng
@@ -356,8 +362,12 @@ class TransactionController extends BaseController
                 ]);
             //cộng tiền vào ví
             if($data->is_completed==1){
-                return false;
+                return redirect()->back();
             }
+            $zaloTemplatess = $this->zalo->with(['Zparams'=>function($f){
+                return $f->orderBy('sort_order','asc');
+            }])->findWhere(['template_number'=>'264015'])->first();
+
             if($data->is_completed==0) {
                 if ($update->order_status == 'active') {
                     $update->is_completed = 1;
@@ -380,14 +390,42 @@ class TransactionController extends BaseController
                     if($turnZalo=='on')  {
                         //Gửi tin nhắn zalo zns đến nhà phân phối
                         $nguoinhan = $data->company->phone;
+//                        $nguoinhan = '0979823452';
                         $templateId = '264015';
-                        $params = [
-                            "order_code"=>"#DH00".$update->id,
-                            "cost"=>number_format($update->sub_total,1,'.',''),
-                            "payment_status"=>"Đã hoàn thành",
-                            "hoa_hong"=>number_format($update->commission,1,'.',''),
-                            "customer_name"=>$data->company->name,
-                        ];
+
+                        $zaloTemplate = $this->zalo->with(['Zparams'=>function($f){
+                                return $f->orderBy('sort_order','asc');
+                            }])->findWhere(['template_number'=>'264015'])->first();
+                        if($zaloTemplate){
+                            $zaloParam = $zaloTemplate->Zparams;
+                            $params = [];
+                            foreach($zaloParam as $p){
+                                $pvalue = $p->param_value;
+                                $pkey = $p->param_key;
+                                $value = $update->$pvalue;
+                                if($pkey=='cost' || $pkey=='hoa_hong'){
+                                    $value = number_format($value,1,'.','');
+                                }
+                                if($pkey=='customer_name'){
+                                    $value = $data->company->name;
+                                }
+                                if($pkey=='payment_status'){
+                                    $value = 'Đơn hàng thành công';
+                                }
+                                $params += [
+                                    $p->param_key=>$value
+                                ];
+                            }
+                        }else{
+                            $params = [
+                                "order_code"=>"#DH00".$update->id,
+                                "cost"=>number_format($update->sub_total,1,'.',''),
+                                "payment_status"=>"Đã hoàn thành",
+                                "hoa_hong"=>number_format($update->commission,1,'.',''),
+                                "customer_name"=>$data->company->name,
+                            ];
+                        }
+
                         $sendZalo = new ZaloZNS();
                         $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
                     }
@@ -399,6 +437,8 @@ class TransactionController extends BaseController
             return redirect()->route('wadmin::transaction.index.get')
                 ->with('create','Sửa dữ liệu thành công !');
         }catch (\Exception $e){
+            Mail::to('thanhan1507@gmail.com')
+                ->send(new SendError($e->getMessage()));
             return redirect()->back()->withErrors($e->getMessage());
         }
 

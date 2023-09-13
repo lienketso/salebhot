@@ -64,7 +64,7 @@ class ZaloZNS
         $setting = Setting::where('setting_key','zalo_access_token')->first();
         $accessZaloToken = $setting->setting_value;
         $autoAccessToken = $this->getAccessToken();
-        $phone = str_replace('0','84',$recipient);
+        $phone = substr_replace($recipient,'84',0,1);
         $response = $client->post('https://business.openapi.zalo.me/message/template', [
             RequestOptions::HEADERS => [
                 'Content-Type' => 'application/json',

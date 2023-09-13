@@ -55,8 +55,10 @@
                     <thead>
                     <tr>
                         <th>STT</th>
+                        <th>Tiêu đề</th>
                         <th>Tên tham số</th>
                         <th>Giá trị </th>
+                        <th>Thứ tự </th>
                         <th></th>
                     </tr>
                     </thead>
@@ -64,14 +66,16 @@
                     @foreach($data as $key=>$d)
                         <tr id="tr_{{$d->id}}">
                             <td>{{$key+1}}</td>
+                            <td>{{$d->title}}</td>
                             <td>
                                 {{$d->param_key}}
                             </td>
                             <td>{{$d->param_value}}</td>
+                            <td>{{$d->sort_order}}</td>
                             <td>
                                 <ul class="table-options">
-                                    <li><a href="#"><i class="fa fa-pencil"></i></a></li>
-                                    <li><a class="example-p-6" data-url="#"><i class="fa fa-trash"></i></a></li>
+                                    <li><a href="{{route('wadmin::zalozns.param.edit.get',$d->id)}}"><i class="fa fa-pencil"></i></a></li>
+                                    <li><a class="example-p-6" data-url="{{route('wadmin::zaloparam.delete.get',$d->id)}}"><i class="fa fa-trash"></i></a></li>
                                 </ul>
                             </td>
                         </tr>
