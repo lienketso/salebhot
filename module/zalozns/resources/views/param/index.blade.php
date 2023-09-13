@@ -58,6 +58,7 @@
                         <th>Tiêu đề</th>
                         <th>Tên tham số</th>
                         <th>Giá trị </th>
+                        <th>Loại dữ liệu </th>
                         <th>Thứ tự </th>
                         <th></th>
                     </tr>
@@ -71,6 +72,7 @@
                                 {{$d->param_key}}
                             </td>
                             <td>{{$d->param_value}}</td>
+                            <td>{{$d->type}}</td>
                             <td>{{$d->sort_order}}</td>
                             <td>
                                 <ul class="table-options">

@@ -402,8 +402,9 @@ class TransactionController extends BaseController
                             foreach($zaloParam as $p){
                                 $pvalue = $p->param_value;
                                 $pkey = $p->param_key;
+                                $ptype = $p->type;
                                 $value = $update->$pvalue;
-                                if($pkey=='cost' || $pkey=='hoa_hong'){
+                                if($ptype=='number'){
                                     $value = number_format($value,1,'.','');
                                 }
                                 if($pkey=='customer_name'){
