@@ -78,7 +78,8 @@
             "Discounts\\": "module/discounts/src",
             "Director\\": "module/director/src",
             "Sales\\": "module/sales/src",
-            "Accountant\\": "module/accountant/src"
+            "Accountant\\": "module/accountant/src",
+            "ZaloZns\\": "module/zalozns/src"
         },
         "classmap": [
             "database/seeds",

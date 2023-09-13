@@ -336,9 +336,32 @@ class TransactionController extends BaseController
                     $order = OrderProduct::updateOrCreate(['transaction_id'=>$id],['product_id'=>$p,'amount'=>$productInfo->amount]);
                 }
             }
+            //logs
+            $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
+            $logdata = [
+                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
+                'action'=>'update',
+                'action_id'=>$data->id,
+                'module'=>'Transaction',
+                'description'=>'Sửa thông tin đơn hàng '.$dh
+            ];
+            $logs = $this->log->create($logdata);
+            //Thêm trạng thái cập nhật đơn hàng
+            $transaction_status = TransactionStatus::updateOrCreate(['status'=>$request->order_status,'transaction_id'=>$id],
+                [
+                    'transaction_id'=>$id,
+                    'user_id'=>Auth::id(),
+                    'status'=>$request->order_status,
+                    'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
+                ]);
             //cộng tiền vào ví
-            if($data->order_status!='active') {
+            if($data->is_completed==1){
+                return false;
+            }
+            if($data->is_completed==0) {
                 if ($update->order_status == 'active') {
+                    $update->is_completed = 1;
+                    $update->save();
                     $nppWallet = $this->wallet->findWhere(['company_id' => $update->company_id])->first();
                     $nppWallet->balance = $nppWallet->balance + $commission;
                     $nppWallet->save();
@@ -372,24 +395,7 @@ class TransactionController extends BaseController
                 }
 
             }
-            //logs
-            $dh = '<a target="_blank" href="'.route('wadmin::transaction.index.get',['id'=>$data->id]).'">#DH'.$data->id.'</a>';
-            $logdata = [
-                'user_id'=>\Illuminate\Support\Facades\Auth::id(),
-                'action'=>'update',
-                'action_id'=>$data->id,
-                'module'=>'Transaction',
-                'description'=>'Sửa thông tin đơn hàng '.$dh
-            ];
-            $logs = $this->log->create($logdata);
-            //Thêm trạng thái cập nhật đơn hàng
-            $transaction_status = TransactionStatus::updateOrCreate(['status'=>$request->order_status,'transaction_id'=>$id],
-                [
-                    'transaction_id'=>$id,
-                    'user_id'=>Auth::id(),
-                    'status'=>$request->order_status,
-                    'description'=>'Cập nhật trạng thái đơn hàng: '.$request->order_status
-                ]);
+
             return redirect()->route('wadmin::transaction.index.get')
                 ->with('create','Sửa dữ liệu thành công !');
         }catch (\Exception $e){
