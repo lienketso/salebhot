@@ -51,7 +51,7 @@
                                    placeholder="VD : 5">
                         </div>
                         <div class="form-group">
-                            <label>Giá sản phẩm</label>
+                            <label>Giá sản phẩm ( Trước thuế )</label>
                             <input class="form-control"
                                    onkeyup="this.value=FormatNumber(this.value);"
                                    name="price"

@@ -275,11 +275,11 @@ class ReportsController extends BaseController
         $users = Users::select('users.*')
             ->leftJoin('company', function ($join) use($thang,$year,$u){
                 $join->on('users.id','=','company.sale_admin')
-                    ->when($thang,function ($m,$thang) use($year){
-                        if(!is_null($thang)){
-                            return $m->whereMonth('company.updated_at',$thang)->whereYear('company.updated_at',$year);
-                        }
-                    })
+//                    ->when($thang,function ($m,$thang) use($year){
+//                        if(!is_null($thang)){
+//                            return $m->whereMonth('company.updated_at',$thang)->whereYear('company.updated_at',$year);
+//                        }
+//                    })
                     ->where('company.status','!=','disable');
             })
             ->selectRaw('COUNT(company.id) AS countCompany')

@@ -198,6 +198,11 @@ class HomeController extends BaseController
                 //Gửi tin nhắn zalo zns đến nhà phân phối
                 $nguoinhan = $nhapp->phone;
                 $templateId = '263030';
+                $zaloTemplateOne = $this->zs->with(['Zparams'=>function($f){
+                    return $f->orderBy('sort_order','asc');
+                }])->findWhere(['template_number'=>$templateId])->first();
+                $zaloParam = $zaloTemplateOne->Zparams;
+
                 $params = [
                     'note'=>'Đang xử lý',
                     'Number_a' => '#BHOTO'.$transaction->id,
@@ -206,6 +211,7 @@ class HomeController extends BaseController
                     'customer_name' => $nhapp->name,
                     'oder_number'=>$transaction->phone,
                 ];
+
                 $sendZalo = new ZaloZNS();
                 $sendZalo->sendZaloMessage($templateId,$nguoinhan,$params);
                 //Gửi tin nhắn đến người mua hàng

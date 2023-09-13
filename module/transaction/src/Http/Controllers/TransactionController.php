@@ -392,10 +392,9 @@ class TransactionController extends BaseController
                         $nguoinhan = $data->company->phone;
 //                        $nguoinhan = '0979823452';
                         $templateId = '264015';
-
                         $zaloTemplate = $this->zalo->with(['Zparams'=>function($f){
                                 return $f->orderBy('sort_order','asc');
-                            }])->findWhere(['template_number'=>'264015'])->first();
+                            }])->findWhere(['template_number'=>$templateId])->first();
                         if($zaloTemplate){
                             $zaloParam = $zaloTemplate->Zparams;
                             $params = [];
