@@ -28,6 +28,7 @@ class ExcelCompany implements FromCollection, WithHeadings, WithMapping, ShouldA
             'Tên nhà phân phối',
             'Tên liên hệ',
             'Số điện thoại',
+            'Tỉnh thành',
             'Địa chỉ'
         ];
     }
@@ -39,6 +40,7 @@ class ExcelCompany implements FromCollection, WithHeadings, WithMapping, ShouldA
             $item->name,
             $item->contact_name,
             $item->phone,
+            $item->getCity->name,
             $item->address,
         ];
     }

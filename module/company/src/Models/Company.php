@@ -5,6 +5,7 @@ namespace Company\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Location\Models\City;
 use Product\Models\Catproduct;
 use Transaction\Models\Transaction;
 use Users\Models\Users;
@@ -68,6 +69,10 @@ class Company extends Model
 
     public function getWallet(){
         return $this->hasMany(Wallets::class,'company_id','id');
+    }
+
+    public function getCity(){
+        return $this->belongsTo(City::class,'city','matp');
     }
 
     public static function assignUsers()

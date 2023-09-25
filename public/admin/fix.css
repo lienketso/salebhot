@@ -47,6 +47,14 @@ ul.tree1 li span a{
     border: 1px solid #ccc;
     width: 100%;
 }
+.item-search-city{
+    background: #dedede;
+    padding: 10px;
+    margin-top: 20px;
+}
+.item-search-city strong{
+    color: #1e7e34;
+}
 .list_dinh_kem {
     display: inline-flex;
 }

@@ -105,7 +105,8 @@ class CompanyController extends BaseController
             $q->where('city',$city);
         }
         $cities = City::orderBy('name','asc')->get();
-        $data = $q->where('lang_code',$this->langcode)->where('c_type','distributor')
+        $data = $q->where('lang_code',$this->langcode)
+            ->where('c_type','distributor')->where('status','active')
             ->orderBy('created_at','desc')->paginate(30);
         $users = Users::orderBy('id','desc')->where('status','active')->get();
         return view('wadmin-company::index',['data'=>$data,'users'=>$users,'cities'=>$cities]);
@@ -378,8 +379,11 @@ class CompanyController extends BaseController
         if(!is_null($company_code)){
             $q->where('company_code',$company_code);
         }
+        $cityName = '';
         if(!is_null($city)){
             $q->where('city',$city);
+            $cityInfo = City::where('matp',$city)->first();
+            $cityName = $cityInfo->name;
         }
         $cities = City::orderBy('name','asc')->get();
         $data = $q->where('lang_code',$this->langcode)
@@ -389,10 +393,10 @@ class CompanyController extends BaseController
             ->paginate(30);
         if(!is_null($request->get('export'))){
             $exports = $q->where('lang_code',$this->langcode)
-                ->where('status','active')->orderBy('created_at','desc')->paginate(2000);
+                ->where('status','active')->orderBy('created_at','desc')->paginate(5000);
             return Excel::download(new ExcelCompany($exports), 'danh-sach-dai-ly.xlsx');
         }
-        return view('wadmin-company::accept',compact('data','cities'));
+        return view('wadmin-company::accept',compact('data','cities','cityName'));
     }
 
     public function updateCode(){

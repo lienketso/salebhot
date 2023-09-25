@@ -86,6 +86,16 @@
 
                     </form>
                 </div>
+                @if(request('city') || request('name'))
+                    <div class="row">
+                        <div class="col-lg-12">
+                        <p class="item-search-city">Có
+                            <strong>{{$data->total()}}</strong> nhà phân phối được tìm thấy với
+                            <strong>{{$cityName}}</strong>, <strong>{{request('name')}}</strong>
+                        </p>
+                        </div>
+                    </div>
+                @endif
 
             </div>
         </div>
@@ -107,6 +117,7 @@
                         <th>STT</th>
                         <th>Mã NPP</th>
                         <th>Tên NPP</th>
+                        <th>Tỉnh thành</th>
                         <th>Ảnh NPP</th>
                         <th>Hình ảnh 1</th>
                         <th>Hình ảnh 2</th>
@@ -129,6 +140,7 @@
                                     <li>Ngân hàng : <strong>{{$d->bank_name}}</strong></li>
                                 </ul>
                             </td>
+                            <td>{{($d->getCity()->exists()) ? $d->getCity->name : 'Null'}}</td>
                             <td>
                                 <div class="product-img bg-transparent border">
                                     <a style="cursor: pointer" data-fancybox="gallery"
