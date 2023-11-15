@@ -229,6 +229,7 @@ class HomeController extends BaseController
         }catch (\Exception $e){
             Mail::to('thanhan1507@gmail.com')
            ->send(new SendError($e->getMessage()));
+            return response()->json($e->getMessage());
         }
 //       Mail::to($emailSetting)
 //           ->send(new SendMail($transaction));
