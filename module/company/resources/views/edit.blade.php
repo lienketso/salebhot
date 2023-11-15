@@ -166,6 +166,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Sale chăm sóc</label>
+                            <select id="" name="sale_admin" class="form-control js-example-basic-single" style="width: 100%" >
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}"
+                                        {{ ($data->sale_admin==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group mb-3">
                             <label>Ảnh chủ cửa hàng</label>
                             <div class="custom-file">
