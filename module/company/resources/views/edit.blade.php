@@ -169,6 +169,7 @@
                         <div class="form-group">
                             <label>Sale chăm sóc</label>
                             <select id="" name="sale_admin" class="form-control js-example-basic-single" style="width: 100%" >
+                                <option value="0">--Chưa chọn sale chăm sóc--</option>
                                 @foreach($users as $user)
                                     <option value="{{$user->id}}"
                                         {{ ($data->sale_admin==$user->id) ? 'selected' : ''}}>{{$user->full_name}} - {{$user->phone}}</option>
